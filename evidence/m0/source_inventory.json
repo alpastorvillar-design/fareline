@@ -1,0 +1,1323 @@
+{
+  "files": [
+    {
+      "filename": "yellow_tripdata_2024-01.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 49961641,
+        "content_type": "binary/octet-stream",
+        "etag": "\"d6ebae95a45f284994e283e2df97c06f-3\"",
+        "last_modified": "Thu, 21 Mar 2024 15:35:44 GMT",
+        "status": 200
+      },
+      "month": 1,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 3,
+        "num_rows": 2964624
+      },
+      "service": "yellow",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "yellow_tripdata_2024-02.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 50349284,
+        "content_type": "binary/octet-stream",
+        "etag": "\"7337741e6032c0652369749781534e79-3\"",
+        "last_modified": "Fri, 19 Apr 2024 18:22:42 GMT",
+        "status": 200
+      },
+      "month": 2,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 3,
+        "num_rows": 3007526
+      },
+      "service": "yellow",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-02.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "yellow_tripdata_2024-03.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 60078280,
+        "content_type": "binary/octet-stream",
+        "etag": "\"7a8994a37b02c8200aac7bcf9c3a2c69-4\"",
+        "last_modified": "Wed, 22 May 2024 19:27:43 GMT",
+        "status": 200
+      },
+      "month": 3,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 4,
+        "num_rows": 3582628
+      },
+      "service": "yellow",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-03.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "yellow_tripdata_2024-04.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 59133625,
+        "content_type": "binary/octet-stream",
+        "etag": "\"e67ba6e0a21daa942fb9c10aafa2a354-4\"",
+        "last_modified": "Thu, 20 Jun 2024 20:30:14 GMT",
+        "status": 200
+      },
+      "month": 4,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 4,
+        "num_rows": 3514289
+      },
+      "service": "yellow",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-04.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "yellow_tripdata_2024-05.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 62553128,
+        "content_type": "binary/octet-stream",
+        "etag": "\"e7dbcee49593af9a20818857f421e7be-4\"",
+        "last_modified": "Thu, 18 Jul 2024 18:35:19 GMT",
+        "status": 200
+      },
+      "month": 5,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 4,
+        "num_rows": 3723833
+      },
+      "service": "yellow",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-05.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "yellow_tripdata_2024-06.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 59859922,
+        "content_type": "binary/octet-stream",
+        "etag": "\"247a4df111330ea3b9d909854f8c72bc-4\"",
+        "last_modified": "Tue, 20 Aug 2024 14:01:55 GMT",
+        "status": 200
+      },
+      "month": 6,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 4,
+        "num_rows": 3539193
+      },
+      "service": "yellow",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-06.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "yellow_tripdata_2024-07.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 52299432,
+        "content_type": "binary/octet-stream",
+        "etag": "\"56fcd589e51d2a8919047175e973f240-4\"",
+        "last_modified": "Wed, 18 Sep 2024 13:53:34 GMT",
+        "status": 200
+      },
+      "month": 7,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 3,
+        "num_rows": 3076903
+      },
+      "service": "yellow",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-07.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "yellow_tripdata_2024-08.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 51067350,
+        "content_type": "binary/octet-stream",
+        "etag": "\"067a7eaf85df072942b9c62b9ae97b8f-3\"",
+        "last_modified": "Wed, 23 Oct 2024 18:45:26 GMT",
+        "status": 200
+      },
+      "month": 8,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 16.1.0",
+        "format_version": 2,
+        "num_row_groups": 3,
+        "num_rows": 2979183
+      },
+      "service": "yellow",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-08.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "yellow_tripdata_2024-09.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 61170186,
+        "content_type": "binary/octet-stream",
+        "etag": "\"064399d34a57ef1d0b0b2a7d7c45bc43-4\"",
+        "last_modified": "Wed, 20 Nov 2024 21:37:39 GMT",
+        "status": 200
+      },
+      "month": 9,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 16.1.0",
+        "format_version": 2,
+        "num_row_groups": 4,
+        "num_rows": 3633030
+      },
+      "service": "yellow",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-09.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "yellow_tripdata_2024-10.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 64346071,
+        "content_type": "binary/octet-stream",
+        "etag": "\"9fd448f7f073698d04344137417ce731-4\"",
+        "last_modified": "Wed, 18 Dec 2024 21:21:21 GMT",
+        "status": 200
+      },
+      "month": 10,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 16.1.0",
+        "format_version": 2,
+        "num_row_groups": 4,
+        "num_rows": 3833771
+      },
+      "service": "yellow",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-10.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "yellow_tripdata_2024-11.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 60658709,
+        "content_type": "binary/octet-stream",
+        "etag": "\"b2fc70ec04da5a1f8b6db3f987b4e3b9-4\"",
+        "last_modified": "Fri, 17 Jan 2025 20:03:41 GMT",
+        "status": 200
+      },
+      "month": 11,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 4,
+        "num_rows": 3646369
+      },
+      "service": "yellow",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-11.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "yellow_tripdata_2024-12.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 61524085,
+        "content_type": "binary/octet-stream",
+        "etag": "\"485c9d3e08117991f3d9788c016798b4-4\"",
+        "last_modified": "Fri, 21 Feb 2025 21:29:11 GMT",
+        "status": 200
+      },
+      "month": 12,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 4,
+        "num_rows": 3668371
+      },
+      "service": "yellow",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-12.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "fhvhv_tripdata_2024-01.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 472757547,
+        "content_type": "binary/octet-stream",
+        "etag": "\"6fbcb7266198225efbdf85925032c0db-28\"",
+        "last_modified": "Thu, 21 Mar 2024 15:35:44 GMT",
+        "status": 200
+      },
+      "month": 1,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 19,
+        "num_rows": 19663930
+      },
+      "service": "hvfhv",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-01.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "fhvhv_tripdata_2024-02.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 462475428,
+        "content_type": "binary/octet-stream",
+        "etag": "\"e55a4112377004059be5102baa4eecb7-27\"",
+        "last_modified": "Fri, 19 Apr 2024 18:22:42 GMT",
+        "status": 200
+      },
+      "month": 2,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 19,
+        "num_rows": 19359148
+      },
+      "service": "hvfhv",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-02.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "fhvhv_tripdata_2024-03.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 507940560,
+        "content_type": "binary/octet-stream",
+        "etag": "\"fafe7a2cea32d82b462e38708a7ba8ad-30\"",
+        "last_modified": "Wed, 22 May 2024 19:27:43 GMT",
+        "status": 200
+      },
+      "month": 3,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 21,
+        "num_rows": 21280788
+      },
+      "service": "hvfhv",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-03.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "fhvhv_tripdata_2024-04.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 476115643,
+        "content_type": "binary/octet-stream",
+        "etag": "\"3075f550e829d26dc1b66e5610d17cc3-28\"",
+        "last_modified": "Thu, 20 Jun 2024 20:30:13 GMT",
+        "status": 200
+      },
+      "month": 4,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 19,
+        "num_rows": 19733038
+      },
+      "service": "hvfhv",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-04.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "fhvhv_tripdata_2024-05.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 498575918,
+        "content_type": "binary/octet-stream",
+        "etag": "\"699d35ba8357d7a1f19090aed680a401-30\"",
+        "last_modified": "Thu, 18 Jul 2024 18:35:19 GMT",
+        "status": 200
+      },
+      "month": 5,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 20,
+        "num_rows": 20704538
+      },
+      "service": "hvfhv",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-05.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "fhvhv_tripdata_2024-06.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 484417715,
+        "content_type": "binary/octet-stream",
+        "etag": "\"e0f5c43a5d0726db1a2d0e1206e9f1dc-29\"",
+        "last_modified": "Tue, 20 Aug 2024 14:01:56 GMT",
+        "status": 200
+      },
+      "month": 6,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 20,
+        "num_rows": 20123226
+      },
+      "service": "hvfhv",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-06.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "fhvhv_tripdata_2024-07.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 468437522,
+        "content_type": "binary/octet-stream",
+        "etag": "\"18553777308dd22a920c29f2adfc1d39-28\"",
+        "last_modified": "Wed, 18 Sep 2024 13:53:34 GMT",
+        "status": 200
+      },
+      "month": 7,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 19,
+        "num_rows": 19182934
+      },
+      "service": "hvfhv",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-07.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "fhvhv_tripdata_2024-08.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 465991646,
+        "content_type": "binary/octet-stream",
+        "etag": "\"acb5259d0ecf5e51175d43718577c151-28\"",
+        "last_modified": "Wed, 23 Oct 2024 18:45:26 GMT",
+        "status": 200
+      },
+      "month": 8,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 16.1.0",
+        "format_version": 2,
+        "num_row_groups": 19,
+        "num_rows": 19128392
+      },
+      "service": "hvfhv",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-08.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "fhvhv_tripdata_2024-09.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 466470118,
+        "content_type": "binary/octet-stream",
+        "etag": "\"20af1deee7fddec6482ed74e89cece55-28\"",
+        "last_modified": "Wed, 20 Nov 2024 21:37:39 GMT",
+        "status": 200
+      },
+      "month": 9,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 16.1.0",
+        "format_version": 2,
+        "num_row_groups": 19,
+        "num_rows": 19209788
+      },
+      "service": "hvfhv",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-09.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "fhvhv_tripdata_2024-10.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 485102359,
+        "content_type": "binary/octet-stream",
+        "etag": "\"4d3117def54281fceb7c96f83595d043-29\"",
+        "last_modified": "Wed, 18 Dec 2024 21:21:21 GMT",
+        "status": 200
+      },
+      "month": 10,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 16.1.0",
+        "format_version": 2,
+        "num_row_groups": 20,
+        "num_rows": 20028282
+      },
+      "service": "hvfhv",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-10.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "fhvhv_tripdata_2024-11.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 480228052,
+        "content_type": "binary/octet-stream",
+        "etag": "\"c5bba1ac9c92b1e88ab9cef218f48ff2-28\"",
+        "last_modified": "Fri, 17 Jan 2025 20:03:41 GMT",
+        "status": 200
+      },
+      "month": 11,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 20,
+        "num_rows": 19987533
+      },
+      "service": "hvfhv",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-11.parquet",
+      "year": 2024
+    },
+    {
+      "filename": "fhvhv_tripdata_2024-12.parquet",
+      "http": {
+        "accept_ranges": "bytes",
+        "content_length_bytes": 507534115,
+        "content_type": "binary/octet-stream",
+        "etag": "\"fa34956571f71e2663eed475670b57b4-30\"",
+        "last_modified": "Fri, 21 Feb 2025 21:29:11 GMT",
+        "status": 200
+      },
+      "month": 12,
+      "parquet": {
+        "created_by": "parquet-cpp-arrow version 14.0.2",
+        "format_version": 2,
+        "num_row_groups": 21,
+        "num_rows": 21068851
+      },
+      "service": "hvfhv",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-12.parquet",
+      "year": 2024
+    }
+  ],
+  "generated_at": "2026-09-07T15:18:55.841036+00:00",
+  "redistribution_policy": "No TLC row data is committed; only derived metadata is published.",
+  "samples": [
+    {
+      "bytes": 24625,
+      "month": 1,
+      "path": "data/samples/yellow_tripdata_2024-01.parquet",
+      "redistributed": false,
+      "rows": 1000,
+      "service": "yellow",
+      "sha256": "1b03034b48b6ee91259bd9eef32b8d82227bdf9d7adc02d7fdec5a1b4bc1a2a5",
+      "year": 2024
+    },
+    {
+      "bytes": 41206,
+      "month": 1,
+      "path": "data/samples/fhvhv_tripdata_2024-01.parquet",
+      "redistributed": false,
+      "rows": 1000,
+      "service": "hvfhv",
+      "sha256": "6eaff465514af2d0fd34eaa06e353673505bc0a6f34453314bc3cdfed3944344",
+      "year": 2024
+    },
+    {
+      "bytes": 24970,
+      "month": 1,
+      "path": "data/samples/yellow_tripdata_2025-01.parquet",
+      "redistributed": false,
+      "rows": 1000,
+      "service": "yellow",
+      "sha256": "ba59cfe194707862124f3a355130b22effec79f558a2cc46513ce1478ccd76d2",
+      "year": 2025
+    },
+    {
+      "bytes": 42833,
+      "month": 1,
+      "path": "data/samples/fhvhv_tripdata_2025-01.parquet",
+      "redistributed": false,
+      "rows": 1000,
+      "service": "hvfhv",
+      "sha256": "1f78a1ec48859000d8ea145ba1167cc43454dbab266deb7009df99833b0dc536",
+      "year": 2025
+    }
+  ],
+  "schema_changes": {
+    "hvfhv": {
+      "added": [
+        "cbd_congestion_fee"
+      ],
+      "removed": [],
+      "type_changes": []
+    },
+    "yellow": {
+      "added": [
+        "cbd_congestion_fee"
+      ],
+      "removed": [],
+      "type_changes": []
+    }
+  },
+  "schemas": {
+    "hvfhv_2024_01": [
+      {
+        "converted_type": null,
+        "duckdb_type": "INTEGER",
+        "logical_type": null,
+        "name": "DOLocationID",
+        "physical_type": "INT32",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "INTEGER",
+        "logical_type": null,
+        "name": "PULocationID",
+        "physical_type": "INT32",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "access_a_ride_flag",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "airport_fee",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "base_passenger_fare",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "bcf",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "congestion_surcharge",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "dispatching_base_num",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "driver_pay",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "TIMESTAMP_MICROS",
+        "duckdb_type": "TIMESTAMP",
+        "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=MicroSeconds(), NANOS=<null>))",
+        "name": "dropoff_datetime",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "hvfhs_license_num",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "TIMESTAMP_MICROS",
+        "duckdb_type": "TIMESTAMP",
+        "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=MicroSeconds(), NANOS=<null>))",
+        "name": "on_scene_datetime",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "originating_base_num",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "TIMESTAMP_MICROS",
+        "duckdb_type": "TIMESTAMP",
+        "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=MicroSeconds(), NANOS=<null>))",
+        "name": "pickup_datetime",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "TIMESTAMP_MICROS",
+        "duckdb_type": "TIMESTAMP",
+        "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=MicroSeconds(), NANOS=<null>))",
+        "name": "request_datetime",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "sales_tax",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "shared_match_flag",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "shared_request_flag",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "tips",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "tolls",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "trip_miles",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "BIGINT",
+        "logical_type": null,
+        "name": "trip_time",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "wav_match_flag",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "wav_request_flag",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      }
+    ],
+    "hvfhv_2025_01": [
+      {
+        "converted_type": null,
+        "duckdb_type": "INTEGER",
+        "logical_type": null,
+        "name": "DOLocationID",
+        "physical_type": "INT32",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "INTEGER",
+        "logical_type": null,
+        "name": "PULocationID",
+        "physical_type": "INT32",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "access_a_ride_flag",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "airport_fee",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "base_passenger_fare",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "bcf",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "cbd_congestion_fee",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "congestion_surcharge",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "dispatching_base_num",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "driver_pay",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "TIMESTAMP_MICROS",
+        "duckdb_type": "TIMESTAMP",
+        "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=MicroSeconds(), NANOS=<null>))",
+        "name": "dropoff_datetime",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "hvfhs_license_num",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "TIMESTAMP_MICROS",
+        "duckdb_type": "TIMESTAMP",
+        "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=MicroSeconds(), NANOS=<null>))",
+        "name": "on_scene_datetime",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "originating_base_num",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "TIMESTAMP_MICROS",
+        "duckdb_type": "TIMESTAMP",
+        "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=MicroSeconds(), NANOS=<null>))",
+        "name": "pickup_datetime",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "TIMESTAMP_MICROS",
+        "duckdb_type": "TIMESTAMP",
+        "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=MicroSeconds(), NANOS=<null>))",
+        "name": "request_datetime",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "sales_tax",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "shared_match_flag",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "shared_request_flag",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "tips",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "tolls",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "trip_miles",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "BIGINT",
+        "logical_type": null,
+        "name": "trip_time",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "wav_match_flag",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "wav_request_flag",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      }
+    ],
+    "yellow_2024_01": [
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "Airport_fee",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "INTEGER",
+        "logical_type": null,
+        "name": "DOLocationID",
+        "physical_type": "INT32",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "INTEGER",
+        "logical_type": null,
+        "name": "PULocationID",
+        "physical_type": "INT32",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "BIGINT",
+        "logical_type": null,
+        "name": "RatecodeID",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "INTEGER",
+        "logical_type": null,
+        "name": "VendorID",
+        "physical_type": "INT32",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "congestion_surcharge",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "extra",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "fare_amount",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "improvement_surcharge",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "mta_tax",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "BIGINT",
+        "logical_type": null,
+        "name": "passenger_count",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "BIGINT",
+        "logical_type": null,
+        "name": "payment_type",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "store_and_fwd_flag",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "tip_amount",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "tolls_amount",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "total_amount",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "TIMESTAMP_MICROS",
+        "duckdb_type": "TIMESTAMP",
+        "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=MicroSeconds(), NANOS=<null>))",
+        "name": "tpep_dropoff_datetime",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "TIMESTAMP_MICROS",
+        "duckdb_type": "TIMESTAMP",
+        "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=MicroSeconds(), NANOS=<null>))",
+        "name": "tpep_pickup_datetime",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "trip_distance",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      }
+    ],
+    "yellow_2025_01": [
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "Airport_fee",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "INTEGER",
+        "logical_type": null,
+        "name": "DOLocationID",
+        "physical_type": "INT32",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "INTEGER",
+        "logical_type": null,
+        "name": "PULocationID",
+        "physical_type": "INT32",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "BIGINT",
+        "logical_type": null,
+        "name": "RatecodeID",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "INTEGER",
+        "logical_type": null,
+        "name": "VendorID",
+        "physical_type": "INT32",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "cbd_congestion_fee",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "congestion_surcharge",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "extra",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "fare_amount",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "improvement_surcharge",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "mta_tax",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "BIGINT",
+        "logical_type": null,
+        "name": "passenger_count",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "BIGINT",
+        "logical_type": null,
+        "name": "payment_type",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "UTF8",
+        "duckdb_type": "VARCHAR",
+        "logical_type": "StringType()",
+        "name": "store_and_fwd_flag",
+        "physical_type": "BYTE_ARRAY",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "tip_amount",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "tolls_amount",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "total_amount",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "TIMESTAMP_MICROS",
+        "duckdb_type": "TIMESTAMP",
+        "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=MicroSeconds(), NANOS=<null>))",
+        "name": "tpep_dropoff_datetime",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": "TIMESTAMP_MICROS",
+        "duckdb_type": "TIMESTAMP",
+        "logical_type": "TimestampType(isAdjustedToUTC=0, unit=TimeUnit(MILLIS=<null>, MICROS=MicroSeconds(), NANOS=<null>))",
+        "name": "tpep_pickup_datetime",
+        "physical_type": "INT64",
+        "repetition_type": "OPTIONAL"
+      },
+      {
+        "converted_type": null,
+        "duckdb_type": "DOUBLE",
+        "logical_type": null,
+        "name": "trip_distance",
+        "physical_type": "DOUBLE",
+        "repetition_type": "OPTIONAL"
+      }
+    ]
+  },
+  "scope": {
+    "inventory_year": 2024,
+    "method": "HTTP headers and Parquet footers; bounded row samples are not published",
+    "sample_rows_per_file": 1000,
+    "schema_periods": [
+      "2024-01",
+      "2025-01"
+    ],
+    "services": [
+      "yellow",
+      "hvfhv"
+    ]
+  },
+  "sources": {
+    "hvfhv_dictionary": "https://www.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_hvfhs.pdf",
+    "nyc_terms": "https://www.nyc.gov/main/terms-of-use",
+    "open_data_faq": "https://opendata.cityofnewyork.us/faq/",
+    "trip_record_page": "https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page",
+    "yellow_dictionary": "https://www.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_yellow.pdf"
+  },
+  "summary": {
+    "by_service": {
+      "hvfhv": {
+        "bytes": 5776046623,
+        "files": 12,
+        "rows": 239470448
+      },
+      "yellow": {
+        "bytes": 693001713,
+        "files": 12,
+        "rows": 41169720
+      }
+    },
+    "combined": {
+      "bytes": 6469048336,
+      "files": 24,
+      "rows": 280640168
+    },
+    "target_met_by_metadata": true,
+    "target_rows": 100000000
+  }
+}

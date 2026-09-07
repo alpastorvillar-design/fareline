@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fareline"
+version = "0.1.0"
+description = "A reproducible Spark lakehouse for heterogeneous NYC TLC trip records"
+readme = "README.md"
+requires-python = ">=3.10,<3.15"
+license = { file = "LICENSE" }
+authors = [{ name = "alpastorvillar-design" }]
+dependencies = ["duckdb==1.5.5"]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==8.4.2",
+  "ruff==0.13.2",
+]
+
+[project.scripts]
+fareline-m0 = "fareline.m0:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fareline"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"

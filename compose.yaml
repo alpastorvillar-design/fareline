@@ -1,0 +1,51 @@
+name: fareline
+
+x-spark-image: &spark-image
+  build:
+    context: .
+    dockerfile: docker/spark/Dockerfile
+  image: fareline-spark:4.1.0-m0
+
+services:
+  spark-master:
+    <<: *spark-image
+    command:
+      - /opt/spark/bin/spark-class
+      - org.apache.spark.deploy.master.Master
+      - --host
+      - spark-master
+      - --port
+      - "7077"
+      - --webui-port
+      - "8080"
+    ports:
+      - "127.0.0.1:8080:8080"
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - -c
+        - "import socket; socket.create_connection(('spark-master', 7077), 2).close()"
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    networks: [fareline]
+
+  spark-worker:
+    <<: *spark-image
+    command:
+      - /opt/spark/bin/spark-class
+      - org.apache.spark.deploy.worker.Worker
+      - spark://spark-master:7077
+      - --cores
+      - "2"
+      - --memory
+      - 2g
+    depends_on:
+      spark-master:
+        condition: service_healthy
+    networks: [fareline]
+
+networks:
+  fareline:
+    driver: bridge
