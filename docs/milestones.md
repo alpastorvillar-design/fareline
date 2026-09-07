@@ -13,8 +13,9 @@ reserved free-space floor.
 
 ## M1 — vertical slice and standalone runtime
 
-Process one bounded real file through versioned landing, physical occurrences,
-both service-contract paths, quality checks, and minimal analytical products.
+Process one bounded real file through versioned landing, a minimal Delta bronze
+table, physical occurrences, both service-contract paths, quality checks, and
+minimal analytical products.
 Use local mode for fixture tests and Docker Compose for a master plus worker
 processes with explicit memory/core budgets.
 
@@ -24,7 +25,7 @@ approval after independent M0 review.
 
 ## M2 — lakehouse correctness
 
-Add Delta publication, file-version replacement, compatible and incompatible
+Validate Delta publication, file-version replacement, compatible and incompatible
 schema drift, quality incidents, and an incremental-versus-full-rebuild oracle.
 
 Accept when readers never observe partial publication and every affected
@@ -39,7 +40,9 @@ skew, spill, and executor loss. A faster single-node baseline is a valid result.
 
 Accept when outputs remain equivalent, recovery does not double-publish, and
 configuration-specific conclusions are documented. Add a secondary 2–3 page
-Power BI report over the analytical products.
+Power BI report over the analytical products. Publish an explicit dimensional
+model with a trip-occurrence fact, conformed date/zone/service/source-version
+dimensions, and separate service-specific fare facts.
 
 ## M4 — separately approved cloud proof
 
@@ -47,3 +50,13 @@ First select a provider from current demand, compatibility, security, and
 official cost evidence. Then request approval for a bounded design and budget.
 Only an applied-and-destroyed proof may support cloud, IAM, IaC, or measured-cost
 claims.
+
+## M5 — portfolio and defense
+
+Consolidate the README, useful diagrams and ADRs, an operations runbook, measured
+results and limitations, the final repository audit, independent review, and an
+English interview briefing. M5 follows M3 whether M4 is executed or skipped.
+
+Accept only when the Definition of Done is complete, remote CI is observed green,
+public claims map to evidence, and no cloud capability is claimed without an
+applied and destroyed M4 proof.

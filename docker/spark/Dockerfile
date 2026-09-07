@@ -6,9 +6,11 @@ WORKDIR /opt/fareline
 
 COPY pyproject.toml README.md LICENSE ./
 COPY src ./src
+COPY scripts ./scripts
 RUN python3 -m pip install --no-cache-dir .
 
-RUN mkdir -p /opt/fareline/data /opt/fareline/output /opt/fareline/spark-events \
+RUN mkdir -p /opt/fareline/data /opt/fareline/output /opt/fareline/warehouse \
+        /opt/fareline/spark-events \
     && chown -R 185:0 /opt/fareline
 
 USER 185

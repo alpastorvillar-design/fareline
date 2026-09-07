@@ -13,6 +13,12 @@ rows have been downloaded or processed. No full historical dataset or cloud
 infrastructure has been created. See the measured
 [`M0 findings`](docs/m0-findings.md).
 
+**M0.1 closes the independent-review gate.** It inventories every 2024 schema
+and the zone lookup, documents real incompatible drift, and protects the Docker
+baseline with a two-worker write/read test over shared storage. It does not
+implement landing or Delta bronze; those remain M1 work requiring separate user
+approval.
+
 ## Why this exists
 
 The public TLC files are large enough to exercise partitioning, shuffle, skew,
@@ -48,7 +54,10 @@ that requires current demand evidence, a cost estimate, and explicit approval.
 ## Reproduce M0
 
 Python 3.10–3.14 is supported by the bounded metadata inspector. CI uses Python
-3.12, while the pinned Spark image currently provides Python 3.10.
+3.12, while the pinned Spark image currently provides Python 3.10. DuckDB stays
+in the core package because it powers the inspector and will be the single-node
+correctness/performance oracle; installing the package in the Spark image keeps
+that diagnostic path available in the same runtime.
 
 ```bash
 python -m venv .venv
@@ -57,12 +66,23 @@ python -m pip install -e ".[dev]"
 pytest
 ruff check .
 ruff format --check .
-fareline-m0 --inventory-year 2024 --schema-period 2024-01 --schema-period 2025-01
+fareline-m0 \
+  --inventory-year 2024 \
+  --schema-period 2019-02 --schema-period 2019-07 \
+  --schema-period 2023-01 --schema-period 2023-07 \
+  --schema-period 2024-01 --schema-period 2025-01 \
+  --sample-period 2024-01 --sample-period 2025-01 \
+  --sample-rows 1000 \
+  --output evidence/m0/source_inventory.json
 ```
 
-The last command reads HTTP headers and Parquet footers for 24 monthly objects.
-It does not download the annual corpus. Add `--sample-rows 1000` to materialize
-small local samples under the gitignored `data/` directory.
+The last command is the procedure used to produce the published evidence. It
+reads HTTP headers and Parquet footers for 24 monthly objects, probes bounded
+historical schemas, and downloads the 12 KiB zone lookup. It does not download
+the annual trip corpus. Samples are materialized only under the gitignored
+`data/` directory; a Parquet row limit may still transfer a complete row group
+and should not be interpreted as network bytes. Timestamps and mutable source
+HTTP metadata can change between runs.
 
 ## Container baseline
 
@@ -73,14 +93,25 @@ claimed at M0.
 
 ```bash
 docker compose build
-docker compose up -d --scale spark-worker=2
+docker compose up -d --scale spark-worker=2 --wait --wait-timeout 120
 docker compose ps
+docker compose exec -T spark-master /opt/spark/bin/spark-submit \
+  --master spark://spark-master:7077 \
+  /opt/fareline/scripts/spark_storage_smoke.py
 docker compose down
 ```
 
-Docker Desktop may need enough memory for the driver and workers before M3
-experiments. The local host remains one physical machine even with multiple JVM
-worker processes.
+The smoke must report at least two executor hosts, one or more data files, and
+exactly 100,000 rows after re-reading shared output. Docker named volumes share
+`data`, `output`, `warehouse`, and `spark-events` across the driver and workers;
+`docker compose down -v` removes those volumes.
+
+Defaults reserve two cores and 2 GiB of Spark memory per worker, cap each worker
+container at 3 GiB, and cap the master/driver container at 4 GiB. Override them
+with `FARELINE_WORKER_CORES`, `FARELINE_WORKER_MEMORY`,
+`FARELINE_WORKER_CONTAINER_MEMORY_LIMIT`, and
+`FARELINE_MASTER_CONTAINER_MEMORY_LIMIT`. The local host remains one physical
+machine even with multiple JVM worker processes.
 
 ## Documentation
 

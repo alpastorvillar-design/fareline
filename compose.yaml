@@ -4,11 +4,18 @@ x-spark-image: &spark-image
   build:
     context: .
     dockerfile: docker/spark/Dockerfile
-  image: fareline-spark:4.1.0-m0
+  image: fareline-spark:4.1.0-m0.1
+
+x-spark-volumes: &spark-volumes
+  - fareline-data:/opt/fareline/data
+  - fareline-output:/opt/fareline/output
+  - fareline-warehouse:/opt/fareline/warehouse
+  - fareline-spark-events:/opt/fareline/spark-events
 
 services:
   spark-master:
     <<: *spark-image
+    mem_limit: "${FARELINE_MASTER_CONTAINER_MEMORY_LIMIT:-4g}"
     command:
       - /opt/spark/bin/spark-class
       - org.apache.spark.deploy.master.Master
@@ -29,23 +36,32 @@ services:
       interval: 5s
       timeout: 3s
       retries: 12
+    volumes: *spark-volumes
     networks: [fareline]
 
   spark-worker:
     <<: *spark-image
+    mem_limit: "${FARELINE_WORKER_CONTAINER_MEMORY_LIMIT:-3g}"
     command:
       - /opt/spark/bin/spark-class
       - org.apache.spark.deploy.worker.Worker
       - spark://spark-master:7077
       - --cores
-      - "2"
+      - "${FARELINE_WORKER_CORES:-2}"
       - --memory
-      - 2g
+      - "${FARELINE_WORKER_MEMORY:-2g}"
     depends_on:
       spark-master:
         condition: service_healthy
+    volumes: *spark-volumes
     networks: [fareline]
 
 networks:
   fareline:
     driver: bridge
+
+volumes:
+  fareline-data:
+  fareline-output:
+  fareline-warehouse:
+  fareline-spark-events:

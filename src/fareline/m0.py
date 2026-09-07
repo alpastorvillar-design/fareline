@@ -3,14 +3,17 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
+import io
 import json
+import platform
 import time
 import urllib.error
 import urllib.request
 from collections.abc import Iterable, Sequence
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -26,8 +29,11 @@ HVFHV_DICTIONARY = (
     "https://www.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_hvfhs.pdf"
 )
 TRIP_DATA_BASE = "https://d37ci6vzurychx.cloudfront.net/trip-data"
+TAXI_ZONE_LOOKUP_URL = "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv"
 SERVICE_PREFIXES = {"yellow": "yellow_tripdata", "hvfhv": "fhvhv_tripdata"}
-USER_AGENT = "Fareline-M0/0.1 (+https://github.com/alpastorvillar-design/fareline)"
+SERVICE_START_PERIODS = {"yellow": (2019, 1), "hvfhv": (2019, 2)}
+REQUIRED_ZONE_COLUMNS = {"LocationID", "Borough", "Zone", "service_zone"}
+USER_AGENT = "Fareline/0.1.1 (+https://github.com/alpastorvillar-design/fareline)"
 
 
 @dataclass(frozen=True)
@@ -39,14 +45,24 @@ class SourceFile:
     url: str
 
 
+@dataclass(frozen=True)
+class ReferenceFile:
+    name: str
+    url: str
+
+
+TAXI_ZONE_LOOKUP = ReferenceFile("taxi_zone_lookup", TAXI_ZONE_LOOKUP_URL)
+
+
 def source_file(service: str, year: int, month: int) -> SourceFile:
     """Build one official TLC monthly Parquet URL."""
     if service not in SERVICE_PREFIXES:
         raise ValueError(f"Unsupported service: {service}")
-    if year < 2019:
-        raise ValueError("Fareline sources start in 2019 because HVFHV is required")
     if month not in range(1, 13):
         raise ValueError(f"Invalid month: {month}")
+    if (year, month) < SERVICE_START_PERIODS[service]:
+        first_year, first_month = SERVICE_START_PERIODS[service]
+        raise ValueError(f"{service} Fareline sources start at {first_year}-{first_month:02d}")
     filename = f"{SERVICE_PREFIXES[service]}_{year}-{month:02d}.parquet"
     return SourceFile(service, year, month, filename, f"{TRIP_DATA_BASE}/{filename}")
 
@@ -58,7 +74,9 @@ def annual_files(year: int, services: Sequence[str]) -> list[SourceFile]:
 def _request_with_retries(request: urllib.request.Request, attempts: int = 3):
     for attempt in range(1, attempts + 1):
         try:
-            return urllib.request.urlopen(request, timeout=45)  # noqa: S310
+            return urllib.request.urlopen(request, timeout=45)
+        except urllib.error.HTTPError:
+            raise
         except (TimeoutError, urllib.error.URLError):
             if attempt == attempts:
                 raise
@@ -66,7 +84,7 @@ def _request_with_retries(request: urllib.request.Request, attempts: int = 3):
     raise AssertionError("unreachable")
 
 
-def remote_headers(item: SourceFile) -> dict[str, Any]:
+def remote_headers(item: SourceFile | ReferenceFile) -> dict[str, Any]:
     """Read object headers without downloading the Parquet body."""
     request = urllib.request.Request(
         item.url,
@@ -136,14 +154,16 @@ def parquet_summary(connection: duckdb.DuckDBPyConnection, item: SourceFile) -> 
 def parquet_schema(connection: duckdb.DuckDBPyConnection, item: SourceFile) -> list[dict[str, Any]]:
     rows = connection.execute(
         """
-        SELECT name, type, repetition_type, converted_type, logical_type, duckdb_type
+        SELECT row_number() OVER () - 1 AS source_ordinal,
+               name, type, repetition_type, converted_type, logical_type, duckdb_type
         FROM parquet_schema(?)
         WHERE type IS NOT NULL
-        ORDER BY field_id, name
+        ORDER BY source_ordinal
         """,
         [item.url],
     ).fetchall()
     keys = (
+        "source_ordinal",
         "name",
         "physical_type",
         "repetition_type",
@@ -152,6 +172,73 @@ def parquet_schema(connection: duckdb.DuckDBPyConnection, item: SourceFile) -> l
         "duckdb_type",
     )
     return [dict(zip(keys, row, strict=True)) for row in rows]
+
+
+def schema_fingerprint(columns: Sequence[dict[str, Any]]) -> str:
+    """Hash a full ordered physical/logical schema without source data."""
+    payload = json.dumps(columns, sort_keys=True, separators=(",", ":")).encode()
+    return hashlib.sha256(payload).hexdigest()
+
+
+def inspect_zone_lookup(
+    item: ReferenceFile = TAXI_ZONE_LOOKUP,
+    max_bytes: int = 1_000_000,
+) -> dict[str, Any]:
+    """Download and summarize the small zone dimension without retaining rows."""
+    request = urllib.request.Request(
+        item.url,
+        headers={"User-Agent": USER_AGENT, "Accept-Encoding": "identity"},
+    )
+    with _request_with_retries(request) as response:
+        declared_length = response.headers.get("Content-Length")
+        if declared_length and int(declared_length) > max_bytes:
+            raise ValueError(f"Reference file exceeds {max_bytes} bytes: {item.url}")
+        content = response.read(max_bytes + 1)
+        if len(content) > max_bytes:
+            raise ValueError(f"Reference file exceeds {max_bytes} bytes: {item.url}")
+        http = {
+            "status": response.status,
+            "content_length_bytes": len(content),
+            "content_type": response.headers.get("Content-Type"),
+            "etag": response.headers.get("ETag"),
+            "last_modified": response.headers.get("Last-Modified"),
+        }
+
+    reader = csv.DictReader(io.StringIO(content.decode("utf-8-sig")))
+    columns = reader.fieldnames or []
+    missing_columns = sorted(REQUIRED_ZONE_COLUMNS - set(columns))
+    if missing_columns:
+        raise ValueError(f"Zone lookup is missing required columns: {missing_columns}")
+    location_ids: set[int] = set()
+    duplicate_location_ids = 0
+    invalid_location_ids = 0
+    row_count = 0
+    for row in reader:
+        row_count += 1
+        try:
+            location_id = int((row.get("LocationID") or "").strip())
+        except ValueError:
+            invalid_location_ids += 1
+            continue
+        if location_id in location_ids:
+            duplicate_location_ids += 1
+        location_ids.add(location_id)
+
+    return {
+        **asdict(item),
+        "http": http,
+        "content": {
+            "sha256": hashlib.sha256(content).hexdigest(),
+            "rows": row_count,
+            "columns": columns,
+        },
+        "quality": {
+            "duplicate_location_ids": duplicate_location_ids,
+            "invalid_location_ids": invalid_location_ids,
+            "missing_required_columns": missing_columns,
+        },
+        "redistributed": False,
+    }
 
 
 def schema_changes(
@@ -230,17 +317,40 @@ def inspect_sources(
     target_rows: int,
     sample_rows: int,
     sample_dir: Path,
+    sample_periods: Sequence[tuple[int, int]],
 ) -> dict[str, Any]:
     connection = prepare_duckdb()
     file_results: list[dict[str, Any]] = []
+    annual_schema_inventory: dict[str, dict[str, Any]] = {}
     for item in annual_files(inventory_year, services):
+        schema = parquet_schema(connection, item)
+        fingerprint = schema_fingerprint(schema)
         file_results.append(
             {
                 **asdict(item),
                 "http": remote_headers(item),
                 "parquet": parquet_summary(connection, item),
+                "schema": {
+                    "column_count": len(schema),
+                    "fingerprint": fingerprint,
+                },
             }
         )
+        service_schemas = annual_schema_inventory.setdefault(
+            item.service,
+            {"periods": [], "unique_schemas": {}},
+        )
+        service_schemas["periods"].append(
+            {
+                "period": f"{item.year}-{item.month:02d}",
+                "column_count": len(schema),
+                "fingerprint": fingerprint,
+            }
+        )
+        service_schemas["unique_schemas"].setdefault(fingerprint, schema)
+
+    for service_schemas in annual_schema_inventory.values():
+        service_schemas["unique_schema_count"] = len(service_schemas["unique_schemas"])
 
     schemas: dict[str, list[dict[str, Any]]] = {}
     samples: list[dict[str, Any]] = []
@@ -249,10 +359,21 @@ def inspect_sources(
             item = source_file(service, year, month)
             key = f"{service}_{year}_{month:02d}"
             schemas[key] = parquet_schema(connection, item)
-            if sample_rows:
-                samples.append(sample_remote_file(connection, item, sample_dir, sample_rows))
+
+    if sample_rows:
+        for year, month in sample_periods:
+            for service in services:
+                samples.append(
+                    sample_remote_file(
+                        connection,
+                        source_file(service, year, month),
+                        sample_dir,
+                        sample_rows,
+                    )
+                )
 
     changes: dict[str, Any] = {}
+    change_history: dict[str, list[dict[str, Any]]] = {}
     if len(schema_periods) >= 2:
         first_year, first_month = schema_periods[0]
         last_year, last_month = schema_periods[-1]
@@ -261,15 +382,40 @@ def inspect_sources(
                 schemas[f"{service}_{first_year}_{first_month:02d}"],
                 schemas[f"{service}_{last_year}_{last_month:02d}"],
             )
+            change_history[service] = []
+            for before, after in zip(schema_periods, schema_periods[1:], strict=False):
+                before_year, before_month = before
+                after_year, after_month = after
+                change_history[service].append(
+                    {
+                        "before": f"{before_year}-{before_month:02d}",
+                        "after": f"{after_year}-{after_month:02d}",
+                        **schema_changes(
+                            schemas[f"{service}_{before_year}_{before_month:02d}"],
+                            schemas[f"{service}_{after_year}_{after_month:02d}"],
+                        ),
+                    }
+                )
+
+    reference_files = [inspect_zone_lookup()]
+    connection.close()
 
     return {
-        "generated_at": datetime.now(UTC).isoformat(),
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "scope": {
             "inventory_year": inventory_year,
             "services": list(services),
             "schema_periods": [f"{year}-{month:02d}" for year, month in schema_periods],
             "sample_rows_per_file": sample_rows,
-            "method": "HTTP headers and Parquet footers; bounded row samples are not published",
+            "sample_periods": [f"{year}-{month:02d}" for year, month in sample_periods],
+            "method": (
+                "HTTP headers, Parquet footers, bounded row samples, and an in-memory "
+                "zone lookup; source rows are not published"
+            ),
+        },
+        "runtime": {
+            "python_version": platform.python_version(),
+            "duckdb_version": duckdb.__version__,
         },
         "sources": {
             "trip_record_page": SOURCE_PAGE,
@@ -277,14 +423,18 @@ def inspect_sources(
             "hvfhv_dictionary": HVFHV_DICTIONARY,
             "nyc_terms": NYC_TERMS,
             "open_data_faq": OPEN_DATA_FAQ,
+            "taxi_zone_lookup": TAXI_ZONE_LOOKUP_URL,
         },
         "files": file_results,
+        "reference_files": reference_files,
         "summary": summarize_inventory(file_results, target_rows),
+        "annual_schema_inventory": annual_schema_inventory,
         "schemas": schemas,
         "schema_changes": changes,
+        "schema_change_history": change_history,
         "samples": samples,
         "redistribution_policy": (
-            "No TLC row data is committed; only derived metadata is published."
+            "No TLC trip or zone rows are committed; only derived metadata is published."
         ),
     }
 
@@ -317,6 +467,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--target-rows", type=int, default=100_000_000)
     parser.add_argument("--sample-rows", type=int, default=0)
+    parser.add_argument(
+        "--sample-period",
+        action="append",
+        type=parse_period,
+        default=None,
+        help="repeatable YYYY-MM sample period; defaults to 2024-01 and 2025-01",
+    )
     parser.add_argument("--sample-dir", type=Path, default=Path("data/samples"))
     parser.add_argument("--output", type=Path, default=Path("evidence/m0/source_inventory.json"))
     return parser
@@ -327,6 +484,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.sample_rows < 0:
         raise SystemExit("--sample-rows must be non-negative")
     periods = args.schema_period or [(2024, 1), (2025, 1)]
+    sample_periods = args.sample_period or [(2024, 1), (2025, 1)]
     report = inspect_sources(
         inventory_year=args.inventory_year,
         schema_periods=periods,
@@ -334,6 +492,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         target_rows=args.target_rows,
         sample_rows=args.sample_rows,
         sample_dir=args.sample_dir,
+        sample_periods=sample_periods,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
