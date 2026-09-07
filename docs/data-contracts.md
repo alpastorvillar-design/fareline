@@ -28,6 +28,20 @@ Invariants:
 - A new hash creates a new version; it never overwrites audit history.
 - An incomplete or unreadable file cannot become published.
 
+The version identifier is `sha256(logical_id + "\n" + content_sha256)`, so it is
+stable across runs and hosts and changes only when the logical artifact or its
+bytes change. Completeness is part of `logical_id`: a bounded derivative, a
+synthetic fixture and a complete upstream object can never become versions of
+one logical artifact. M1 implements `published`, `replayed`, `repaired` and
+`rejected`; `acquired` and `superseded` belong to M2, which introduces version
+selection.
+
+A local artifact records whether it is a `bounded_sample` derived from the
+upstream object or a `synthetic_fixture`; the local-trip interface refuses a
+`complete_object` claim. For the measured M1 slice, each bounded sample's hash
+must equal the corresponding hash in M0 evidence before publication. The hash
+describes the bytes acquired locally and never the remote monthly object.
+
 ## Schema normalization and conflicts
 
 Raw metadata preserves each source name, type, and physical ordinal. Contracted
@@ -58,6 +72,14 @@ Invariants:
 - Equal values in different ordinals remain separate occurrences.
 - Reprocessing the same version cannot add another published copy.
 - Lineage to the exact file version and run is mandatory.
+
+The ordinal is the Parquet reader's physical row index within the version's
+single file, and must form a dense `0..n-1` sequence. Lineage columns are
+`source_file_version_id`, `source_row_ordinal`, `source_service`,
+`source_period`, `source_artifact_completeness`, `source_logical_url`,
+`source_content_sha256`, `ingest_run_id` and `ingested_at_utc`; every other
+column keeps its source name and type. One source-occurrence table cannot mix completeness
+scopes.
 
 ## Yellow Taxi contract
 

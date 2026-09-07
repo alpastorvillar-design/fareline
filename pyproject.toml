@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "fareline"
-version = "0.1.1"
+version = "0.2.0"
 description = "A reproducible Spark lakehouse for heterogeneous NYC TLC trip records"
 readme = "README.md"
 requires-python = ">=3.10,<3.15"
@@ -20,6 +20,7 @@ dev = [
 
 [project.scripts]
 fareline-m0 = "fareline.m0:main"
+fareline-m1 = "fareline.m1.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/fareline"]

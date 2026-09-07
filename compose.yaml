@@ -4,13 +4,24 @@ x-spark-image: &spark-image
   build:
     context: .
     dockerfile: docker/spark/Dockerfile
-  image: fareline-spark:4.1.0-m0.1
+  image: fareline-spark:4.1.0-m1
 
 x-spark-volumes: &spark-volumes
   - fareline-data:/opt/fareline/data
   - fareline-output:/opt/fareline/output
   - fareline-warehouse:/opt/fareline/warehouse
   - fareline-spark-events:/opt/fareline/spark-events
+  # Read-only inputs from the working copy: bounded samples are the external
+  # source location that landing acquires from, and M0 evidence lets a run bind
+  # a landed sample back to the hash M0 measured.
+  - type: bind
+    source: ${FARELINE_SAMPLE_DIR:-./data/samples}
+    target: /opt/fareline/samples
+    read_only: true
+  - type: bind
+    source: ./evidence
+    target: /opt/fareline/evidence
+    read_only: true
 
 services:
   spark-master:
