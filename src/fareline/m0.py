@@ -19,6 +19,8 @@ from typing import Any
 
 import duckdb
 
+from fareline import __version__
+
 SOURCE_PAGE = "https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page"
 NYC_TERMS = "https://www.nyc.gov/main/terms-of-use"
 OPEN_DATA_FAQ = "https://opendata.cityofnewyork.us/faq/"
@@ -33,7 +35,7 @@ TAXI_ZONE_LOOKUP_URL = "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_loo
 SERVICE_PREFIXES = {"yellow": "yellow_tripdata", "hvfhv": "fhvhv_tripdata"}
 SERVICE_START_PERIODS = {"yellow": (2019, 1), "hvfhv": (2019, 2)}
 REQUIRED_ZONE_COLUMNS = {"LocationID", "Borough", "Zone", "service_zone"}
-USER_AGENT = "Fareline/0.1.1 (+https://github.com/alpastorvillar-design/fareline)"
+USER_AGENT = f"Fareline/{__version__} (+https://github.com/alpastorvillar-design/fareline)"
 
 
 @dataclass(frozen=True)

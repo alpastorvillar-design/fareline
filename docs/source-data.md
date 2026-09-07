@@ -24,6 +24,11 @@ be republished independently of monthly trip files. The M0 inspector downloads
 the small CSV only to record its byte size, hash, columns, row count, and key
 quality; it neither stores nor publishes its rows.
 
+M1 landing does keep acquired bytes, including the zone lookup and the bounded
+trip samples, but only inside gitignored Docker volumes on the machine running
+the pipeline. Downloads are capped at 4 MiB, which is far below any monthly trip
+object. Nothing acquired is committed or published.
+
 NYC Open Data says that Open Data has no use restrictions, while the TLC page
 and general NYC.gov terms do not provide an equally explicit license grant for
 redistributing the linked Parquet objects. Fareline therefore applies a

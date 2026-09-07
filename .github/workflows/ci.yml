@@ -34,6 +34,10 @@ jobs:
         run: docker compose config --quiet
       - name: Build Spark baseline
         run: docker compose build
+      - name: Prepare read-only mount sources
+        # The sample directory is gitignored, so CI creates it empty instead of
+        # relying on the daemon to materialize a missing bind source.
+        run: mkdir -p data/samples
       - name: Start standalone cluster
         run: docker compose up -d --scale spark-worker=2 --wait --wait-timeout 120
       - name: Verify Java, Spark, and package
@@ -45,6 +49,12 @@ jobs:
           docker compose exec -T spark-master
           /opt/spark/bin/spark-submit --master spark://spark-master:7077
           /opt/fareline/scripts/spark_storage_smoke.py
+      - name: Verify M1 landing and Delta source occurrences
+        # Synthetic fixtures only: no TLC download, no credentials.
+        run: >-
+          docker compose exec -T spark-master
+          /opt/spark/bin/spark-submit --master spark://spark-master:7077
+          /opt/fareline/scripts/spark_delta_smoke.py --min-executor-hosts 2
       - name: Clean up cluster and volumes
         if: always()
         run: docker compose down -v --remove-orphans

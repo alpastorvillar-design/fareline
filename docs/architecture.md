@@ -34,9 +34,17 @@ content hash. Each raw row is an occurrence identified by that file version and
 its physical ordinal. Equal field values do not imply equal trips, so Fareline
 preserves multiplicity and never deduplicates by a heuristic content hash.
 
+M1 derives the ordinal from `_metadata.row_index`, the Parquet reader's physical
+row position inside the file. It is produced by the scan before any shuffle, so
+it does not depend on how Spark orders or packs file splits, and a landed
+version is exactly one file so the in-file index is the version's ordinal.
+Ingestion fails unless those ordinals form a dense `0..n-1` sequence.
+
 ## Execution modes
 
-- CI uses small fixtures and Spark local mode where appropriate.
+- Unit tests run on plain Python and DuckDB, with no Spark dependency.
+- The Delta integration smoke runs inside the container on fixtures it generates
+  itself, so CI exercises the standalone cluster without touching the source.
 - M0 establishes a Docker Compose Spark standalone master and worker baseline;
   M0.1 proves that it can write and read shared output before M1 uses it.
 - M3 compares DuckDB, one Spark worker, and multiple Spark workers on the same
@@ -65,12 +73,25 @@ cloud storage implementation.
 
 ## Delta boundary
 
-M1 introduces a minimal Delta bronze table on the bounded vertical slice. M2
-will validate replacement, atomic publication, schema enforcement/evolution,
-and incremental-versus-rebuild equivalence. Local-filesystem concurrency
-testing is limited to a single Spark driver. Fareline will not generalize that
-result to multi-process writers or object storage; stronger claims require M4
-on the chosen storage implementation.
+M1 publishes one minimal Delta source-occurrence table per service on the bounded vertical
+slice. Delta artifacts are supplied as user jars through a coordinate pinned in
+the image rather than copied into `/opt/spark/jars`, because their transitive
+closure contains older Jackson and Parquet builds that must not take precedence
+over the ones Spark ships.
+
+Idempotency is a published-version check followed by an append, which is safe
+for the single writer M1 declares and is not safe for two concurrent drivers.
+The table also rejects a version whose artifact completeness differs from the
+scope already present, preventing sample or fixture rows from contaminating a
+future complete-object table.
+M2 will validate replacement, atomic publication, schema enforcement and
+evolution, and incremental-versus-rebuild equivalence. Fareline will not
+generalize a local-filesystem result to multi-process writers or object storage;
+stronger claims require M4 on the chosen storage implementation.
+
+Verification never trusts the transaction log alone. After a write the job
+re-reads the table and requires a Delta log, data files that exist on the shared
+volume, the expected row count and one technical key per row.
 
 ## Cloud gate
 

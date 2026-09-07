@@ -15,9 +15,15 @@ infrastructure has been created. See the measured
 
 **M0.1 closes the independent-review gate.** It inventories every 2024 schema
 and the zone lookup, documents real incompatible drift, and protects the Docker
-baseline with a two-worker write/read test over shared storage. It does not
-implement landing or Delta bronze; those remain M1 work requiring separate user
-approval.
+baseline with a two-worker write/read test over shared storage.
+
+**M1 delivers the first vertical slice.** Bounded Yellow and HVFHV samples and
+the official zone lookup are acquired into versioned landing and published as
+separate Delta source-occurrence tables on the two-worker cluster. Replaying identical
+content changes nothing, and Spark and DuckDB agree on every service-specific
+count and sum. It processes 1,000 rows per service, not a month and not the
+ratified annual target. See the measured
+[`M1 vertical slice`](docs/m1-vertical-slice.md).
 
 ## Why this exists
 
@@ -32,18 +38,20 @@ Yellow and HVFHV are intentionally not forced into one fare contract. Their
 service-specific components remain separate, and cross-service products compare
 coverage and demand only where the semantics are defensible.
 
-## Planned data flow
+## Data flow
 
 ```text
 official monthly Parquet
         |
-source manifest + content hash
+source manifest + content hash          <- M1
         |
-versioned landing files
+versioned landing files                 <- M1
         |
-Spark standalone (one or more workers)
+Spark standalone (one or more workers)  <- M1
         |
-source occurrences -> service contracts -> analytical products
+source occurrences                      <- M1, Delta table per service
+        |
+service contracts -> analytical products
         |                                      |
 quality ledger                         Spark SQL / Power BI extract
 ```
@@ -86,10 +94,10 @@ HTTP metadata can change between runs.
 
 ## Container baseline
 
-The Spark image is pinned to Apache Spark 4.1.0 with Java 17. The M0 smoke test
-registered two standalone workers with four cores and 4 GiB total worker memory.
-Delta Lake 4.2.0 is the compatible target for M1, but Delta execution is not
-claimed at M0.
+The Spark image is pinned to Apache Spark 4.1.0 with Java 17 and adds Delta Lake
+4.2.0. The Delta coordinate is declared once in the Dockerfile, resolved into an
+Ivy cache during the build, and verified by a Delta round trip that fails the
+build if the Python package and the JVM artifacts disagree.
 
 ```bash
 docker compose build
@@ -104,7 +112,9 @@ docker compose down
 The smoke must report at least two executor hosts, one or more data files, and
 exactly 100,000 rows after re-reading shared output. Docker named volumes share
 `data`, `output`, `warehouse`, and `spark-events` across the driver and workers;
-`docker compose down -v` removes those volumes.
+`docker compose down -v` removes those volumes. The working copy is also mounted
+read-only at `/opt/fareline/samples` (bounded local samples, overridable with
+`FARELINE_SAMPLE_DIR`) and `/opt/fareline/evidence`.
 
 Defaults reserve two cores and 2 GiB of Spark memory per worker, cap each worker
 container at 3 GiB, and cap the master/driver container at 4 GiB. Override them
@@ -113,12 +123,53 @@ with `FARELINE_WORKER_CORES`, `FARELINE_WORKER_MEMORY`,
 `FARELINE_MASTER_CONTAINER_MEMORY_LIMIT`. The local host remains one physical
 machine even with multiple JVM worker processes.
 
+## Reproduce M1
+
+The M1 slice reads the bounded samples produced by the `fareline-m0` command
+above. PySpark is available only inside a submitted application, so the CLI is
+launched through `spark-submit`; `fareline-m1 land` also works as a plain
+console script when Spark is not needed.
+
+```bash
+docker compose up -d --scale spark-worker=2 --wait --wait-timeout 180
+docker compose exec -T spark-master /opt/spark/bin/spark-submit \
+  --master spark://spark-master:7077 \
+  /opt/fareline/scripts/spark_delta_smoke.py --min-executor-hosts 2
+docker compose exec -T spark-master /opt/spark/bin/spark-submit \
+  --master spark://spark-master:7077 \
+  /opt/fareline/scripts/fareline_m1.py run
+docker compose cp \
+  spark-master:/opt/fareline/output/evidence/m1/vertical_slice.json \
+  evidence/m1/vertical_slice.json
+docker compose down
+```
+
+The first command is the integration smoke: it generates its own Parquet
+fixtures, so it needs no TLC access and no credentials, and it deletes the
+fixtures and their tables afterwards. The second acquires the local samples plus
+the 12 KiB official zone lookup, requires each sample hash to match the M0
+evidence, publishes Delta source-occurrence tables, replays the same content to prove the no-op,
+and compares Spark against DuckDB. Repeating it reports `replayed` everywhere
+and adds no Delta commit while the landed bytes remain intact; a missing or
+damaged landed file is restored from newly validated bytes and recorded as
+`repaired`.
+
+Inspect the results without rerunning anything:
+
+```bash
+docker compose exec -T spark-master find /opt/fareline/data/landing -maxdepth 3
+docker compose exec -T spark-master cat /opt/fareline/data/landing/events.jsonl
+docker compose exec -T spark-master find /opt/fareline/warehouse/source_occurrences -maxdepth 3
+```
+
 ## Documentation
 
 - [Architecture and milestones](docs/architecture.md)
 - [Source-specific data contracts](docs/data-contracts.md)
 - [Source terms and redistribution boundary](docs/source-data.md)
 - [Acceptance and cancellation gates](docs/milestones.md)
+- [M0 findings](docs/m0-findings.md)
+- [M1 vertical slice](docs/m1-vertical-slice.md)
 
 ## Scope boundaries
 

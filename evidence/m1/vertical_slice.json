@@ -1,0 +1,356 @@
+{
+  "generated_at_utc": "2026-09-07T22:47:31.731507+00:00",
+  "landing": {
+    "artifacts": {
+      "hvfhv": {
+        "content_length_bytes": 41206,
+        "content_profile": {
+          "columns": 24,
+          "format": "parquet",
+          "format_version": 1,
+          "row_groups": 1,
+          "rows": 1000
+        },
+        "content_sha256": "6eaff465514af2d0fd34eaa06e353673505bc0a6f34453314bc3cdfed3944344",
+        "first_pass_state": "published",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2024-01",
+        "origin_kind": "local_file",
+        "publication_state": "published",
+        "relative_path": "files/trip_records__bounded_sample__hvfhv__2024-01/9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5/fhvhv_tripdata_2024-01.parquet",
+        "replay_state": "replayed",
+        "upstream": {
+          "acquired_scope": "bounded_sample",
+          "hash_covers_upstream_object": false,
+          "logical_url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2024-01.parquet",
+          "m0_sample_sha256": "6eaff465514af2d0fd34eaa06e353673505bc0a6f34453314bc3cdfed3944344",
+          "period": "2024-01"
+        },
+        "version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5"
+      },
+      "yellow": {
+        "content_length_bytes": 24625,
+        "content_profile": {
+          "columns": 19,
+          "format": "parquet",
+          "format_version": 1,
+          "row_groups": 1,
+          "rows": 1000
+        },
+        "content_sha256": "1b03034b48b6ee91259bd9eef32b8d82227bdf9d7adc02d7fdec5a1b4bc1a2a5",
+        "first_pass_state": "published",
+        "logical_id": "trip_records:bounded_sample:yellow:2024-01",
+        "origin_kind": "local_file",
+        "publication_state": "published",
+        "relative_path": "files/trip_records__bounded_sample__yellow__2024-01/0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032/yellow_tripdata_2024-01.parquet",
+        "replay_state": "replayed",
+        "upstream": {
+          "acquired_scope": "bounded_sample",
+          "hash_covers_upstream_object": false,
+          "logical_url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.parquet",
+          "m0_sample_sha256": "1b03034b48b6ee91259bd9eef32b8d82227bdf9d7adc02d7fdec5a1b4bc1a2a5",
+          "period": "2024-01"
+        },
+        "version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032"
+      },
+      "zone_lookup": {
+        "content_length_bytes": 12331,
+        "content_profile": {
+          "columns": [
+            "LocationID",
+            "Borough",
+            "Zone",
+            "service_zone"
+          ],
+          "format": "csv",
+          "location_ids": 265,
+          "rows": 265
+        },
+        "content_sha256": "1a99e105092230f8620f301edcca7f80d3080642ff404d28ed957d3fa222c8ed",
+        "first_pass_state": "published",
+        "logical_id": "zone_lookup:complete_object",
+        "origin_kind": "https",
+        "publication_state": "published",
+        "relative_path": "files/zone_lookup__complete_object/d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb/taxi_zone_lookup.csv",
+        "replay_state": "replayed",
+        "upstream": {
+          "acquired_scope": "complete_object",
+          "hash_covers_upstream_object": true,
+          "logical_url": "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv",
+          "m0_sample_sha256": null,
+          "period": null
+        },
+        "version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      }
+    },
+    "ledger_events": {
+      "all_runs": {
+        "published": 3,
+        "replayed": 3
+      },
+      "current_run": {
+        "published": 3,
+        "replayed": 3
+      }
+    },
+    "root": "/opt/fareline/data/landing"
+  },
+  "limits": [
+    "The slice processes bounded samples of 1,000 rows per service, not a complete month and not 100 million rows.",
+    "Idempotency is demonstrated for a single writer on a local filesystem; concurrent drivers and object storage are not covered.",
+    "Every acquired version stays published; supersession and rebuild equivalence are M2 work.",
+    "The SHA-256 of a bounded sample does not describe the remote monthly object it was derived from."
+  ],
+  "milestone": "m1",
+  "quality": {
+    "hvfhv": {
+      "fare_components": [
+        "base_passenger_fare",
+        "tips",
+        "driver_pay"
+      ],
+      "metrics": {
+        "all_match": true,
+        "metrics": {
+          "base_passenger_fare_non_null_rows": {
+            "delta_spark": 1000,
+            "match": true,
+            "source_duckdb": 1000
+          },
+          "base_passenger_fare_sum_cents": {
+            "delta_spark": 2755683,
+            "match": true,
+            "source_duckdb": 2755683
+          },
+          "driver_pay_non_null_rows": {
+            "delta_spark": 1000,
+            "match": true,
+            "source_duckdb": 1000
+          },
+          "driver_pay_sum_cents": {
+            "delta_spark": 2112996,
+            "match": true,
+            "source_duckdb": 2112996
+          },
+          "negative_duration_rows": {
+            "delta_spark": 0,
+            "match": true,
+            "source_duckdb": 0
+          },
+          "null_dropoff_zone_rows": {
+            "delta_spark": 0,
+            "match": true,
+            "source_duckdb": 0
+          },
+          "null_pickup_zone_rows": {
+            "delta_spark": 0,
+            "match": true,
+            "source_duckdb": 0
+          },
+          "pickup_out_of_period_rows": {
+            "delta_spark": 0,
+            "match": true,
+            "source_duckdb": 0
+          },
+          "source_rows": {
+            "delta_spark": 1000,
+            "match": true,
+            "source_duckdb": 1000
+          },
+          "tips_non_null_rows": {
+            "delta_spark": 1000,
+            "match": true,
+            "source_duckdb": 1000
+          },
+          "tips_sum_cents": {
+            "delta_spark": 107706,
+            "match": true,
+            "source_duckdb": 107706
+          },
+          "unresolved_duration_rows": {
+            "delta_spark": 0,
+            "match": true,
+            "source_duckdb": 0
+          }
+        }
+      },
+      "ordinal_alignment": {
+        "checked": true,
+        "compared_rows": 1000,
+        "delta_rows": 1000,
+        "first_mismatch_ordinal": null,
+        "match": true,
+        "oracle_rows": 1000
+      },
+      "period": "2024-01",
+      "version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5"
+    },
+    "yellow": {
+      "fare_components": [
+        "fare_amount",
+        "tip_amount",
+        "total_amount"
+      ],
+      "metrics": {
+        "all_match": true,
+        "metrics": {
+          "fare_amount_non_null_rows": {
+            "delta_spark": 1000,
+            "match": true,
+            "source_duckdb": 1000
+          },
+          "fare_amount_sum_cents": {
+            "delta_spark": 1827320,
+            "match": true,
+            "source_duckdb": 1827320
+          },
+          "negative_duration_rows": {
+            "delta_spark": 0,
+            "match": true,
+            "source_duckdb": 0
+          },
+          "null_dropoff_zone_rows": {
+            "delta_spark": 0,
+            "match": true,
+            "source_duckdb": 0
+          },
+          "null_pickup_zone_rows": {
+            "delta_spark": 0,
+            "match": true,
+            "source_duckdb": 0
+          },
+          "pickup_out_of_period_rows": {
+            "delta_spark": 3,
+            "match": true,
+            "source_duckdb": 3
+          },
+          "source_rows": {
+            "delta_spark": 1000,
+            "match": true,
+            "source_duckdb": 1000
+          },
+          "tip_amount_non_null_rows": {
+            "delta_spark": 1000,
+            "match": true,
+            "source_duckdb": 1000
+          },
+          "tip_amount_sum_cents": {
+            "delta_spark": 347287,
+            "match": true,
+            "source_duckdb": 347287
+          },
+          "total_amount_non_null_rows": {
+            "delta_spark": 1000,
+            "match": true,
+            "source_duckdb": 1000
+          },
+          "total_amount_sum_cents": {
+            "delta_spark": 2682838,
+            "match": true,
+            "source_duckdb": 2682838
+          },
+          "unresolved_duration_rows": {
+            "delta_spark": 0,
+            "match": true,
+            "source_duckdb": 0
+          }
+        }
+      },
+      "ordinal_alignment": {
+        "checked": true,
+        "compared_rows": 1000,
+        "delta_rows": 1000,
+        "first_mismatch_ordinal": null,
+        "match": true,
+        "oracle_rows": 1000
+      },
+      "period": "2024-01",
+      "version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032"
+    }
+  },
+  "replay": {
+    "landing_states": {
+      "hvfhv": "replayed",
+      "yellow": "replayed",
+      "zone_lookup": "replayed"
+    },
+    "no_op": true,
+    "source_occurrence_states": {
+      "hvfhv": "replayed",
+      "yellow": "replayed"
+    },
+    "table_state_unchanged": true
+  },
+  "run_id": "m1-acceptance-20260908",
+  "runtime": {
+    "delta_jar_packages": "io.delta:delta-spark_2.13:4.2.0",
+    "delta_python_version": "4.2.0",
+    "duckdb_version": "1.5.5",
+    "fareline_version": "0.2.0",
+    "java_version": "17.0.17",
+    "probe_executor_hosts": [
+      "b9d66895e621",
+      "bba7931db3cc"
+    ],
+    "python_version": "3.10.12",
+    "spark_master": "spark://spark-master:7077",
+    "spark_version": "4.1.0"
+  },
+  "scope": {
+    "executed_on": "locally acquired bounded TLC samples and the official zone lookup",
+    "not_executed": [
+      "full monthly or annual TLC objects",
+      "contracted service tables, analytical products, dimensional models and Power BI",
+      "version supersession and incremental-versus-rebuild equivalence",
+      "multi-driver concurrency and object storage",
+      "cloud infrastructure of any provider"
+    ],
+    "period": "2024-01",
+    "services": [
+      "yellow",
+      "hvfhv"
+    ],
+    "trip_artifact_completeness": "bounded_sample",
+    "zone_lookup_acquired": true
+  },
+  "source_occurrences": {
+    "hvfhv": {
+      "artifact_completeness": "bounded_sample",
+      "data_file_bytes": 68385,
+      "data_files": 1,
+      "delta_log_present": true,
+      "delta_version": 0,
+      "delta_version_after_replay": 0,
+      "distinct_technical_keys": 1000,
+      "distinct_versions": 1,
+      "first_pass_rows_written": 1000,
+      "first_pass_state": "published",
+      "replay_state": "replayed",
+      "rows": 1000,
+      "table_path": "/opt/fareline/warehouse/source_occurrences/hvfhv_trip_occurrence"
+    },
+    "yellow": {
+      "artifact_completeness": "bounded_sample",
+      "data_file_bytes": 40372,
+      "data_files": 1,
+      "delta_log_present": true,
+      "delta_version": 0,
+      "delta_version_after_replay": 0,
+      "distinct_technical_keys": 1000,
+      "distinct_versions": 1,
+      "first_pass_rows_written": 1000,
+      "first_pass_state": "published",
+      "replay_state": "replayed",
+      "rows": 1000,
+      "table_path": "/opt/fareline/warehouse/source_occurrences/yellow_trip_occurrence"
+    }
+  },
+  "timings_seconds": {
+    "ingest_first_pass": 10.507,
+    "land_first_pass": 0.161,
+    "oracle": 2.633,
+    "replay_pass": 1.598,
+    "spark_session": 2.835,
+    "verify_first_pass": 5.972,
+    "verify_replay": 0.879
+  }
+}

@@ -13,17 +13,18 @@ reserved free-space floor.
 
 ## M1 — vertical slice and standalone runtime
 
-Process one bounded real file through versioned landing, a minimal Delta bronze
-table, physical occurrences, both service-contract paths, quality checks, and
-minimal analytical products.
-Use local mode for fixture tests and Docker Compose for a master plus worker
-processes with explicit memory/core budgets.
+Process bounded real files through versioned landing, a minimal Delta
+source-occurrence table per service, both service-contract paths and quality
+checks. Fixture tests run without Spark; the Delta integration smoke and the
+slice itself run on Docker Compose with a master plus worker processes under
+explicit memory and core budgets.
 
 Accept when replay is a no-op, counts and service-specific sums match a DuckDB
-oracle, and the container runtime is reproducible. M1 requires a separate user
-approval after independent M0 review.
+oracle, and the container runtime is reproducible. Measured results are in
+[`m1-vertical-slice.md`](m1-vertical-slice.md). Contracted service tables and
+analytical products move to M2 with the rest of the correctness work.
 
-## M2 — lakehouse correctness
+## M2 — contracted data correctness
 
 Validate Delta publication, file-version replacement, compatible and incompatible
 schema drift, quality incidents, and an incremental-versus-full-rebuild oracle.
