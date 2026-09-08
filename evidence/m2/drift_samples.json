@@ -1,0 +1,58 @@
+{
+  "acquisition": {
+    "method": "DuckDB httpfs read of the official object with a 1,000 row LIMIT, written back as ZSTD Parquet",
+    "measured_transfer": {
+      "note": "A row limit bounds the retained sample, not the network read. Measured on the yellow 2023-01 object with DuckDB HTTP logging enabled.",
+      "observed_requests": [
+        {"type": "HEAD", "response_body_bytes": 0},
+        {"type": "GET", "range": "bytes=47607834-47673369", "response_body_bytes": 65536},
+        {"type": "GET", "range": "bytes=4-47607833", "response_body_bytes": 47607830}
+      ],
+      "response_body_bytes": 47673366,
+      "object_content_length_bytes": 47673370,
+      "conclusion": "Reading any row of a single-row-group Parquet object transfers that whole row group."
+    },
+    "reason": "M0 sampled 2024-01 and 2025-01 only. The two historical drift cases named by the M2 contract rules are not reproducible from those periods.",
+    "row_limit": 1000
+  },
+  "redistribution_policy": "No TLC trip rows are committed; only derived metadata is published.",
+  "samples": [
+    {
+      "bytes": 25224,
+      "derivative_note": "Physical types match the upstream object recorded by M0 for this period.",
+      "month": 1,
+      "observed_drift": "airport_fee is lower case here and Airport_fee from 2023-07 onward; passenger_count and RatecodeID are DOUBLE here and BIGINT later; VendorID and the location ids are 64-bit here and 32-bit later.",
+      "path": "data/samples/yellow_tripdata_2023-01.parquet",
+      "redistributed": false,
+      "remote_content_length_bytes": 47673370,
+      "remote_row_group_compressed_bytes": 47660763,
+      "remote_row_groups_read": 1,
+      "rows": 1000,
+      "service": "yellow",
+      "sha256": "693ba227aeab937081ad2c89acc594ce7d2c8e00575ced7d43185afd9d8917e5",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-01.parquet",
+      "year": 2023
+    },
+    {
+      "bytes": 41349,
+      "derivative_note": "Upstream declares airport_fee and wav_match_flag with the Parquet Null logical type. The DuckDB copy materialises both as INT32, so this derivative is not type-identical to the object M0 inspected.",
+      "month": 2,
+      "observed_drift": "The location ids are 64-bit here and 32-bit from 2023-07 onward; cbd_congestion_fee does not exist yet; wav_match_flag is INT32 in this derivative where the contract requires a string.",
+      "path": "data/samples/fhvhv_tripdata_2019-02.parquet",
+      "redistributed": false,
+      "remote_content_length_bytes": 513054623,
+      "remote_row_group_compressed_bytes": 513039052,
+      "remote_row_groups_read": 1,
+      "rows": 1000,
+      "service": "hvfhv",
+      "sha256": "d98472e75760611f37dca8fe2d210309474c65f20141c3e0128d19b825b23eb1",
+      "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2019-02.parquet",
+      "year": 2019
+    }
+  ],
+  "scope": {
+    "milestone": "m2",
+    "periods": ["2023-01", "2019-02"],
+    "services": ["yellow", "hvfhv"]
+  }
+}

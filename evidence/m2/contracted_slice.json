@@ -1,0 +1,2417 @@
+{
+  "contracts": {
+    "hvfhv": {
+      "columns": 25,
+      "contract_version": "hvfhv/v1",
+      "fare_components": [
+        "base_passenger_fare",
+        "tolls",
+        "bcf",
+        "sales_tax",
+        "congestion_surcharge",
+        "airport_fee",
+        "cbd_congestion_fee",
+        "tips",
+        "driver_pay"
+      ],
+      "fingerprint": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
+      "local_time_zone": "America/New_York"
+    },
+    "yellow": {
+      "columns": 20,
+      "contract_version": "yellow/v1",
+      "fare_components": [
+        "fare_amount",
+        "extra",
+        "mta_tax",
+        "tip_amount",
+        "tolls_amount",
+        "improvement_surcharge",
+        "congestion_surcharge",
+        "airport_fee",
+        "cbd_congestion_fee",
+        "total_amount"
+      ],
+      "fingerprint": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b",
+      "local_time_zone": "America/New_York"
+    }
+  },
+  "equivalence": {
+    "compared": "marker-visible schema, row counts, distinct technical keys and content digests",
+    "equivalent": true,
+    "not_compared": "Parquet and Delta file bytes, which differ between correct runs",
+    "per_table": {
+      "hvfhv": {
+        "contracted": {
+          "equivalent": true,
+          "fields": {
+            "content_additive_digest": {
+              "incremental": "1134751693862575821891",
+              "match": true,
+              "rebuild": "1134751693862575821891"
+            },
+            "content_sorted_digest": {
+              "incremental": "ba9093b637c1221aa39347a74939d6fead74835f12fdac909cd0759a223fff25",
+              "match": true,
+              "rebuild": "ba9093b637c1221aa39347a74939d6fead74835f12fdac909cd0759a223fff25"
+            },
+            "distinct_keys": {
+              "incremental": 2000,
+              "match": true,
+              "rebuild": 2000
+            },
+            "key_additive_digest": {
+              "incremental": "1147200667442363268144",
+              "match": true,
+              "rebuild": "1147200667442363268144"
+            },
+            "key_sorted_digest": {
+              "incremental": "f39896e327ffe801391c7355807a31af1e4545f7bfa13cba532030cdda9234bf",
+              "match": true,
+              "rebuild": "f39896e327ffe801391c7355807a31af1e4545f7bfa13cba532030cdda9234bf"
+            },
+            "rows": {
+              "incremental": 2000,
+              "match": true,
+              "rebuild": 2000
+            },
+            "schema": {
+              "incremental": [
+                "derivation_id:string",
+                "source_file_version_id:string",
+                "source_row_ordinal:bigint",
+                "source_service:string",
+                "source_period:string",
+                "source_artifact_completeness:string",
+                "source_logical_url:string",
+                "source_content_sha256:string",
+                "contract_version:string",
+                "contract_fingerprint:string",
+                "zone_lookup_version_id:string",
+                "hvfhs_license_num:string",
+                "dispatching_base_num:string",
+                "originating_base_num:string",
+                "request_datetime:timestamp_ntz",
+                "on_scene_datetime:timestamp_ntz",
+                "pickup_datetime:timestamp_ntz",
+                "dropoff_datetime:timestamp_ntz",
+                "pickup_location_id:bigint",
+                "dropoff_location_id:bigint",
+                "trip_miles:double",
+                "trip_time:bigint",
+                "base_passenger_fare:double",
+                "tolls:double",
+                "bcf:double",
+                "sales_tax:double",
+                "congestion_surcharge:double",
+                "airport_fee:double",
+                "tips:double",
+                "driver_pay:double",
+                "shared_request_flag:string",
+                "shared_match_flag:string",
+                "access_a_ride_flag:string",
+                "wav_request_flag:string",
+                "wav_match_flag:string",
+                "cbd_congestion_fee:double",
+                "pickup_local_date:date",
+                "pickup_local_hour:int",
+                "pickup_borough:string",
+                "pickup_zone_name:string",
+                "pickup_service_zone:string",
+                "pickup_zone_resolved:boolean",
+                "dropoff_borough:string",
+                "dropoff_zone_name:string",
+                "dropoff_service_zone:string",
+                "dropoff_zone_resolved:boolean"
+              ],
+              "match": true,
+              "rebuild": [
+                "derivation_id:string",
+                "source_file_version_id:string",
+                "source_row_ordinal:bigint",
+                "source_service:string",
+                "source_period:string",
+                "source_artifact_completeness:string",
+                "source_logical_url:string",
+                "source_content_sha256:string",
+                "contract_version:string",
+                "contract_fingerprint:string",
+                "zone_lookup_version_id:string",
+                "hvfhs_license_num:string",
+                "dispatching_base_num:string",
+                "originating_base_num:string",
+                "request_datetime:timestamp_ntz",
+                "on_scene_datetime:timestamp_ntz",
+                "pickup_datetime:timestamp_ntz",
+                "dropoff_datetime:timestamp_ntz",
+                "pickup_location_id:bigint",
+                "dropoff_location_id:bigint",
+                "trip_miles:double",
+                "trip_time:bigint",
+                "base_passenger_fare:double",
+                "tolls:double",
+                "bcf:double",
+                "sales_tax:double",
+                "congestion_surcharge:double",
+                "airport_fee:double",
+                "tips:double",
+                "driver_pay:double",
+                "shared_request_flag:string",
+                "shared_match_flag:string",
+                "access_a_ride_flag:string",
+                "wav_request_flag:string",
+                "wav_match_flag:string",
+                "cbd_congestion_fee:double",
+                "pickup_local_date:date",
+                "pickup_local_hour:int",
+                "pickup_borough:string",
+                "pickup_zone_name:string",
+                "pickup_service_zone:string",
+                "pickup_zone_resolved:boolean",
+                "dropoff_borough:string",
+                "dropoff_zone_name:string",
+                "dropoff_service_zone:string",
+                "dropoff_zone_resolved:boolean"
+              ]
+            },
+            "visible_derivations": {
+              "incremental": [
+                "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+                "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+              ],
+              "match": true,
+              "rebuild": [
+                "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+                "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+              ]
+            }
+          }
+        },
+        "incidents": {
+          "equivalent": true,
+          "fields": {
+            "content_additive_digest": {
+              "incremental": "382170605765084307",
+              "match": true,
+              "rebuild": "382170605765084307"
+            },
+            "content_sorted_digest": {
+              "incremental": "a1ec067fb5bcb13ce9699f925e35f8f9d460880e235361b83f805d3816f844c9",
+              "match": true,
+              "rebuild": "a1ec067fb5bcb13ce9699f925e35f8f9d460880e235361b83f805d3816f844c9"
+            },
+            "distinct_keys": {
+              "incremental": 1,
+              "match": true,
+              "rebuild": 1
+            },
+            "key_additive_digest": {
+              "incremental": "1017468096032556861",
+              "match": true,
+              "rebuild": "1017468096032556861"
+            },
+            "key_sorted_digest": {
+              "incremental": "9e46d08141ba0beb74c71f10aaeea3c7e0da74ac0ecc4e6ef6e9f482c3e58db6",
+              "match": true,
+              "rebuild": "9e46d08141ba0beb74c71f10aaeea3c7e0da74ac0ecc4e6ef6e9f482c3e58db6"
+            },
+            "rows": {
+              "incremental": 1,
+              "match": true,
+              "rebuild": 1
+            },
+            "schema": {
+              "incremental": [
+                "incident_id:string",
+                "source_service:string",
+                "source_period:string",
+                "source_file_version_id:string",
+                "derivation_id:string",
+                "source_row_ordinal:bigint",
+                "contract_version:string",
+                "scope:string",
+                "rule:string",
+                "severity:string",
+                "action:string",
+                "detail:string"
+              ],
+              "match": true,
+              "rebuild": [
+                "incident_id:string",
+                "source_service:string",
+                "source_period:string",
+                "source_file_version_id:string",
+                "derivation_id:string",
+                "source_row_ordinal:bigint",
+                "contract_version:string",
+                "scope:string",
+                "rule:string",
+                "severity:string",
+                "action:string",
+                "detail:string"
+              ]
+            },
+            "visible_derivations": {
+              "incremental": [
+                "67d5cb54f422d9625eea58b78badc051fec4883fdb26edb1830e3d740e383610",
+                "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+                "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+              ],
+              "match": true,
+              "rebuild": [
+                "67d5cb54f422d9625eea58b78badc051fec4883fdb26edb1830e3d740e383610",
+                "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+                "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+              ]
+            }
+          }
+        },
+        "quarantine": {
+          "equivalent": true,
+          "fields": {
+            "content_additive_digest": {
+              "incremental": null,
+              "match": true,
+              "rebuild": null
+            },
+            "content_sorted_digest": {
+              "incremental": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "match": true,
+              "rebuild": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "distinct_keys": {
+              "incremental": 0,
+              "match": true,
+              "rebuild": 0
+            },
+            "key_additive_digest": {
+              "incremental": null,
+              "match": true,
+              "rebuild": null
+            },
+            "key_sorted_digest": {
+              "incremental": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "match": true,
+              "rebuild": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "rows": {
+              "incremental": 0,
+              "match": true,
+              "rebuild": 0
+            },
+            "schema": {
+              "incremental": [
+                "derivation_id:string",
+                "source_file_version_id:string",
+                "source_row_ordinal:bigint",
+                "source_service:string",
+                "source_period:string",
+                "source_artifact_completeness:string",
+                "source_logical_url:string",
+                "source_content_sha256:string",
+                "contract_version:string",
+                "contract_fingerprint:string",
+                "zone_lookup_version_id:string",
+                "hvfhs_license_num:string",
+                "dispatching_base_num:string",
+                "originating_base_num:string",
+                "request_datetime:timestamp_ntz",
+                "on_scene_datetime:timestamp_ntz",
+                "pickup_datetime:timestamp_ntz",
+                "dropoff_datetime:timestamp_ntz",
+                "pickup_location_id:bigint",
+                "dropoff_location_id:bigint",
+                "trip_miles:double",
+                "trip_time:bigint",
+                "base_passenger_fare:double",
+                "tolls:double",
+                "bcf:double",
+                "sales_tax:double",
+                "congestion_surcharge:double",
+                "airport_fee:double",
+                "tips:double",
+                "driver_pay:double",
+                "shared_request_flag:string",
+                "shared_match_flag:string",
+                "access_a_ride_flag:string",
+                "wav_request_flag:string",
+                "wav_match_flag:string",
+                "cbd_congestion_fee:double",
+                "pickup_local_date:date",
+                "pickup_local_hour:int",
+                "pickup_borough:string",
+                "pickup_zone_name:string",
+                "pickup_service_zone:string",
+                "pickup_zone_resolved:boolean",
+                "dropoff_borough:string",
+                "dropoff_zone_name:string",
+                "dropoff_service_zone:string",
+                "dropoff_zone_resolved:boolean",
+                "quarantine_reasons:array<string>"
+              ],
+              "match": true,
+              "rebuild": [
+                "derivation_id:string",
+                "source_file_version_id:string",
+                "source_row_ordinal:bigint",
+                "source_service:string",
+                "source_period:string",
+                "source_artifact_completeness:string",
+                "source_logical_url:string",
+                "source_content_sha256:string",
+                "contract_version:string",
+                "contract_fingerprint:string",
+                "zone_lookup_version_id:string",
+                "hvfhs_license_num:string",
+                "dispatching_base_num:string",
+                "originating_base_num:string",
+                "request_datetime:timestamp_ntz",
+                "on_scene_datetime:timestamp_ntz",
+                "pickup_datetime:timestamp_ntz",
+                "dropoff_datetime:timestamp_ntz",
+                "pickup_location_id:bigint",
+                "dropoff_location_id:bigint",
+                "trip_miles:double",
+                "trip_time:bigint",
+                "base_passenger_fare:double",
+                "tolls:double",
+                "bcf:double",
+                "sales_tax:double",
+                "congestion_surcharge:double",
+                "airport_fee:double",
+                "tips:double",
+                "driver_pay:double",
+                "shared_request_flag:string",
+                "shared_match_flag:string",
+                "access_a_ride_flag:string",
+                "wav_request_flag:string",
+                "wav_match_flag:string",
+                "cbd_congestion_fee:double",
+                "pickup_local_date:date",
+                "pickup_local_hour:int",
+                "pickup_borough:string",
+                "pickup_zone_name:string",
+                "pickup_service_zone:string",
+                "pickup_zone_resolved:boolean",
+                "dropoff_borough:string",
+                "dropoff_zone_name:string",
+                "dropoff_service_zone:string",
+                "dropoff_zone_resolved:boolean",
+                "quarantine_reasons:array<string>"
+              ]
+            },
+            "visible_derivations": {
+              "incremental": [
+                "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+                "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+              ],
+              "match": true,
+              "rebuild": [
+                "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+                "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+              ]
+            }
+          }
+        }
+      },
+      "yellow": {
+        "contracted": {
+          "equivalent": true,
+          "fields": {
+            "content_additive_digest": {
+              "incremental": "1740708144712216954092",
+              "match": true,
+              "rebuild": "1740708144712216954092"
+            },
+            "content_sorted_digest": {
+              "incremental": "4c9637a2483ae219d33c016c04104f063786f52fcc9e2f167c7987fd848abd4e",
+              "match": true,
+              "rebuild": "4c9637a2483ae219d33c016c04104f063786f52fcc9e2f167c7987fd848abd4e"
+            },
+            "distinct_keys": {
+              "incremental": 3000,
+              "match": true,
+              "rebuild": 3000
+            },
+            "key_additive_digest": {
+              "incremental": "1727007012676094316828",
+              "match": true,
+              "rebuild": "1727007012676094316828"
+            },
+            "key_sorted_digest": {
+              "incremental": "fb9beaa163be60a655bb0fdaf88385251e42baf04128080e2e29c765ec103bb8",
+              "match": true,
+              "rebuild": "fb9beaa163be60a655bb0fdaf88385251e42baf04128080e2e29c765ec103bb8"
+            },
+            "rows": {
+              "incremental": 3000,
+              "match": true,
+              "rebuild": 3000
+            },
+            "schema": {
+              "incremental": [
+                "derivation_id:string",
+                "source_file_version_id:string",
+                "source_row_ordinal:bigint",
+                "source_service:string",
+                "source_period:string",
+                "source_artifact_completeness:string",
+                "source_logical_url:string",
+                "source_content_sha256:string",
+                "contract_version:string",
+                "contract_fingerprint:string",
+                "zone_lookup_version_id:string",
+                "vendor_id:bigint",
+                "pickup_datetime:timestamp_ntz",
+                "dropoff_datetime:timestamp_ntz",
+                "passenger_count:double",
+                "trip_distance:double",
+                "ratecode_id:double",
+                "store_and_fwd_flag:string",
+                "pickup_location_id:bigint",
+                "dropoff_location_id:bigint",
+                "payment_type:bigint",
+                "fare_amount:double",
+                "extra:double",
+                "mta_tax:double",
+                "tip_amount:double",
+                "tolls_amount:double",
+                "improvement_surcharge:double",
+                "total_amount:double",
+                "congestion_surcharge:double",
+                "airport_fee:double",
+                "cbd_congestion_fee:double",
+                "pickup_local_date:date",
+                "pickup_local_hour:int",
+                "pickup_borough:string",
+                "pickup_zone_name:string",
+                "pickup_service_zone:string",
+                "pickup_zone_resolved:boolean",
+                "dropoff_borough:string",
+                "dropoff_zone_name:string",
+                "dropoff_service_zone:string",
+                "dropoff_zone_resolved:boolean"
+              ],
+              "match": true,
+              "rebuild": [
+                "derivation_id:string",
+                "source_file_version_id:string",
+                "source_row_ordinal:bigint",
+                "source_service:string",
+                "source_period:string",
+                "source_artifact_completeness:string",
+                "source_logical_url:string",
+                "source_content_sha256:string",
+                "contract_version:string",
+                "contract_fingerprint:string",
+                "zone_lookup_version_id:string",
+                "vendor_id:bigint",
+                "pickup_datetime:timestamp_ntz",
+                "dropoff_datetime:timestamp_ntz",
+                "passenger_count:double",
+                "trip_distance:double",
+                "ratecode_id:double",
+                "store_and_fwd_flag:string",
+                "pickup_location_id:bigint",
+                "dropoff_location_id:bigint",
+                "payment_type:bigint",
+                "fare_amount:double",
+                "extra:double",
+                "mta_tax:double",
+                "tip_amount:double",
+                "tolls_amount:double",
+                "improvement_surcharge:double",
+                "total_amount:double",
+                "congestion_surcharge:double",
+                "airport_fee:double",
+                "cbd_congestion_fee:double",
+                "pickup_local_date:date",
+                "pickup_local_hour:int",
+                "pickup_borough:string",
+                "pickup_zone_name:string",
+                "pickup_service_zone:string",
+                "pickup_zone_resolved:boolean",
+                "dropoff_borough:string",
+                "dropoff_zone_name:string",
+                "dropoff_service_zone:string",
+                "dropoff_zone_resolved:boolean"
+              ]
+            },
+            "visible_derivations": {
+              "incremental": [
+                "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+                "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+                "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+              ],
+              "match": true,
+              "rebuild": [
+                "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+                "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+                "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+              ]
+            }
+          }
+        },
+        "incidents": {
+          "equivalent": true,
+          "fields": {
+            "content_additive_digest": {
+              "incremental": "6152953661356696221",
+              "match": true,
+              "rebuild": "6152953661356696221"
+            },
+            "content_sorted_digest": {
+              "incremental": "798c81d93e137c77f2f0c1a232d30c1f4ff7bf4344093d6f9fe1892787b3049b",
+              "match": true,
+              "rebuild": "798c81d93e137c77f2f0c1a232d30c1f4ff7bf4344093d6f9fe1892787b3049b"
+            },
+            "distinct_keys": {
+              "incremental": 11,
+              "match": true,
+              "rebuild": 11
+            },
+            "key_additive_digest": {
+              "incremental": "7642816291403605315",
+              "match": true,
+              "rebuild": "7642816291403605315"
+            },
+            "key_sorted_digest": {
+              "incremental": "02413bb0b6c3bc5a7c71ac93b545211f5ce75bf32b84ecfbf06cd558b391056f",
+              "match": true,
+              "rebuild": "02413bb0b6c3bc5a7c71ac93b545211f5ce75bf32b84ecfbf06cd558b391056f"
+            },
+            "rows": {
+              "incremental": 11,
+              "match": true,
+              "rebuild": 11
+            },
+            "schema": {
+              "incremental": [
+                "incident_id:string",
+                "source_service:string",
+                "source_period:string",
+                "source_file_version_id:string",
+                "derivation_id:string",
+                "source_row_ordinal:bigint",
+                "contract_version:string",
+                "scope:string",
+                "rule:string",
+                "severity:string",
+                "action:string",
+                "detail:string"
+              ],
+              "match": true,
+              "rebuild": [
+                "incident_id:string",
+                "source_service:string",
+                "source_period:string",
+                "source_file_version_id:string",
+                "derivation_id:string",
+                "source_row_ordinal:bigint",
+                "contract_version:string",
+                "scope:string",
+                "rule:string",
+                "severity:string",
+                "action:string",
+                "detail:string"
+              ]
+            },
+            "visible_derivations": {
+              "incremental": [
+                "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+                "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+                "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+              ],
+              "match": true,
+              "rebuild": [
+                "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+                "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+                "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+              ]
+            }
+          }
+        },
+        "quarantine": {
+          "equivalent": true,
+          "fields": {
+            "content_additive_digest": {
+              "incremental": null,
+              "match": true,
+              "rebuild": null
+            },
+            "content_sorted_digest": {
+              "incremental": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "match": true,
+              "rebuild": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "distinct_keys": {
+              "incremental": 0,
+              "match": true,
+              "rebuild": 0
+            },
+            "key_additive_digest": {
+              "incremental": null,
+              "match": true,
+              "rebuild": null
+            },
+            "key_sorted_digest": {
+              "incremental": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "match": true,
+              "rebuild": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "rows": {
+              "incremental": 0,
+              "match": true,
+              "rebuild": 0
+            },
+            "schema": {
+              "incremental": [
+                "derivation_id:string",
+                "source_file_version_id:string",
+                "source_row_ordinal:bigint",
+                "source_service:string",
+                "source_period:string",
+                "source_artifact_completeness:string",
+                "source_logical_url:string",
+                "source_content_sha256:string",
+                "contract_version:string",
+                "contract_fingerprint:string",
+                "zone_lookup_version_id:string",
+                "vendor_id:bigint",
+                "pickup_datetime:timestamp_ntz",
+                "dropoff_datetime:timestamp_ntz",
+                "passenger_count:double",
+                "trip_distance:double",
+                "ratecode_id:double",
+                "store_and_fwd_flag:string",
+                "pickup_location_id:bigint",
+                "dropoff_location_id:bigint",
+                "payment_type:bigint",
+                "fare_amount:double",
+                "extra:double",
+                "mta_tax:double",
+                "tip_amount:double",
+                "tolls_amount:double",
+                "improvement_surcharge:double",
+                "total_amount:double",
+                "congestion_surcharge:double",
+                "airport_fee:double",
+                "cbd_congestion_fee:double",
+                "pickup_local_date:date",
+                "pickup_local_hour:int",
+                "pickup_borough:string",
+                "pickup_zone_name:string",
+                "pickup_service_zone:string",
+                "pickup_zone_resolved:boolean",
+                "dropoff_borough:string",
+                "dropoff_zone_name:string",
+                "dropoff_service_zone:string",
+                "dropoff_zone_resolved:boolean",
+                "quarantine_reasons:array<string>"
+              ],
+              "match": true,
+              "rebuild": [
+                "derivation_id:string",
+                "source_file_version_id:string",
+                "source_row_ordinal:bigint",
+                "source_service:string",
+                "source_period:string",
+                "source_artifact_completeness:string",
+                "source_logical_url:string",
+                "source_content_sha256:string",
+                "contract_version:string",
+                "contract_fingerprint:string",
+                "zone_lookup_version_id:string",
+                "vendor_id:bigint",
+                "pickup_datetime:timestamp_ntz",
+                "dropoff_datetime:timestamp_ntz",
+                "passenger_count:double",
+                "trip_distance:double",
+                "ratecode_id:double",
+                "store_and_fwd_flag:string",
+                "pickup_location_id:bigint",
+                "dropoff_location_id:bigint",
+                "payment_type:bigint",
+                "fare_amount:double",
+                "extra:double",
+                "mta_tax:double",
+                "tip_amount:double",
+                "tolls_amount:double",
+                "improvement_surcharge:double",
+                "total_amount:double",
+                "congestion_surcharge:double",
+                "airport_fee:double",
+                "cbd_congestion_fee:double",
+                "pickup_local_date:date",
+                "pickup_local_hour:int",
+                "pickup_borough:string",
+                "pickup_zone_name:string",
+                "pickup_service_zone:string",
+                "pickup_zone_resolved:boolean",
+                "dropoff_borough:string",
+                "dropoff_zone_name:string",
+                "dropoff_service_zone:string",
+                "dropoff_zone_resolved:boolean",
+                "quarantine_reasons:array<string>"
+              ]
+            },
+            "visible_derivations": {
+              "incremental": [
+                "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+                "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+                "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+              ],
+              "match": true,
+              "rebuild": [
+                "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+                "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+                "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "generated_at_utc": "2026-09-08T15:30:30.796186+00:00",
+  "incremental": {
+    "outcomes": [
+      {
+        "action": "rejected",
+        "contracted_rows": 0,
+        "derivation_id": "67d5cb54f422d9625eea58b78badc051fec4883fdb26edb1830e3d740e383610",
+        "incident_rows": 1,
+        "period": "2019-02",
+        "quarantined_rows": 0,
+        "service": "hvfhv",
+        "source_rows": 1000,
+        "state": "rejected",
+        "version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3"
+      },
+      {
+        "action": "written",
+        "contracted_rows": 1000,
+        "derivation_id": "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c",
+        "incident_rows": 0,
+        "period": "2024-01",
+        "quarantined_rows": 0,
+        "service": "hvfhv",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5"
+      },
+      {
+        "action": "written",
+        "contracted_rows": 1000,
+        "derivation_id": "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+        "incident_rows": 0,
+        "period": "2025-01",
+        "quarantined_rows": 0,
+        "service": "hvfhv",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa"
+      },
+      {
+        "action": "written",
+        "contracted_rows": 1000,
+        "derivation_id": "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+        "incident_rows": 4,
+        "period": "2023-01",
+        "quarantined_rows": 0,
+        "service": "yellow",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c"
+      },
+      {
+        "action": "written",
+        "contracted_rows": 1000,
+        "derivation_id": "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f",
+        "incident_rows": 3,
+        "period": "2024-01",
+        "quarantined_rows": 0,
+        "service": "yellow",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032"
+      },
+      {
+        "action": "written",
+        "contracted_rows": 1000,
+        "derivation_id": "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+        "incident_rows": 4,
+        "period": "2025-01",
+        "quarantined_rows": 0,
+        "service": "yellow",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34"
+      }
+    ],
+    "physical_history_removed": false,
+    "publication_markers": [
+      {
+        "action": "published",
+        "contract_fingerprint": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
+        "contract_version": "hvfhv/v1",
+        "derivation_id": "67d5cb54f422d9625eea58b78badc051fec4883fdb26edb1830e3d740e383610",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2019-02",
+        "period": "2019-02",
+        "schema_version": 1,
+        "service": "hvfhv",
+        "source_published_at_utc": "2026-09-08T00:25:48.676554+00:00",
+        "source_version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3",
+        "state": "rejected",
+        "violations": [
+          "incompatible_type_drift:wav_match_flag"
+        ],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "published",
+        "contract_fingerprint": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
+        "contract_version": "hvfhv/v1",
+        "derivation_id": "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2024-01",
+        "period": "2024-01",
+        "schema_version": 1,
+        "service": "hvfhv",
+        "source_published_at_utc": "2026-09-08T00:25:48.694525+00:00",
+        "source_version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "published",
+        "contract_fingerprint": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
+        "contract_version": "hvfhv/v1",
+        "derivation_id": "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2025-01",
+        "period": "2025-01",
+        "schema_version": 1,
+        "service": "hvfhv",
+        "source_published_at_utc": "2026-09-08T00:25:48.712541+00:00",
+        "source_version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "published",
+        "contract_fingerprint": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b",
+        "contract_version": "yellow/v1",
+        "derivation_id": "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+        "logical_id": "trip_records:bounded_sample:yellow:2023-01",
+        "period": "2023-01",
+        "schema_version": 1,
+        "service": "yellow",
+        "source_published_at_utc": "2026-09-08T00:25:48.499083+00:00",
+        "source_version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "published",
+        "contract_fingerprint": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b",
+        "contract_version": "yellow/v1",
+        "derivation_id": "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f",
+        "logical_id": "trip_records:bounded_sample:yellow:2024-01",
+        "period": "2024-01",
+        "schema_version": 1,
+        "service": "yellow",
+        "source_published_at_utc": "2026-09-08T00:25:48.642789+00:00",
+        "source_version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "published",
+        "contract_fingerprint": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b",
+        "contract_version": "yellow/v1",
+        "derivation_id": "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+        "logical_id": "trip_records:bounded_sample:yellow:2025-01",
+        "period": "2025-01",
+        "schema_version": 1,
+        "service": "yellow",
+        "source_published_at_utc": "2026-09-08T00:25:48.659984+00:00",
+        "source_version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      }
+    ]
+  },
+  "landing": {
+    "hvfhv:2019-02": {
+      "state": "replayed",
+      "version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3"
+    },
+    "hvfhv:2024-01": {
+      "state": "replayed",
+      "version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5"
+    },
+    "hvfhv:2025-01": {
+      "state": "replayed",
+      "version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa"
+    },
+    "yellow:2023-01": {
+      "state": "replayed",
+      "version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c"
+    },
+    "yellow:2024-01": {
+      "state": "replayed",
+      "version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032"
+    },
+    "yellow:2025-01": {
+      "state": "replayed",
+      "version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34"
+    },
+    "zone_lookup": {
+      "state": "replayed",
+      "version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+    }
+  },
+  "landing_events": {
+    "all_runs": {
+      "published": 7,
+      "replayed": 35
+    },
+    "current_run": {
+      "replayed": 7
+    }
+  },
+  "limits": [
+    "Bounded samples of 1,000 rows per source version; no month and no annual window.",
+    "The rebuild comparison is logical; Delta and Parquet files are never expected to be byte-identical.",
+    "Concurrency is measured by a separate probe and is not claimed here.",
+    "The publication-marker protocol is validated only on the shared local filesystem used by Docker named volumes.",
+    "The orchestration and JSONL audit ledger retain one coordinator.",
+    "Analytical products, the dimensional model and Power BI remain M3 work."
+  ],
+  "milestone": "m2",
+  "rebuild": {
+    "outcomes": [
+      {
+        "action": "rejected",
+        "contracted_rows": 0,
+        "derivation_id": "67d5cb54f422d9625eea58b78badc051fec4883fdb26edb1830e3d740e383610",
+        "incident_rows": 1,
+        "period": "2019-02",
+        "quarantined_rows": 0,
+        "service": "hvfhv",
+        "source_rows": 1000,
+        "state": "rejected",
+        "version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3"
+      },
+      {
+        "action": "written",
+        "contracted_rows": 1000,
+        "derivation_id": "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c",
+        "incident_rows": 0,
+        "period": "2024-01",
+        "quarantined_rows": 0,
+        "service": "hvfhv",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5"
+      },
+      {
+        "action": "written",
+        "contracted_rows": 1000,
+        "derivation_id": "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+        "incident_rows": 0,
+        "period": "2025-01",
+        "quarantined_rows": 0,
+        "service": "hvfhv",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa"
+      },
+      {
+        "action": "written",
+        "contracted_rows": 1000,
+        "derivation_id": "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+        "incident_rows": 4,
+        "period": "2023-01",
+        "quarantined_rows": 0,
+        "service": "yellow",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c"
+      },
+      {
+        "action": "written",
+        "contracted_rows": 1000,
+        "derivation_id": "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f",
+        "incident_rows": 3,
+        "period": "2024-01",
+        "quarantined_rows": 0,
+        "service": "yellow",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032"
+      },
+      {
+        "action": "written",
+        "contracted_rows": 1000,
+        "derivation_id": "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+        "incident_rows": 4,
+        "period": "2025-01",
+        "quarantined_rows": 0,
+        "service": "yellow",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34"
+      }
+    ],
+    "physical_history_removed": false,
+    "publication_markers": [
+      {
+        "action": "published",
+        "contract_fingerprint": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
+        "contract_version": "hvfhv/v1",
+        "derivation_id": "67d5cb54f422d9625eea58b78badc051fec4883fdb26edb1830e3d740e383610",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2019-02",
+        "period": "2019-02",
+        "schema_version": 1,
+        "service": "hvfhv",
+        "source_published_at_utc": "2026-09-08T00:25:48.676554+00:00",
+        "source_version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3",
+        "state": "rejected",
+        "violations": [
+          "incompatible_type_drift:wav_match_flag"
+        ],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "published",
+        "contract_fingerprint": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
+        "contract_version": "hvfhv/v1",
+        "derivation_id": "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2024-01",
+        "period": "2024-01",
+        "schema_version": 1,
+        "service": "hvfhv",
+        "source_published_at_utc": "2026-09-08T00:25:48.694525+00:00",
+        "source_version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "published",
+        "contract_fingerprint": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
+        "contract_version": "hvfhv/v1",
+        "derivation_id": "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2025-01",
+        "period": "2025-01",
+        "schema_version": 1,
+        "service": "hvfhv",
+        "source_published_at_utc": "2026-09-08T00:25:48.712541+00:00",
+        "source_version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "published",
+        "contract_fingerprint": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b",
+        "contract_version": "yellow/v1",
+        "derivation_id": "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+        "logical_id": "trip_records:bounded_sample:yellow:2023-01",
+        "period": "2023-01",
+        "schema_version": 1,
+        "service": "yellow",
+        "source_published_at_utc": "2026-09-08T00:25:48.499083+00:00",
+        "source_version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "published",
+        "contract_fingerprint": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b",
+        "contract_version": "yellow/v1",
+        "derivation_id": "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f",
+        "logical_id": "trip_records:bounded_sample:yellow:2024-01",
+        "period": "2024-01",
+        "schema_version": 1,
+        "service": "yellow",
+        "source_published_at_utc": "2026-09-08T00:25:48.642789+00:00",
+        "source_version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "published",
+        "contract_fingerprint": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b",
+        "contract_version": "yellow/v1",
+        "derivation_id": "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+        "logical_id": "trip_records:bounded_sample:yellow:2025-01",
+        "period": "2025-01",
+        "schema_version": 1,
+        "service": "yellow",
+        "source_published_at_utc": "2026-09-08T00:25:48.659984+00:00",
+        "source_version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      }
+    ]
+  },
+  "replay": {
+    "delta_versions": {
+      "hvfhv": {
+        "contracted": {
+          "after": 1,
+          "before": 1
+        },
+        "incidents": {
+          "after": 2,
+          "before": 2
+        },
+        "quarantine": {
+          "after": 1,
+          "before": 1
+        }
+      },
+      "yellow": {
+        "contracted": {
+          "after": 2,
+          "before": 2
+        },
+        "incidents": {
+          "after": 2,
+          "before": 2
+        },
+        "quarantine": {
+          "after": 2,
+          "before": 2
+        }
+      }
+    },
+    "logical_state_unchanged": true,
+    "no_new_delta_commits": true,
+    "outcomes": [
+      {
+        "action": "already_published",
+        "contracted_rows": 0,
+        "derivation_id": "67d5cb54f422d9625eea58b78badc051fec4883fdb26edb1830e3d740e383610",
+        "incident_rows": 0,
+        "period": "2019-02",
+        "quarantined_rows": 0,
+        "service": "hvfhv",
+        "source_rows": 1000,
+        "state": "rejected",
+        "version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3"
+      },
+      {
+        "action": "already_published",
+        "contracted_rows": 0,
+        "derivation_id": "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c",
+        "incident_rows": 0,
+        "period": "2024-01",
+        "quarantined_rows": 0,
+        "service": "hvfhv",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5"
+      },
+      {
+        "action": "already_published",
+        "contracted_rows": 0,
+        "derivation_id": "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+        "incident_rows": 0,
+        "period": "2025-01",
+        "quarantined_rows": 0,
+        "service": "hvfhv",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa"
+      },
+      {
+        "action": "already_published",
+        "contracted_rows": 0,
+        "derivation_id": "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+        "incident_rows": 0,
+        "period": "2023-01",
+        "quarantined_rows": 0,
+        "service": "yellow",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c"
+      },
+      {
+        "action": "already_published",
+        "contracted_rows": 0,
+        "derivation_id": "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f",
+        "incident_rows": 0,
+        "period": "2024-01",
+        "quarantined_rows": 0,
+        "service": "yellow",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032"
+      },
+      {
+        "action": "already_published",
+        "contracted_rows": 0,
+        "derivation_id": "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+        "incident_rows": 0,
+        "period": "2025-01",
+        "quarantined_rows": 0,
+        "service": "yellow",
+        "source_rows": 1000,
+        "state": "active",
+        "version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34"
+      }
+    ],
+    "physical_history_removed": false,
+    "publication_markers": [
+      {
+        "action": "unchanged",
+        "contract_fingerprint": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
+        "contract_version": "hvfhv/v1",
+        "derivation_id": "67d5cb54f422d9625eea58b78badc051fec4883fdb26edb1830e3d740e383610",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2019-02",
+        "period": "2019-02",
+        "schema_version": 1,
+        "service": "hvfhv",
+        "source_published_at_utc": "2026-09-08T00:25:48.676554+00:00",
+        "source_version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3",
+        "state": "rejected",
+        "violations": [
+          "incompatible_type_drift:wav_match_flag"
+        ],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "unchanged",
+        "contract_fingerprint": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
+        "contract_version": "hvfhv/v1",
+        "derivation_id": "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2024-01",
+        "period": "2024-01",
+        "schema_version": 1,
+        "service": "hvfhv",
+        "source_published_at_utc": "2026-09-08T00:25:48.694525+00:00",
+        "source_version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "unchanged",
+        "contract_fingerprint": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
+        "contract_version": "hvfhv/v1",
+        "derivation_id": "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2025-01",
+        "period": "2025-01",
+        "schema_version": 1,
+        "service": "hvfhv",
+        "source_published_at_utc": "2026-09-08T00:25:48.712541+00:00",
+        "source_version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "unchanged",
+        "contract_fingerprint": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b",
+        "contract_version": "yellow/v1",
+        "derivation_id": "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+        "logical_id": "trip_records:bounded_sample:yellow:2023-01",
+        "period": "2023-01",
+        "schema_version": 1,
+        "service": "yellow",
+        "source_published_at_utc": "2026-09-08T00:25:48.499083+00:00",
+        "source_version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "unchanged",
+        "contract_fingerprint": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b",
+        "contract_version": "yellow/v1",
+        "derivation_id": "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f",
+        "logical_id": "trip_records:bounded_sample:yellow:2024-01",
+        "period": "2024-01",
+        "schema_version": 1,
+        "service": "yellow",
+        "source_published_at_utc": "2026-09-08T00:25:48.642789+00:00",
+        "source_version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      },
+      {
+        "action": "unchanged",
+        "contract_fingerprint": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b",
+        "contract_version": "yellow/v1",
+        "derivation_id": "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+        "logical_id": "trip_records:bounded_sample:yellow:2025-01",
+        "period": "2025-01",
+        "schema_version": 1,
+        "service": "yellow",
+        "source_published_at_utc": "2026-09-08T00:25:48.659984+00:00",
+        "source_version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34",
+        "state": "active",
+        "violations": [],
+        "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+      }
+    ]
+  },
+  "run_id": "m2-release-evidence-20260908",
+  "runtime": {
+    "delta_python_version": "4.2.0",
+    "duckdb_version": "1.5.5",
+    "fareline_version": "0.3.0",
+    "java_version": "17.0.17",
+    "probe_executor_hosts": [
+      "60734b4bebd9",
+      "730d37f0bea3"
+    ],
+    "python_version": "3.10.12",
+    "spark_master": "spark://spark-master:7077",
+    "spark_version": "4.1.0"
+  },
+  "scope": {
+    "artifacts": [
+      {
+        "period": "2023-01",
+        "service": "yellow"
+      },
+      {
+        "period": "2024-01",
+        "service": "yellow"
+      },
+      {
+        "period": "2025-01",
+        "service": "yellow"
+      },
+      {
+        "period": "2019-02",
+        "service": "hvfhv"
+      },
+      {
+        "period": "2024-01",
+        "service": "hvfhv"
+      },
+      {
+        "period": "2025-01",
+        "service": "hvfhv"
+      }
+    ],
+    "executed_on": "locally landed bounded TLC samples and the official zone lookup",
+    "not_executed": [
+      "full monthly or annual TLC objects",
+      "analytical products, dimensional models and Power BI",
+      "measured scale comparisons against DuckDB",
+      "cloud infrastructure of any provider"
+    ],
+    "trip_artifact_completeness": "bounded_sample"
+  },
+  "tables": {
+    "incremental": {
+      "hvfhv": {
+        "contracted": {
+          "content_additive_digest": "1134751693862575821891",
+          "content_sorted_digest": "ba9093b637c1221aa39347a74939d6fead74835f12fdac909cd0759a223fff25",
+          "data_file_bytes": 165032,
+          "data_files_on_disk": 2,
+          "delta_version": 1,
+          "distinct_keys": 2000,
+          "key_additive_digest": "1147200667442363268144",
+          "key_sorted_digest": "f39896e327ffe801391c7355807a31af1e4545f7bfa13cba532030cdda9234bf",
+          "physical_rows": 2000,
+          "referenced_data_files": 2,
+          "rows": 2000,
+          "schema": [
+            "derivation_id:string",
+            "source_file_version_id:string",
+            "source_row_ordinal:bigint",
+            "source_service:string",
+            "source_period:string",
+            "source_artifact_completeness:string",
+            "source_logical_url:string",
+            "source_content_sha256:string",
+            "contract_version:string",
+            "contract_fingerprint:string",
+            "zone_lookup_version_id:string",
+            "hvfhs_license_num:string",
+            "dispatching_base_num:string",
+            "originating_base_num:string",
+            "request_datetime:timestamp_ntz",
+            "on_scene_datetime:timestamp_ntz",
+            "pickup_datetime:timestamp_ntz",
+            "dropoff_datetime:timestamp_ntz",
+            "pickup_location_id:bigint",
+            "dropoff_location_id:bigint",
+            "trip_miles:double",
+            "trip_time:bigint",
+            "base_passenger_fare:double",
+            "tolls:double",
+            "bcf:double",
+            "sales_tax:double",
+            "congestion_surcharge:double",
+            "airport_fee:double",
+            "tips:double",
+            "driver_pay:double",
+            "shared_request_flag:string",
+            "shared_match_flag:string",
+            "access_a_ride_flag:string",
+            "wav_request_flag:string",
+            "wav_match_flag:string",
+            "cbd_congestion_fee:double",
+            "pickup_local_date:date",
+            "pickup_local_hour:int",
+            "pickup_borough:string",
+            "pickup_zone_name:string",
+            "pickup_service_zone:string",
+            "pickup_zone_resolved:boolean",
+            "dropoff_borough:string",
+            "dropoff_zone_name:string",
+            "dropoff_service_zone:string",
+            "dropoff_zone_resolved:boolean"
+          ],
+          "visible_derivations": [
+            "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+            "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+          ]
+        },
+        "incidents": {
+          "content_additive_digest": "382170605765084307",
+          "content_sorted_digest": "a1ec067fb5bcb13ce9699f925e35f8f9d460880e235361b83f805d3816f844c9",
+          "data_file_bytes": 4989,
+          "data_files_on_disk": 1,
+          "delta_version": 2,
+          "distinct_keys": 1,
+          "key_additive_digest": "1017468096032556861",
+          "key_sorted_digest": "9e46d08141ba0beb74c71f10aaeea3c7e0da74ac0ecc4e6ef6e9f482c3e58db6",
+          "physical_rows": 1,
+          "referenced_data_files": 1,
+          "rows": 1,
+          "schema": [
+            "incident_id:string",
+            "source_service:string",
+            "source_period:string",
+            "source_file_version_id:string",
+            "derivation_id:string",
+            "source_row_ordinal:bigint",
+            "contract_version:string",
+            "scope:string",
+            "rule:string",
+            "severity:string",
+            "action:string",
+            "detail:string"
+          ],
+          "visible_derivations": [
+            "67d5cb54f422d9625eea58b78badc051fec4883fdb26edb1830e3d740e383610",
+            "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+            "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+          ]
+        },
+        "quarantine": {
+          "content_additive_digest": null,
+          "content_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_file_bytes": 0,
+          "data_files_on_disk": 0,
+          "delta_version": 1,
+          "distinct_keys": 0,
+          "key_additive_digest": null,
+          "key_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "physical_rows": 0,
+          "referenced_data_files": 0,
+          "rows": 0,
+          "schema": [
+            "derivation_id:string",
+            "source_file_version_id:string",
+            "source_row_ordinal:bigint",
+            "source_service:string",
+            "source_period:string",
+            "source_artifact_completeness:string",
+            "source_logical_url:string",
+            "source_content_sha256:string",
+            "contract_version:string",
+            "contract_fingerprint:string",
+            "zone_lookup_version_id:string",
+            "hvfhs_license_num:string",
+            "dispatching_base_num:string",
+            "originating_base_num:string",
+            "request_datetime:timestamp_ntz",
+            "on_scene_datetime:timestamp_ntz",
+            "pickup_datetime:timestamp_ntz",
+            "dropoff_datetime:timestamp_ntz",
+            "pickup_location_id:bigint",
+            "dropoff_location_id:bigint",
+            "trip_miles:double",
+            "trip_time:bigint",
+            "base_passenger_fare:double",
+            "tolls:double",
+            "bcf:double",
+            "sales_tax:double",
+            "congestion_surcharge:double",
+            "airport_fee:double",
+            "tips:double",
+            "driver_pay:double",
+            "shared_request_flag:string",
+            "shared_match_flag:string",
+            "access_a_ride_flag:string",
+            "wav_request_flag:string",
+            "wav_match_flag:string",
+            "cbd_congestion_fee:double",
+            "pickup_local_date:date",
+            "pickup_local_hour:int",
+            "pickup_borough:string",
+            "pickup_zone_name:string",
+            "pickup_service_zone:string",
+            "pickup_zone_resolved:boolean",
+            "dropoff_borough:string",
+            "dropoff_zone_name:string",
+            "dropoff_service_zone:string",
+            "dropoff_zone_resolved:boolean",
+            "quarantine_reasons:array<string>"
+          ],
+          "visible_derivations": [
+            "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+            "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+          ]
+        }
+      },
+      "yellow": {
+        "contracted": {
+          "content_additive_digest": "1740708144712216954092",
+          "content_sorted_digest": "4c9637a2483ae219d33c016c04104f063786f52fcc9e2f167c7987fd848abd4e",
+          "data_file_bytes": 152227,
+          "data_files_on_disk": 3,
+          "delta_version": 2,
+          "distinct_keys": 3000,
+          "key_additive_digest": "1727007012676094316828",
+          "key_sorted_digest": "fb9beaa163be60a655bb0fdaf88385251e42baf04128080e2e29c765ec103bb8",
+          "physical_rows": 3000,
+          "referenced_data_files": 3,
+          "rows": 3000,
+          "schema": [
+            "derivation_id:string",
+            "source_file_version_id:string",
+            "source_row_ordinal:bigint",
+            "source_service:string",
+            "source_period:string",
+            "source_artifact_completeness:string",
+            "source_logical_url:string",
+            "source_content_sha256:string",
+            "contract_version:string",
+            "contract_fingerprint:string",
+            "zone_lookup_version_id:string",
+            "vendor_id:bigint",
+            "pickup_datetime:timestamp_ntz",
+            "dropoff_datetime:timestamp_ntz",
+            "passenger_count:double",
+            "trip_distance:double",
+            "ratecode_id:double",
+            "store_and_fwd_flag:string",
+            "pickup_location_id:bigint",
+            "dropoff_location_id:bigint",
+            "payment_type:bigint",
+            "fare_amount:double",
+            "extra:double",
+            "mta_tax:double",
+            "tip_amount:double",
+            "tolls_amount:double",
+            "improvement_surcharge:double",
+            "total_amount:double",
+            "congestion_surcharge:double",
+            "airport_fee:double",
+            "cbd_congestion_fee:double",
+            "pickup_local_date:date",
+            "pickup_local_hour:int",
+            "pickup_borough:string",
+            "pickup_zone_name:string",
+            "pickup_service_zone:string",
+            "pickup_zone_resolved:boolean",
+            "dropoff_borough:string",
+            "dropoff_zone_name:string",
+            "dropoff_service_zone:string",
+            "dropoff_zone_resolved:boolean"
+          ],
+          "visible_derivations": [
+            "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+            "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+            "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+          ]
+        },
+        "incidents": {
+          "content_additive_digest": "6152953661356696221",
+          "content_sorted_digest": "798c81d93e137c77f2f0c1a232d30c1f4ff7bf4344093d6f9fe1892787b3049b",
+          "data_file_bytes": 14883,
+          "data_files_on_disk": 3,
+          "delta_version": 2,
+          "distinct_keys": 11,
+          "key_additive_digest": "7642816291403605315",
+          "key_sorted_digest": "02413bb0b6c3bc5a7c71ac93b545211f5ce75bf32b84ecfbf06cd558b391056f",
+          "physical_rows": 11,
+          "referenced_data_files": 3,
+          "rows": 11,
+          "schema": [
+            "incident_id:string",
+            "source_service:string",
+            "source_period:string",
+            "source_file_version_id:string",
+            "derivation_id:string",
+            "source_row_ordinal:bigint",
+            "contract_version:string",
+            "scope:string",
+            "rule:string",
+            "severity:string",
+            "action:string",
+            "detail:string"
+          ],
+          "visible_derivations": [
+            "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+            "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+            "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+          ]
+        },
+        "quarantine": {
+          "content_additive_digest": null,
+          "content_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_file_bytes": 0,
+          "data_files_on_disk": 0,
+          "delta_version": 2,
+          "distinct_keys": 0,
+          "key_additive_digest": null,
+          "key_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "physical_rows": 0,
+          "referenced_data_files": 0,
+          "rows": 0,
+          "schema": [
+            "derivation_id:string",
+            "source_file_version_id:string",
+            "source_row_ordinal:bigint",
+            "source_service:string",
+            "source_period:string",
+            "source_artifact_completeness:string",
+            "source_logical_url:string",
+            "source_content_sha256:string",
+            "contract_version:string",
+            "contract_fingerprint:string",
+            "zone_lookup_version_id:string",
+            "vendor_id:bigint",
+            "pickup_datetime:timestamp_ntz",
+            "dropoff_datetime:timestamp_ntz",
+            "passenger_count:double",
+            "trip_distance:double",
+            "ratecode_id:double",
+            "store_and_fwd_flag:string",
+            "pickup_location_id:bigint",
+            "dropoff_location_id:bigint",
+            "payment_type:bigint",
+            "fare_amount:double",
+            "extra:double",
+            "mta_tax:double",
+            "tip_amount:double",
+            "tolls_amount:double",
+            "improvement_surcharge:double",
+            "total_amount:double",
+            "congestion_surcharge:double",
+            "airport_fee:double",
+            "cbd_congestion_fee:double",
+            "pickup_local_date:date",
+            "pickup_local_hour:int",
+            "pickup_borough:string",
+            "pickup_zone_name:string",
+            "pickup_service_zone:string",
+            "pickup_zone_resolved:boolean",
+            "dropoff_borough:string",
+            "dropoff_zone_name:string",
+            "dropoff_service_zone:string",
+            "dropoff_zone_resolved:boolean",
+            "quarantine_reasons:array<string>"
+          ],
+          "visible_derivations": [
+            "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+            "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+            "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+          ]
+        }
+      }
+    },
+    "rebuild": {
+      "hvfhv": {
+        "contracted": {
+          "content_additive_digest": "1134751693862575821891",
+          "content_sorted_digest": "ba9093b637c1221aa39347a74939d6fead74835f12fdac909cd0759a223fff25",
+          "data_file_bytes": 165032,
+          "data_files_on_disk": 2,
+          "delta_version": 1,
+          "distinct_keys": 2000,
+          "key_additive_digest": "1147200667442363268144",
+          "key_sorted_digest": "f39896e327ffe801391c7355807a31af1e4545f7bfa13cba532030cdda9234bf",
+          "physical_rows": 2000,
+          "referenced_data_files": 2,
+          "rows": 2000,
+          "schema": [
+            "derivation_id:string",
+            "source_file_version_id:string",
+            "source_row_ordinal:bigint",
+            "source_service:string",
+            "source_period:string",
+            "source_artifact_completeness:string",
+            "source_logical_url:string",
+            "source_content_sha256:string",
+            "contract_version:string",
+            "contract_fingerprint:string",
+            "zone_lookup_version_id:string",
+            "hvfhs_license_num:string",
+            "dispatching_base_num:string",
+            "originating_base_num:string",
+            "request_datetime:timestamp_ntz",
+            "on_scene_datetime:timestamp_ntz",
+            "pickup_datetime:timestamp_ntz",
+            "dropoff_datetime:timestamp_ntz",
+            "pickup_location_id:bigint",
+            "dropoff_location_id:bigint",
+            "trip_miles:double",
+            "trip_time:bigint",
+            "base_passenger_fare:double",
+            "tolls:double",
+            "bcf:double",
+            "sales_tax:double",
+            "congestion_surcharge:double",
+            "airport_fee:double",
+            "tips:double",
+            "driver_pay:double",
+            "shared_request_flag:string",
+            "shared_match_flag:string",
+            "access_a_ride_flag:string",
+            "wav_request_flag:string",
+            "wav_match_flag:string",
+            "cbd_congestion_fee:double",
+            "pickup_local_date:date",
+            "pickup_local_hour:int",
+            "pickup_borough:string",
+            "pickup_zone_name:string",
+            "pickup_service_zone:string",
+            "pickup_zone_resolved:boolean",
+            "dropoff_borough:string",
+            "dropoff_zone_name:string",
+            "dropoff_service_zone:string",
+            "dropoff_zone_resolved:boolean"
+          ],
+          "visible_derivations": [
+            "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+            "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+          ]
+        },
+        "incidents": {
+          "content_additive_digest": "382170605765084307",
+          "content_sorted_digest": "a1ec067fb5bcb13ce9699f925e35f8f9d460880e235361b83f805d3816f844c9",
+          "data_file_bytes": 4989,
+          "data_files_on_disk": 1,
+          "delta_version": 2,
+          "distinct_keys": 1,
+          "key_additive_digest": "1017468096032556861",
+          "key_sorted_digest": "9e46d08141ba0beb74c71f10aaeea3c7e0da74ac0ecc4e6ef6e9f482c3e58db6",
+          "physical_rows": 1,
+          "referenced_data_files": 1,
+          "rows": 1,
+          "schema": [
+            "incident_id:string",
+            "source_service:string",
+            "source_period:string",
+            "source_file_version_id:string",
+            "derivation_id:string",
+            "source_row_ordinal:bigint",
+            "contract_version:string",
+            "scope:string",
+            "rule:string",
+            "severity:string",
+            "action:string",
+            "detail:string"
+          ],
+          "visible_derivations": [
+            "67d5cb54f422d9625eea58b78badc051fec4883fdb26edb1830e3d740e383610",
+            "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+            "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+          ]
+        },
+        "quarantine": {
+          "content_additive_digest": null,
+          "content_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_file_bytes": 0,
+          "data_files_on_disk": 0,
+          "delta_version": 1,
+          "distinct_keys": 0,
+          "key_additive_digest": null,
+          "key_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "physical_rows": 0,
+          "referenced_data_files": 0,
+          "rows": 0,
+          "schema": [
+            "derivation_id:string",
+            "source_file_version_id:string",
+            "source_row_ordinal:bigint",
+            "source_service:string",
+            "source_period:string",
+            "source_artifact_completeness:string",
+            "source_logical_url:string",
+            "source_content_sha256:string",
+            "contract_version:string",
+            "contract_fingerprint:string",
+            "zone_lookup_version_id:string",
+            "hvfhs_license_num:string",
+            "dispatching_base_num:string",
+            "originating_base_num:string",
+            "request_datetime:timestamp_ntz",
+            "on_scene_datetime:timestamp_ntz",
+            "pickup_datetime:timestamp_ntz",
+            "dropoff_datetime:timestamp_ntz",
+            "pickup_location_id:bigint",
+            "dropoff_location_id:bigint",
+            "trip_miles:double",
+            "trip_time:bigint",
+            "base_passenger_fare:double",
+            "tolls:double",
+            "bcf:double",
+            "sales_tax:double",
+            "congestion_surcharge:double",
+            "airport_fee:double",
+            "tips:double",
+            "driver_pay:double",
+            "shared_request_flag:string",
+            "shared_match_flag:string",
+            "access_a_ride_flag:string",
+            "wav_request_flag:string",
+            "wav_match_flag:string",
+            "cbd_congestion_fee:double",
+            "pickup_local_date:date",
+            "pickup_local_hour:int",
+            "pickup_borough:string",
+            "pickup_zone_name:string",
+            "pickup_service_zone:string",
+            "pickup_zone_resolved:boolean",
+            "dropoff_borough:string",
+            "dropoff_zone_name:string",
+            "dropoff_service_zone:string",
+            "dropoff_zone_resolved:boolean",
+            "quarantine_reasons:array<string>"
+          ],
+          "visible_derivations": [
+            "997d7f4bae592a6323cc960d2a2e17b99245b28e073d234e0dc89e68e12bd0c7",
+            "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+          ]
+        }
+      },
+      "yellow": {
+        "contracted": {
+          "content_additive_digest": "1740708144712216954092",
+          "content_sorted_digest": "4c9637a2483ae219d33c016c04104f063786f52fcc9e2f167c7987fd848abd4e",
+          "data_file_bytes": 152227,
+          "data_files_on_disk": 3,
+          "delta_version": 2,
+          "distinct_keys": 3000,
+          "key_additive_digest": "1727007012676094316828",
+          "key_sorted_digest": "fb9beaa163be60a655bb0fdaf88385251e42baf04128080e2e29c765ec103bb8",
+          "physical_rows": 3000,
+          "referenced_data_files": 3,
+          "rows": 3000,
+          "schema": [
+            "derivation_id:string",
+            "source_file_version_id:string",
+            "source_row_ordinal:bigint",
+            "source_service:string",
+            "source_period:string",
+            "source_artifact_completeness:string",
+            "source_logical_url:string",
+            "source_content_sha256:string",
+            "contract_version:string",
+            "contract_fingerprint:string",
+            "zone_lookup_version_id:string",
+            "vendor_id:bigint",
+            "pickup_datetime:timestamp_ntz",
+            "dropoff_datetime:timestamp_ntz",
+            "passenger_count:double",
+            "trip_distance:double",
+            "ratecode_id:double",
+            "store_and_fwd_flag:string",
+            "pickup_location_id:bigint",
+            "dropoff_location_id:bigint",
+            "payment_type:bigint",
+            "fare_amount:double",
+            "extra:double",
+            "mta_tax:double",
+            "tip_amount:double",
+            "tolls_amount:double",
+            "improvement_surcharge:double",
+            "total_amount:double",
+            "congestion_surcharge:double",
+            "airport_fee:double",
+            "cbd_congestion_fee:double",
+            "pickup_local_date:date",
+            "pickup_local_hour:int",
+            "pickup_borough:string",
+            "pickup_zone_name:string",
+            "pickup_service_zone:string",
+            "pickup_zone_resolved:boolean",
+            "dropoff_borough:string",
+            "dropoff_zone_name:string",
+            "dropoff_service_zone:string",
+            "dropoff_zone_resolved:boolean"
+          ],
+          "visible_derivations": [
+            "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+            "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+            "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+          ]
+        },
+        "incidents": {
+          "content_additive_digest": "6152953661356696221",
+          "content_sorted_digest": "798c81d93e137c77f2f0c1a232d30c1f4ff7bf4344093d6f9fe1892787b3049b",
+          "data_file_bytes": 14883,
+          "data_files_on_disk": 3,
+          "delta_version": 2,
+          "distinct_keys": 11,
+          "key_additive_digest": "7642816291403605315",
+          "key_sorted_digest": "02413bb0b6c3bc5a7c71ac93b545211f5ce75bf32b84ecfbf06cd558b391056f",
+          "physical_rows": 11,
+          "referenced_data_files": 3,
+          "rows": 11,
+          "schema": [
+            "incident_id:string",
+            "source_service:string",
+            "source_period:string",
+            "source_file_version_id:string",
+            "derivation_id:string",
+            "source_row_ordinal:bigint",
+            "contract_version:string",
+            "scope:string",
+            "rule:string",
+            "severity:string",
+            "action:string",
+            "detail:string"
+          ],
+          "visible_derivations": [
+            "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+            "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+            "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+          ]
+        },
+        "quarantine": {
+          "content_additive_digest": null,
+          "content_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_file_bytes": 0,
+          "data_files_on_disk": 0,
+          "delta_version": 2,
+          "distinct_keys": 0,
+          "key_additive_digest": null,
+          "key_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "physical_rows": 0,
+          "referenced_data_files": 0,
+          "rows": 0,
+          "schema": [
+            "derivation_id:string",
+            "source_file_version_id:string",
+            "source_row_ordinal:bigint",
+            "source_service:string",
+            "source_period:string",
+            "source_artifact_completeness:string",
+            "source_logical_url:string",
+            "source_content_sha256:string",
+            "contract_version:string",
+            "contract_fingerprint:string",
+            "zone_lookup_version_id:string",
+            "vendor_id:bigint",
+            "pickup_datetime:timestamp_ntz",
+            "dropoff_datetime:timestamp_ntz",
+            "passenger_count:double",
+            "trip_distance:double",
+            "ratecode_id:double",
+            "store_and_fwd_flag:string",
+            "pickup_location_id:bigint",
+            "dropoff_location_id:bigint",
+            "payment_type:bigint",
+            "fare_amount:double",
+            "extra:double",
+            "mta_tax:double",
+            "tip_amount:double",
+            "tolls_amount:double",
+            "improvement_surcharge:double",
+            "total_amount:double",
+            "congestion_surcharge:double",
+            "airport_fee:double",
+            "cbd_congestion_fee:double",
+            "pickup_local_date:date",
+            "pickup_local_hour:int",
+            "pickup_borough:string",
+            "pickup_zone_name:string",
+            "pickup_service_zone:string",
+            "pickup_zone_resolved:boolean",
+            "dropoff_borough:string",
+            "dropoff_zone_name:string",
+            "dropoff_service_zone:string",
+            "dropoff_zone_resolved:boolean",
+            "quarantine_reasons:array<string>"
+          ],
+          "visible_derivations": [
+            "bb6fa0d8aabfbe2a22d50d5b4464b5cf6878e8c1332c4c82544cbcb4e37b295c",
+            "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+            "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+          ]
+        }
+      }
+    }
+  },
+  "timings_seconds": {
+    "incremental": 44.017,
+    "land": 0.253,
+    "plan": 1.384,
+    "rebuild": 26.876,
+    "replay": 9.46,
+    "spark_session": 3.158
+  },
+  "version_ledger": {
+    "first_pass_events": [
+      {
+        "action": "activated",
+        "contract_version": "yellow/v1",
+        "event_at_utc": "2026-09-08T15:29:37.263825+00:00",
+        "logical_id": "trip_records:bounded_sample:yellow:2023-01",
+        "period": "2023-01",
+        "run_id": "m2-release-evidence-20260908",
+        "service": "yellow",
+        "version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c"
+      },
+      {
+        "action": "activated",
+        "contract_version": "yellow/v1",
+        "event_at_utc": "2026-09-08T15:29:37.263825+00:00",
+        "logical_id": "trip_records:bounded_sample:yellow:2024-01",
+        "period": "2024-01",
+        "run_id": "m2-release-evidence-20260908",
+        "service": "yellow",
+        "version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032"
+      },
+      {
+        "action": "activated",
+        "contract_version": "yellow/v1",
+        "event_at_utc": "2026-09-08T15:29:37.263825+00:00",
+        "logical_id": "trip_records:bounded_sample:yellow:2025-01",
+        "period": "2025-01",
+        "run_id": "m2-release-evidence-20260908",
+        "service": "yellow",
+        "version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34"
+      },
+      {
+        "action": "rejected",
+        "contract_version": "hvfhv/v1",
+        "event_at_utc": "2026-09-08T15:29:37.263825+00:00",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2019-02",
+        "period": "2019-02",
+        "run_id": "m2-release-evidence-20260908",
+        "service": "hvfhv",
+        "version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3",
+        "violations": [
+          "incompatible_type_drift:wav_match_flag"
+        ]
+      },
+      {
+        "action": "activated",
+        "contract_version": "hvfhv/v1",
+        "event_at_utc": "2026-09-08T15:29:37.263825+00:00",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2024-01",
+        "period": "2024-01",
+        "run_id": "m2-release-evidence-20260908",
+        "service": "hvfhv",
+        "version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5"
+      },
+      {
+        "action": "activated",
+        "contract_version": "hvfhv/v1",
+        "event_at_utc": "2026-09-08T15:29:37.263825+00:00",
+        "logical_id": "trip_records:bounded_sample:hvfhv:2025-01",
+        "period": "2025-01",
+        "run_id": "m2-release-evidence-20260908",
+        "service": "hvfhv",
+        "version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa"
+      }
+    ],
+    "relative_path": "version_ledger.jsonl",
+    "replay_events": [],
+    "state": {
+      "trip_records:bounded_sample:hvfhv:2019-02": null,
+      "trip_records:bounded_sample:hvfhv:2024-01": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5",
+      "trip_records:bounded_sample:hvfhv:2025-01": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa",
+      "trip_records:bounded_sample:yellow:2023-01": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c",
+      "trip_records:bounded_sample:yellow:2024-01": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032",
+      "trip_records:bounded_sample:yellow:2025-01": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34"
+    }
+  },
+  "version_selection": [
+    {
+      "accepted": true,
+      "period": "2023-01",
+      "promotions": {
+        "absent_in_source": [
+          "cbd_congestion_fee"
+        ],
+        "identity": [
+          "airport_fee",
+          "congestion_surcharge",
+          "dropoff_datetime",
+          "dropoff_location_id",
+          "extra",
+          "fare_amount",
+          "improvement_surcharge",
+          "mta_tax",
+          "passenger_count",
+          "payment_type",
+          "pickup_datetime",
+          "pickup_location_id",
+          "ratecode_id",
+          "store_and_fwd_flag",
+          "tip_amount",
+          "tolls_amount",
+          "total_amount",
+          "trip_distance",
+          "vendor_id"
+        ]
+      },
+      "published_at_utc": "2026-09-08T00:25:48.499083+00:00",
+      "resolution_fingerprint": "bcaeef2208904fefe89f8ad2612720478d7dc4c8472bfb3328d23cba32511779",
+      "service": "yellow",
+      "state": "active",
+      "unmapped_source_columns": [],
+      "version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c",
+      "violations": []
+    },
+    {
+      "accepted": true,
+      "period": "2024-01",
+      "promotions": {
+        "absent_in_source": [
+          "cbd_congestion_fee"
+        ],
+        "guarded": [
+          "passenger_count",
+          "ratecode_id"
+        ],
+        "identity": [
+          "airport_fee",
+          "congestion_surcharge",
+          "dropoff_datetime",
+          "extra",
+          "fare_amount",
+          "improvement_surcharge",
+          "mta_tax",
+          "payment_type",
+          "pickup_datetime",
+          "store_and_fwd_flag",
+          "tip_amount",
+          "tolls_amount",
+          "total_amount",
+          "trip_distance"
+        ],
+        "widening": [
+          "dropoff_location_id",
+          "pickup_location_id",
+          "vendor_id"
+        ]
+      },
+      "published_at_utc": "2026-09-08T00:25:48.642789+00:00",
+      "resolution_fingerprint": "ae01e06f1f3b5fb7df37bf74e2c334a944f9bbd50d72f6d7aa5e8ef37f618ef8",
+      "service": "yellow",
+      "state": "active",
+      "unmapped_source_columns": [],
+      "version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032",
+      "violations": []
+    },
+    {
+      "accepted": true,
+      "period": "2025-01",
+      "promotions": {
+        "guarded": [
+          "passenger_count",
+          "ratecode_id"
+        ],
+        "identity": [
+          "airport_fee",
+          "cbd_congestion_fee",
+          "congestion_surcharge",
+          "dropoff_datetime",
+          "extra",
+          "fare_amount",
+          "improvement_surcharge",
+          "mta_tax",
+          "payment_type",
+          "pickup_datetime",
+          "store_and_fwd_flag",
+          "tip_amount",
+          "tolls_amount",
+          "total_amount",
+          "trip_distance"
+        ],
+        "widening": [
+          "dropoff_location_id",
+          "pickup_location_id",
+          "vendor_id"
+        ]
+      },
+      "published_at_utc": "2026-09-08T00:25:48.659984+00:00",
+      "resolution_fingerprint": "3314f859dcba365269379cce15f7e3601b2586fea43b4b4d10fb8ab0748df9c0",
+      "service": "yellow",
+      "state": "active",
+      "unmapped_source_columns": [],
+      "version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34",
+      "violations": []
+    },
+    {
+      "accepted": false,
+      "period": "2019-02",
+      "promotions": {
+        "absent_in_source": [
+          "cbd_congestion_fee"
+        ],
+        "identity": [
+          "access_a_ride_flag",
+          "base_passenger_fare",
+          "bcf",
+          "congestion_surcharge",
+          "dispatching_base_num",
+          "driver_pay",
+          "dropoff_datetime",
+          "dropoff_location_id",
+          "hvfhs_license_num",
+          "on_scene_datetime",
+          "originating_base_num",
+          "pickup_datetime",
+          "pickup_location_id",
+          "request_datetime",
+          "sales_tax",
+          "shared_match_flag",
+          "shared_request_flag",
+          "tips",
+          "tolls",
+          "trip_miles",
+          "trip_time",
+          "wav_request_flag"
+        ],
+        "incompatible": [
+          "wav_match_flag"
+        ],
+        "widening": [
+          "airport_fee"
+        ]
+      },
+      "published_at_utc": "2026-09-08T00:25:48.676554+00:00",
+      "resolution_fingerprint": "eaa597ada97774dc76ffe612ec285346408b33abbffcc698d50dfaeb22dccbe7",
+      "service": "hvfhv",
+      "state": "rejected",
+      "unmapped_source_columns": [],
+      "version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3",
+      "violations": [
+        {
+          "canonical_name": "wav_match_flag",
+          "detail": "wav_match_flag is int32 and cannot become string",
+          "rule": "incompatible_type_drift"
+        }
+      ]
+    },
+    {
+      "accepted": true,
+      "period": "2024-01",
+      "promotions": {
+        "absent_in_source": [
+          "cbd_congestion_fee"
+        ],
+        "identity": [
+          "access_a_ride_flag",
+          "airport_fee",
+          "base_passenger_fare",
+          "bcf",
+          "congestion_surcharge",
+          "dispatching_base_num",
+          "driver_pay",
+          "dropoff_datetime",
+          "hvfhs_license_num",
+          "on_scene_datetime",
+          "originating_base_num",
+          "pickup_datetime",
+          "request_datetime",
+          "sales_tax",
+          "shared_match_flag",
+          "shared_request_flag",
+          "tips",
+          "tolls",
+          "trip_miles",
+          "trip_time",
+          "wav_match_flag",
+          "wav_request_flag"
+        ],
+        "widening": [
+          "dropoff_location_id",
+          "pickup_location_id"
+        ]
+      },
+      "published_at_utc": "2026-09-08T00:25:48.694525+00:00",
+      "resolution_fingerprint": "5afa903675bfd960018b1012d373c6b3d296547dfffbe407446b221f932e1291",
+      "service": "hvfhv",
+      "state": "active",
+      "unmapped_source_columns": [],
+      "version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5",
+      "violations": []
+    },
+    {
+      "accepted": true,
+      "period": "2025-01",
+      "promotions": {
+        "identity": [
+          "access_a_ride_flag",
+          "airport_fee",
+          "base_passenger_fare",
+          "bcf",
+          "cbd_congestion_fee",
+          "congestion_surcharge",
+          "dispatching_base_num",
+          "driver_pay",
+          "dropoff_datetime",
+          "hvfhs_license_num",
+          "on_scene_datetime",
+          "originating_base_num",
+          "pickup_datetime",
+          "request_datetime",
+          "sales_tax",
+          "shared_match_flag",
+          "shared_request_flag",
+          "tips",
+          "tolls",
+          "trip_miles",
+          "trip_time",
+          "wav_match_flag",
+          "wav_request_flag"
+        ],
+        "widening": [
+          "dropoff_location_id",
+          "pickup_location_id"
+        ]
+      },
+      "published_at_utc": "2026-09-08T00:25:48.712541+00:00",
+      "resolution_fingerprint": "6d41d5e211d8f30a6fc2ab857cfd006277b9165b4578f4223a94f0c0caf0ed35",
+      "service": "hvfhv",
+      "state": "active",
+      "unmapped_source_columns": [],
+      "version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa",
+      "violations": []
+    }
+  ],
+  "zone_lookup": {
+    "zone_lookup_content_sha256": "1a99e105092230f8620f301edcca7f80d3080642ff404d28ed957d3fa222c8ed",
+    "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb",
+    "zone_rows": 265
+  }
+}
