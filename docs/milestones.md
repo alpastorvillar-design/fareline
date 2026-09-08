@@ -30,8 +30,18 @@ Validate Delta publication, file-version replacement, compatible and incompatibl
 schema drift, quality incidents, and an incremental-versus-full-rebuild oracle.
 
 Accept when readers never observe partial publication and every affected
-partition matches the rebuild oracle. Local concurrent writes remain limited to
-one driver unless upstream guarantees and storage semantics justify more.
+partition matches the rebuild oracle. Concurrent writes may only be claimed for
+what a probe actually measured on the storage in use.
+
+Measured results are in [`m2-contracted-correctness.md`](m2-contracted-correctness.md).
+Six real bounded versions were resolved against the two contracts, one was
+rejected for incompatible drift, the incremental tables matched a full rebuild on
+schema, keys, counts and content digests, and replaying changed nothing. An
+injected failure between Delta tables remained invisible until replay completed
+it, and a scoped rerun preserved omitted periods. A separate two-driver probe
+showed no loss or duplication for one throwaway Delta table; orchestration remains
+single-coordinator. Analytical products, the dimensional model and Power BI stay
+in M3.
 
 ## M3 — distributed execution and portfolio evidence
 

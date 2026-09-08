@@ -25,6 +25,9 @@ jobs:
         run: ruff format --check .
       - name: Test
         run: pytest
+      - name: Render the executable service contracts
+        # The contract is data and must stay serialisable without Spark.
+        run: fareline-m2 contracts > /dev/null
 
   container:
     runs-on: ubuntu-latest
@@ -55,6 +58,14 @@ jobs:
           docker compose exec -T spark-master
           /opt/spark/bin/spark-submit --master spark://spark-master:7077
           /opt/fareline/scripts/spark_delta_smoke.py --min-executor-hosts 2
+      - name: Verify M2 contracts, atomic visibility and rebuild equivalence
+        # Also fixtures only. The measured slice needs bounded TLC samples that
+        # are deliberately not committed, so CI exercises the contract engine,
+        # scoped reruns and a planted failure between Delta table writes.
+        run: >-
+          docker compose exec -T spark-master
+          /opt/spark/bin/spark-submit --master spark://spark-master:7077
+          /opt/fareline/scripts/spark_m2_smoke.py --min-executor-hosts 2
       - name: Clean up cluster and volumes
         if: always()
         run: docker compose down -v --remove-orphans

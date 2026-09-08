@@ -25,6 +25,18 @@ count and sum. It processes 1,000 rows per service, not a month and not the
 ratified annual target. See the measured
 [`M1 vertical slice`](docs/m1-vertical-slice.md).
 
+**M2 delivers contracted correctness.** Executable per-service contracts resolve
+the schema drift NYC TLC actually published between 2019 and 2025: a column
+renamed in place, integer widths that change in both directions, columns that
+appear years later, and columns that begin as physically untyped nulls. Six real
+bounded versions were resolved, one was rejected for incompatible drift, an
+incrementally maintained table matched a full rebuild on schema, keys, counts and
+content digests, replaying changed nothing, and an injected failure between Delta
+tables remained invisible until replay completed it. A separate two-driver probe
+measures the Delta append primitive; it is not an end-to-end multi-writer claim.
+See the measured
+[`M2 contracted correctness`](docs/m2-contracted-correctness.md).
+
 ## Why this exists
 
 The public TLC files are large enough to exercise partitioning, shuffle, skew,
@@ -47,13 +59,19 @@ source manifest + content hash          <- M1
         |
 versioned landing files                 <- M1
         |
-Spark standalone (one or more workers)  <- M1
+Spark standalone (one or more workers)
+        |\
+        | source occurrences            <- M1, literal Delta table per service
         |
-source occurrences                      <- M1, Delta table per service
+        +-> service contracts           <- M2, read each landed schema directly
+              |
+          Delta derivation history      <- contracted, quarantine and incidents
+              |
+          atomic publication markers    <- expose complete derivations only
+              |
+          version and quality ledger
         |
-service contracts -> analytical products
-        |                                      |
-quality ledger                         Spark SQL / Power BI extract
+analytical products -> Spark SQL / Power BI extract
 ```
 
 M0–M3 are local and cloud-neutral. A managed-cloud proof is a separate M4 gate
@@ -162,6 +180,59 @@ docker compose exec -T spark-master cat /opt/fareline/data/landing/events.jsonl
 docker compose exec -T spark-master find /opt/fareline/warehouse/source_occurrences -maxdepth 3
 ```
 
+## Reproduce M2
+
+The M2 slice contracts six bounded samples. The `fareline-m0` command above
+produces the 2024-01 and 2025-01 ones. The two historical drift periods, Yellow
+2023-01 and HVFHV 2019-02, are recorded with their sizes and hashes in
+[`drift_samples.json`](evidence/m2/drift_samples.json) and are acquired by the
+same row-limited read:
+
+```sql
+COPY (SELECT * FROM read_parquet('https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2023-01.parquet') LIMIT 1000) TO 'data/samples/yellow_tripdata_2023-01.parquet' (FORMAT PARQUET, COMPRESSION ZSTD);
+```
+
+A row limit bounds the sample that is kept, not the bytes that move. A measured
+run of that statement transferred 47,673,366 response bytes, essentially the
+whole 47,673,370-byte object, because it stores every row in one row group. The
+HVFHV 2019-02 object is 513,054,623 bytes in a single row group and was not
+measured. Reuse an existing sample instead of re-acquiring one; the recorded
+SHA-256 is what binds a landed file to its provenance.
+
+```bash
+docker compose up -d --scale spark-worker=2 --wait --wait-timeout 240
+docker compose exec -T spark-master /opt/spark/bin/spark-submit --master spark://spark-master:7077 /opt/fareline/scripts/spark_m2_smoke.py --min-executor-hosts 2
+docker compose exec -T spark-master /opt/spark/bin/spark-submit --master spark://spark-master:7077 /opt/fareline/scripts/fareline_m2.py run
+docker compose cp spark-master:/opt/fareline/output/evidence/m2/contracted_slice.json evidence/m2/contracted_slice.json
+docker compose down
+```
+
+The smoke generates its own fixtures and needs no TLC access: it checks that
+compatible drift is accepted, that an ambiguous rename and an incompatible type
+are rejected, that impossible rows are quarantined, that a corrected file
+supersedes its predecessor, that a scoped rerun preserves omitted periods, that a
+failure between tables is invisible and repairable, that an incremental build
+matches a full rebuild, and that a Delta log pointing at deleted files is refused.
+The slice then does the same over the real bounded samples and writes its
+measurements to evidence.
+
+`fareline-m2 contracts` prints both service contracts as JSON without Spark.
+
+The concurrency probe is destructive and is run separately against one
+throwaway Delta table, with two drivers in different containers:
+
+```bash
+docker compose exec -T spark-master /opt/spark/bin/spark-submit --master spark://spark-master:7077 --conf spark.cores.max=1 /opt/fareline/scripts/m2_concurrency_probe.py --role write --scenario distinct --table /opt/fareline/output/probe/table --barrier /opt/fareline/output/probe/race --peers 2 --writer 1
+```
+
+Run the same command with `--writer 2` in the worker container at the same time,
+then `--role verify` to measure the table. The core cap matters: a standalone
+application takes every free core by default, so without it the second driver
+waits for the first to finish and the two never actually race. Results are in
+[`concurrency.json`](evidence/m2/concurrency.json). This measures the append
+primitive only. The M2 orchestration and JSONL audit ledger retain one
+coordinator; no end-to-end multi-writer guarantee is claimed.
+
 ## Documentation
 
 - [Architecture and milestones](docs/architecture.md)
@@ -170,6 +241,7 @@ docker compose exec -T spark-master find /opt/fareline/warehouse/source_occurren
 - [Acceptance and cancellation gates](docs/milestones.md)
 - [M0 findings](docs/m0-findings.md)
 - [M1 vertical slice](docs/m1-vertical-slice.md)
+- [M2 contracted correctness](docs/m2-contracted-correctness.md)
 
 ## Scope boundaries
 
@@ -177,6 +249,9 @@ docker compose exec -T spark-master find /opt/fareline/warehouse/source_occurren
 - DuckDB is a fair single-node reference; Spark is not promised to be faster on
   one host.
 - Raw TLC rows and local samples are not committed.
+- The measured concurrency claim covers one throwaway Delta table, two drivers
+  and Docker named volumes on one host. It is neither an orchestration guarantee
+  nor evidence for object storage.
 - The MIT license covers this repository's code and documentation, not NYC TLC
   data or third-party materials.
 - Cloud, IaC, IAM, and cloud-cost claims remain out of scope until M4 is approved

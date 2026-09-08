@@ -1,0 +1,96 @@
+{
+  "conclusion": "Two concurrent drivers never lost or duplicated a row on this storage. Both safe outcomes were observed: a conflicting writer either committed cleanly or failed with a named Delta exception. This describes Delta 4.2.0 over Docker named volumes on one host and is not evidence for object storage.",
+  "method": "Two Spark drivers in different containers write to one Delta table on the shared volume. Each materialises its rows, waits on a file barrier so the commits overlap, then writes through the same code path the contracted build uses, including the txnAppId/txnVersion idempotent-write marker. A third read-only pass measures the table afterwards.",
+  "milestone": "m2",
+  "not_demonstrated": [
+    "object storage or any cloud filesystem",
+    "more than two concurrent drivers",
+    "concurrent writers on different hosts",
+    "concurrent DELETE against a concurrent append"
+  ],
+  "runtime": {
+    "delta_version": "4.2.0",
+    "driver_containers": ["spark-master", "spark-worker (index 1)"],
+    "java_version": "17.0.17",
+    "python_version": "3.10.12",
+    "rows_per_writer": 2000,
+    "spark_conf": ["spark.cores.max=1", "spark.executor.cores=1"],
+    "spark_version": "4.1.0",
+    "storage": "Docker named volume mounted at /opt/fareline/output in every container"
+  },
+  "scenarios": [
+    {
+      "name": "empty_directory_distinct_versions",
+      "question": "What happens when two drivers create the same table at once?",
+      "writers": [
+        {"writer": 1, "outcome": "committed", "commit_seconds": 4.389, "barrier_wait_seconds": 0.151},
+        {
+          "writer": 2,
+          "outcome": "failed",
+          "commit_seconds": 3.61,
+          "barrier_wait_seconds": 0.0,
+          "failure_class": "io.delta.exceptions.ProtocolChangedException",
+          "detail": "DELTA_PROTOCOL_CHANGED: the protocol version was changed by a concurrent update, which happens when multiple writers write into an empty directory"
+        }
+      ],
+      "table_after": {
+        "rows": 2000,
+        "expected_rows": 2000,
+        "distinct_technical_keys": 2000,
+        "distinct_versions": 1,
+        "duplicated_keys": false,
+        "delta_version": 0,
+        "listed_data_files": 2
+      },
+      "safe": true,
+      "reading": "The loser failed loudly instead of writing a second table state. Creating the table before concurrent writers start avoids the conflict."
+    },
+    {
+      "name": "existing_table_distinct_versions",
+      "question": "Can two drivers append two different source versions at the same time?",
+      "seeded_versions": 1,
+      "writers": [
+        {"writer": 1, "outcome": "committed", "commit_seconds": 10.499, "barrier_wait_seconds": 0.101},
+        {"writer": 2, "outcome": "committed", "commit_seconds": 12.906, "barrier_wait_seconds": 0.0}
+      ],
+      "table_after": {
+        "rows": 6000,
+        "expected_rows": 6000,
+        "distinct_technical_keys": 6000,
+        "distinct_versions": 3,
+        "duplicated_keys": false,
+        "delta_version": 2,
+        "listed_data_files": 6
+      },
+      "safe": true,
+      "reading": "Both commits landed and every row of every version is present exactly once. Appends of disjoint source versions do not conflict."
+    },
+    {
+      "name": "existing_table_same_version",
+      "question": "Can a duplicated driver publish the same source version twice?",
+      "seeded_versions": 1,
+      "writers": [
+        {
+          "writer": 1,
+          "outcome": "failed",
+          "commit_seconds": 10.49,
+          "barrier_wait_seconds": 0.0,
+          "failure_class": "io.delta.exceptions.ConcurrentTransactionException",
+          "detail": "DELTA_CONCURRENT_TRANSACTION: the transaction identifier was already used by another writer"
+        },
+        {"writer": 2, "outcome": "committed", "commit_seconds": 10.402, "barrier_wait_seconds": 0.05}
+      ],
+      "table_after": {
+        "rows": 4000,
+        "expected_rows": 4000,
+        "distinct_technical_keys": 4000,
+        "distinct_versions": 2,
+        "duplicated_keys": false,
+        "delta_version": 1,
+        "listed_data_files": 4
+      },
+      "safe": true,
+      "reading": "The idempotent-write marker made the duplicate impossible at the transaction-log level, not by a read-side check that two drivers could both pass."
+    }
+  ]
+}
