@@ -29,12 +29,20 @@ ratified annual target. See the measured
 the schema drift NYC TLC actually published between 2019 and 2025: a column
 renamed in place, integer widths that change in both directions, columns that
 appear years later, and columns that begin as physically untyped nulls. Six real
-bounded versions were resolved, one was rejected for incompatible drift, an
-incrementally maintained table matched a full rebuild on schema, keys, counts and
-content digests, replaying changed nothing, and an injected failure between Delta
-tables remained invisible until replay completed it. A separate two-driver probe
-measures the Delta append primitive; it is not an end-to-end multi-writer claim.
-See the measured
+bounded versions were resolved and one was rejected for incompatible drift. A
+warehouse built over two runs — three versions, then the other three — matched a
+full rebuild from nothing on schema, keys, counts and content digests; replaying
+changed nothing; and an injected failure between Delta tables remained invisible
+until replay completed it.
+
+A dataset-wide publication boundary decides which derivation context readers are
+on. Landing a newer taxi zone lookup does not move it, a context change is
+refused unless one run rebuilds every artifact the previous context published,
+and it becomes visible in a single rename. Each contract fingerprint owns its own
+tables, so a revision that adds a column or changes a type is materialised
+without `mergeSchema` and without disturbing the earlier history. A separate
+two-driver probe measures the Delta append primitive; it is not an end-to-end
+multi-writer claim. See the measured
 [`M2 contracted correctness`](docs/m2-contracted-correctness.md).
 
 ## Why this exists
@@ -65,9 +73,11 @@ Spark standalone (one or more workers)
         |
         +-> service contracts           <- M2, read each landed schema directly
               |
-          Delta derivation history      <- contracted, quarantine and incidents
-              |
+          Delta derivation history      <- contracted, quarantine and incidents,
+              |                            one set per contract fingerprint
           atomic publication markers    <- expose complete derivations only
+              |
+          dataset publication boundary  <- one context readers are on
               |
           version and quality ledger
         |
@@ -202,6 +212,7 @@ SHA-256 is what binds a landed file to its provenance.
 ```bash
 docker compose up -d --scale spark-worker=2 --wait --wait-timeout 240
 docker compose exec -T spark-master /opt/spark/bin/spark-submit --master spark://spark-master:7077 /opt/fareline/scripts/spark_m2_smoke.py --min-executor-hosts 2
+docker compose exec -T spark-master /opt/spark/bin/spark-submit --master spark://spark-master:7077 /opt/fareline/scripts/fareline_m2.py run --artifact yellow:2023-01 --artifact yellow:2024-01 --artifact hvfhv:2024-01 --evidence-out /opt/fareline/output/evidence/m2/phase1.json
 docker compose exec -T spark-master /opt/spark/bin/spark-submit --master spark://spark-master:7077 /opt/fareline/scripts/fareline_m2.py run
 docker compose cp spark-master:/opt/fareline/output/evidence/m2/contracted_slice.json evidence/m2/contracted_slice.json
 docker compose down
@@ -212,9 +223,27 @@ compatible drift is accepted, that an ambiguous rename and an incompatible type
 are rejected, that impossible rows are quarantined, that a corrected file
 supersedes its predecessor, that a scoped rerun preserves omitted periods, that a
 failure between tables is invisible and repairable, that an incremental build
-matches a full rebuild, and that a Delta log pointing at deleted files is refused.
-The slice then does the same over the real bounded samples and writes its
-measurements to evidence.
+matches a full rebuild, that a newer zone lookup does not move the published view
+on its own and that moving it needs full coverage, that a contract revision which
+changes the output schema materialises without disturbing the previous history,
+and that a Delta log pointing at deleted files is refused.
+
+The slice then runs over the real bounded samples. It runs twice on purpose: the
+first command publishes three versions, the second adds the remaining three to
+that warehouse and compares the maintained result against a rebuild from
+nothing. A single run against an empty warehouse would compare two builds from
+nothing and would say nothing about incremental maintenance. The published
+evidence is the second run's, and it records the state the warehouse was already
+in. Both roots must be the same across the two commands, which they are by
+default. A rebuild root is disposable only after Fareline claims it with its
+own marker; an existing non-empty directory without that marker is refused,
+never cleared.
+
+A warehouse written by an earlier version of this code, before tables were
+separated by contract fingerprint, is refused with an explicit message. The
+current layout writes its identity marker before the first derived table, so an
+interrupted first publication can be replayed safely even before a publication
+boundary exists. Build legacy data into a new `--warehouse-root`.
 
 `fareline-m2 contracts` prints both service contracts as JSON without Spark.
 

@@ -14,6 +14,7 @@ import argparse
 import json
 import shutil
 import uuid
+from dataclasses import replace
 from pathlib import Path
 
 import duckdb
@@ -21,15 +22,32 @@ from pyspark.sql import functions as F
 
 from fareline.m1 import landing, occurrences
 from fareline.m1.sources import trip_identity, zone_identity
-from fareline.m2 import build, contracts, equivalence, pipeline, resolution, versions, zones
+from fareline.m2 import (
+    build,
+    contracts,
+    equivalence,
+    paths,
+    pipeline,
+    resolution,
+    types,
+    versions,
+    zones,
+)
 
 SERVICE = "yellow"
 COMPLETENESS = "synthetic_fixture"
 ROWS = 400
 
-ZONE_CSV = "LocationID,Borough,Zone,service_zone\n" + "".join(
-    f"{index},Borough {index},Zone {index},Boro Zone\n" for index in range(1, 51)
-)
+
+def zone_csv(zone_count: int) -> str:
+    return "LocationID,Borough,Zone,service_zone\n" + "".join(
+        f"{index},Borough {index},Zone {index},Boro Zone\n" for index in range(1, zone_count + 1)
+    )
+
+
+ZONE_CSV = zone_csv(50)
+# A second published lookup, the way upstream reissuing the file would look.
+ZONE_CSV_REVISED = zone_csv(60)
 
 
 def fixture_sql(target: Path, *, legacy: bool, rows: int, fare_offset: float) -> str:
@@ -132,10 +150,12 @@ def land_trip(store: landing.LandingStore, source: Path, period: str, run_id: st
     )
 
 
-def land_zone_lookup(store: landing.LandingStore, root: Path, run_id: str) -> object:
+def land_zone_lookup(
+    store: landing.LandingStore, root: Path, run_id: str, text: str = ZONE_CSV
+) -> object:
     source = root / "taxi_zone_lookup.csv"
     source.parent.mkdir(parents=True, exist_ok=True)
-    source.write_text(ZONE_CSV, encoding="utf-8")
+    source.write_text(text, encoding="utf-8")
     return landing.acquire(
         store,
         zone_identity(),
@@ -164,6 +184,19 @@ def states(planned: list[pipeline.VersionPlan]) -> dict[str, str]:
     return {f"{item.period}:{item.manifest['version_id'][:8]}": item.state for item in planned}
 
 
+def boundary_for(
+    options: pipeline.SliceOptions, dimension: zones.ZoneDimension
+) -> versions.PublicationBoundary:
+    catalog = versions.PublicationCatalog(options.warehouse_root)
+    return pipeline.target_boundary(catalog, options, dimension.version_id)
+
+
+def tables_for(options: pipeline.SliceOptions, service: str = SERVICE) -> paths.TablePaths:
+    return paths.table_paths(
+        options.warehouse_root, service, contracts.SERVICE_CONTRACTS[service].fingerprint
+    )
+
+
 def run_all(
     spark: object,
     options: pipeline.SliceOptions,
@@ -171,13 +204,16 @@ def run_all(
     dimension: zones.ZoneDimension,
     frame: object,
 ) -> tuple[list, dict, dict]:
+    catalog = versions.PublicationCatalog(options.warehouse_root)
+    versions.prepare_layout(catalog)
+    target = boundary_for(options, dimension)
+    pipeline.check_publication_scope(catalog, options, target)
     planned = pipeline.plan(spark, options, store)
     applied = pipeline.apply_plan(
         spark, options, Path(options.warehouse_root), planned, store, dimension, frame
     )
-    measured = pipeline.measure_tables(
-        spark, options, Path(options.warehouse_root), dimension.version_id
-    )
+    pipeline.settle_boundary(catalog, target)
+    measured = pipeline.measure_tables(spark, options, Path(options.warehouse_root), target)
     return planned, applied, measured
 
 
@@ -190,12 +226,16 @@ def rebuild_and_compare(
     frame: object,
     incremental: dict,
 ) -> dict:
-    shutil.rmtree(options.rebuild_root, ignore_errors=True)
+    paths.clear_rebuild_root(options.rebuild_root, protected=pipeline.protected_paths(options))
+    rebuild_catalog = versions.PublicationCatalog(options.rebuild_root)
+    versions.prepare_layout(rebuild_catalog)
     pipeline.apply_plan(
         spark, options, Path(options.rebuild_root), planned, store, dimension, frame
     )
+    target = boundary_for(options, dimension)
+    rebuild_catalog.install_boundary(target)
     rebuilt = pipeline.logical_state(
-        pipeline.measure_tables(spark, options, Path(options.rebuild_root), dimension.version_id)
+        pipeline.measure_tables(spark, options, Path(options.rebuild_root), target)
     )
     incremental = pipeline.logical_state(incremental)
     return {
@@ -296,7 +336,7 @@ def main() -> int:
         incident_derivations = incidents["visible_derivations"]
         guarded_incidents = (
             spark.read.format("delta")
-            .load(build.as_uri(build.table_paths(options.warehouse_root, SERVICE).incidents))
+            .load(build.as_uri(tables_for(options).incidents))
             .where(F.col("derivation_id").isin(incident_derivations))
             .where(F.col("rule") == "guarded_promotion_out_of_range")
             .count()
@@ -323,7 +363,7 @@ def main() -> int:
             spark, options, Path(options.warehouse_root), planned, store, dimension, frame
         )
         replayed = pipeline.measure_tables(
-            spark, options, Path(options.warehouse_root), dimension.version_id
+            spark, options, Path(options.warehouse_root), boundary_for(options, dimension)
         )
         if pipeline.logical_state(incremental) != pipeline.logical_state(replayed):
             raise AssertionError("replaying the same plan changed the tables")
@@ -341,7 +381,7 @@ def main() -> int:
 
         # A corrected file for the same period must take over completely in the
         # published view. Physical derived history and landing keep both.
-        contracted_path = build.table_paths(options.warehouse_root, SERVICE).contracted
+        contracted_path = tables_for(options).contracted
         old_contracted_rows = (
             spark.read.format("delta")
             .load(build.as_uri(contracted_path))
@@ -403,7 +443,7 @@ def main() -> int:
         )
         after_subset = pipeline.logical_state(
             pipeline.measure_tables(
-                spark, options, Path(options.warehouse_root), dimension.version_id
+                spark, options, Path(options.warehouse_root), boundary_for(options, dimension)
             )
         )
         if before_subset != after_subset:
@@ -416,6 +456,8 @@ def main() -> int:
         partial = land_trip(store, source / "partial.parquet", "2024-05", "smoke-partial")
         partial_root = root / "partial-publication"
         partial_options = options_for(partial_root, store, ("2024-05",))
+        partial_catalog = versions.PublicationCatalog(partial_options.warehouse_root)
+        versions.prepare_layout(partial_catalog)
         partial_plan = pipeline.plan(spark, partial_options, store)
         real_write = build.write_partition
         write_calls = 0
@@ -448,9 +490,9 @@ def main() -> int:
             build.write_partition = real_write
 
         partial_identity = trip_identity(SERVICE, "2024-05", COMPLETENESS).logical_id
-        partial_catalog = versions.PublicationCatalog(partial_options.warehouse_root)
         if partial_catalog.entries(partial_identity):
             raise AssertionError("a partial set of Delta writes received a publication marker")
+        versions.check_layout(partial_catalog)
         pipeline.apply_plan(
             spark,
             partial_options,
@@ -460,11 +502,12 @@ def main() -> int:
             dimension,
             frame,
         )
+        partial_catalog.install_boundary(boundary_for(partial_options, dimension))
         repaired = pipeline.measure_tables(
             spark,
             partial_options,
             Path(partial_options.warehouse_root),
-            dimension.version_id,
+            boundary_for(partial_options, dimension),
         )
         if (
             repaired[SERVICE]["contracted"]["rows"] + repaired[SERVICE]["quarantine"]["rows"]
@@ -477,8 +520,18 @@ def main() -> int:
             "repair_published_complete_version": True,
         }
 
+        result["incident_id_encoding_matches_python"] = incident_ids_agree(
+            spark, tables_for(options).incidents
+        )
+        result["contract_revision"] = contract_revision(
+            spark, root, store, dimension, frame, args.rows
+        )
+        result["zone_lookup_migration"] = zone_lookup_migration(
+            spark, root, source, store, options, dimension
+        )
+
         result["detects_missing_data_files"] = detects_missing_data_files(
-            spark, options, build.table_paths(options.warehouse_root, SERVICE).contracted
+            spark, options, tables_for(options).contracted
         )
 
         print("FARELINE_M2_SMOKE=" + json.dumps(result, sort_keys=True, default=str))
@@ -486,6 +539,225 @@ def main() -> int:
     finally:
         spark.stop()
         shutil.rmtree(root, ignore_errors=True)
+
+
+def incident_ids_agree(spark: object, incidents_path: Path) -> bool:
+    """The Spark and Python encodings of an incident identifier must agree.
+
+    Two implementations of one canonical encoding are only worth having if they
+    are checked against each other, so a stored row-scope identifier is
+    recomputed on the driver from the columns that produced it.
+    """
+    row = (
+        spark.read.format("delta")
+        .load(build.as_uri(incidents_path))
+        .where(F.col("scope") == build.ROW_SCOPE)
+        .limit(1)
+        .collect()
+    )
+    if not row:
+        raise AssertionError("the smoke produced no row-scope incident to check")
+    stored = row[0]
+    recomputed = versions.incident_id(
+        [
+            stored["source_file_version_id"],
+            stored["derivation_id"],
+            str(stored["source_row_ordinal"]),
+            stored["rule"],
+        ]
+    )
+    if recomputed != stored["incident_id"]:
+        raise AssertionError(
+            f"incident id {stored['incident_id']} was not reproduced by the Python encoding"
+        )
+    return True
+
+
+def revised_contract(version: str, *, add_column: bool, retype_column: bool) -> object:
+    """A contract revision of the kind that changes the derived output schema."""
+    columns = contracts.YELLOW.columns
+    if retype_column:
+        columns = tuple(
+            replace(item, target_type=types.FLOAT64, guarded_promotions=True)
+            if item.canonical_name == "payment_type"
+            else item
+            for item in columns
+        )
+    if add_column:
+        columns = (
+            *columns,
+            contracts.ColumnContract(
+                canonical_name="requested_pickup_datetime",
+                source_aliases=("request_datetime",),
+                target_type=types.TIMESTAMP_NTZ,
+                required=False,
+                role="temporal",
+            ),
+        )
+    return replace(contracts.YELLOW, contract_version=version, columns=columns)
+
+
+def field_type(schema: list[str], name: str) -> str:
+    """The Spark type of one derived column, from a measured schema signature."""
+    return next(item.split(":", 1)[1] for item in schema if item.split(":", 1)[0] == name)
+
+
+def contract_revision(
+    spark: object,
+    root: Path,
+    store: landing.LandingStore,
+    dimension: zones.ZoneDimension,
+    frame: object,
+    rows: int,
+) -> dict:
+    """Materialise two contract revisions that change the derived output schema.
+
+    A new column and an incompatible column type are the two shapes Delta
+    refuses to append to an existing table. Each revision writes its own tables,
+    the previous history stays exactly as it was, and the boundary decides which
+    revision readers are on.
+    """
+    options = options_for(root / "contract-evolution", store, ("2024-01", "2024-02"))
+    catalog = versions.PublicationCatalog(options.warehouse_root)
+    original = contracts.SERVICE_CONTRACTS[SERVICE]
+    observed: dict[str, object] = {}
+    try:
+        _, _, first = run_all(spark, options, store, dimension, frame)
+        baseline = paths.table_paths(options.warehouse_root, SERVICE, original.fingerprint)
+        baseline_schema = first[SERVICE]["contracted"]["schema"]
+        baseline_state = {
+            "fingerprint": original.fingerprint,
+            "rows": first[SERVICE]["contracted"]["rows"],
+            "columns": len(baseline_schema),
+            "delta_version": first[SERVICE]["contracted"]["delta_version"],
+            "payment_type": field_type(baseline_schema, "payment_type"),
+        }
+        if baseline_state["rows"] + first[SERVICE]["quarantine"]["rows"] != 2 * rows:
+            raise AssertionError("the contract-evolution baseline did not publish both periods")
+
+        for label, revision in (
+            (
+                "added_output_column",
+                revised_contract("yellow/v2", add_column=True, retype_column=False),
+            ),
+            (
+                "retyped_output_column",
+                revised_contract("yellow/v3", add_column=False, retype_column=True),
+            ),
+        ):
+            contracts.SERVICE_CONTRACTS[SERVICE] = revision
+            _, _, revised_state = run_all(spark, options, store, dimension, frame)
+            contracted = revised_state[SERVICE]["contracted"]
+            if catalog.boundary().fingerprint(SERVICE) != revision.fingerprint:
+                raise AssertionError(f"{label}: the boundary did not move to the revision")
+            if contracted["rows"] != baseline_state["rows"]:
+                raise AssertionError(f"{label}: the revision published a different row count")
+            # The earlier revision is untouched, not merged into and not dropped.
+            retained = pipeline.measure_table(
+                spark, options, baseline.contracted, pipeline.KEY_COLUMNS
+            )
+            if retained["rows"] != baseline_state["rows"]:
+                raise AssertionError(f"{label}: the previous contract's history changed")
+            before = contracted["delta_version"]
+            _, _, replayed = run_all(spark, options, store, dimension, frame)
+            if replayed[SERVICE]["contracted"]["delta_version"] != before:
+                raise AssertionError(f"{label}: replaying the revision added a Delta commit")
+            observed[label] = {
+                "fingerprint": revision.fingerprint,
+                "rows": contracted["rows"],
+                "columns": len(contracted["schema"]),
+                "payment_type": field_type(contracted["schema"], "payment_type"),
+                "schema_differs_from_baseline": contracted["schema"] != baseline_schema,
+                "replay_added_delta_commit": False,
+            }
+    finally:
+        contracts.SERVICE_CONTRACTS[SERVICE] = original
+
+    added = observed["added_output_column"]
+    retyped = observed["retyped_output_column"]
+    if added["columns"] != baseline_state["columns"] + 1:
+        raise AssertionError("the added column did not reach the derived schema")
+    # The retype keeps the column count, so the type itself is what proves it
+    # reached the output rather than being silently ignored.
+    if (baseline_state["payment_type"], retyped["payment_type"]) != ("bigint", "double"):
+        raise AssertionError(
+            f"the retyped column did not reach the derived schema: "
+            f"{baseline_state['payment_type']} -> {retyped['payment_type']}"
+        )
+    if not all(item["schema_differs_from_baseline"] for item in (added, retyped)):
+        raise AssertionError("a revision produced the baseline schema unchanged")
+    if len({baseline_state["fingerprint"], added["fingerprint"], retyped["fingerprint"]}) != 3:
+        raise AssertionError("two revisions produced the same contract fingerprint")
+    return {"baseline": baseline_state, **observed}
+
+
+def zone_lookup_migration(
+    spark: object,
+    root: Path,
+    source: Path,
+    store: landing.LandingStore,
+    options: pipeline.SliceOptions,
+    dimension: zones.ZoneDimension,
+) -> dict:
+    """Landing a newer lookup must not move the view, and moving it needs coverage.
+
+    This is the condition the M2 review measured: the run followed the newest
+    landed lookup, and every previously published period silently left the view.
+    """
+    catalog = versions.PublicationCatalog(options.warehouse_root)
+    published = catalog.boundary().zone_lookup_version_id
+    revised = land_zone_lookup(store, source, "smoke-zone-2", ZONE_CSV_REVISED)
+    if revised.version_id == published:
+        raise AssertionError("a different lookup body did not create a new landed version")
+    if zones.select_version(store)["version_id"] != revised.version_id:
+        raise AssertionError("the revised lookup is not the newest landed version")
+
+    if pipeline.pinned_zone_version(catalog, options) != published:
+        raise AssertionError("a newly landed lookup changed the default context")
+    before = pipeline.measure_tables(
+        spark, options, Path(options.warehouse_root), catalog.boundary()
+    )
+    visible_before = set(before[SERVICE]["contracted"]["visible_derivations"])
+    if not visible_before:
+        raise AssertionError("nothing was visible before the migration")
+
+    # A run that rebuilds one period cannot move a dataset-wide dimension.
+    scoped = options_for(root, store, ("2024-01",))
+    scoped_target = pipeline.target_boundary(catalog, scoped, revised.version_id)
+    try:
+        pipeline.check_publication_scope(catalog, scoped, scoped_target)
+    except versions.PublicationCoverageError as error:
+        refusal = str(error)
+    else:
+        raise AssertionError("a scoped lookup migration was accepted")
+    if catalog.boundary().zone_lookup_version_id != published:
+        raise AssertionError("a refused migration moved the boundary")
+    if pipeline.logical_state(before) != pipeline.logical_state(
+        pipeline.measure_tables(spark, options, Path(options.warehouse_root), catalog.boundary())
+    ):
+        raise AssertionError("a refused migration changed the published view")
+
+    migrated = zones.load(store, revised.version_id)
+    _, _, after = run_all(spark, options, store, migrated, build.zone_frame(spark, migrated))
+    if catalog.boundary().zone_lookup_version_id != revised.version_id:
+        raise AssertionError("a complete migration did not move the boundary")
+    coverage = pipeline.coverage(catalog, options, catalog.boundary())
+    if not coverage["complete"]:
+        raise AssertionError(f"the migration left {coverage['invisible_logical_ids']} invisible")
+    visible_after = set(after[SERVICE]["contracted"]["visible_derivations"])
+    if visible_after & visible_before:
+        raise AssertionError("a derivation of the previous lookup is still visible")
+    if after[SERVICE]["contracted"]["physical_rows"] <= before[SERVICE]["contracted"]["rows"]:
+        raise AssertionError("the migration did not retain the previous physical history")
+    return {
+        "published_version_id": published,
+        "revised_version_id": revised.version_id,
+        "default_stayed_on_published_version": True,
+        "scoped_migration_refused": refusal,
+        "artifacts_covered_after_migration": len(coverage["known_artifacts"]),
+        "physical_rows_after": after[SERVICE]["contracted"]["physical_rows"],
+        "visible_rows_after": after[SERVICE]["contracted"]["rows"],
+    }
 
 
 def detects_missing_data_files(spark: object, options: pipeline.SliceOptions, path: Path) -> bool:

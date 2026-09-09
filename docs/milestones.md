@@ -35,13 +35,17 @@ what a probe actually measured on the storage in use.
 
 Measured results are in [`m2-contracted-correctness.md`](m2-contracted-correctness.md).
 Six real bounded versions were resolved against the two contracts, one was
-rejected for incompatible drift, the incremental tables matched a full rebuild on
-schema, keys, counts and content digests, and replaying changed nothing. An
-injected failure between Delta tables remained invisible until replay completed
-it, and a scoped rerun preserved omitted periods. A separate two-driver probe
-showed no loss or duplication for one throwaway Delta table; orchestration remains
-single-coordinator. Analytical products, the dimensional model and Power BI stay
-in M3.
+rejected for incompatible drift, a warehouse maintained across two runs matched a
+full rebuild on schema, keys, counts and content digests, and replaying changed
+nothing. An injected failure between Delta tables remained invisible until replay
+completed it, and a scoped rerun preserved omitted periods. A dataset publication
+boundary decides which derivation context readers are on: landing a newer zone
+lookup does not move it, a context change is refused unless one run rebuilds
+every artifact the previous context published, and each contract fingerprint owns
+its own tables so a revised output schema is materialised without `mergeSchema`.
+A separate two-driver probe showed no loss or duplication for one throwaway Delta
+table; orchestration remains single-coordinator. Analytical products, the
+dimensional model and Power BI stay in M3.
 
 ## M3 — distributed execution and portfolio evidence
 
@@ -54,6 +58,22 @@ configuration-specific conclusions are documented. Add a secondary 2–3 page
 Power BI report over the analytical products. Publish an explicit dimensional
 model with a trip-occurrence fact, conformed date/zone/service/source-version
 dimensions, and separate service-specific fare facts.
+
+Two conditions M2 leaves open must be settled before the scale runs, not during
+them.
+
+- **Equivalence above the digest bound.** The exact sorted digest collects one
+  hash per row on the driver and is skipped above `--max-digest-rows`, leaving
+  only an additive checksum that is insensitive to permutations and to
+  compensating errors. M3 works far above that bound, so equivalence at scale
+  needs a mechanism that keeps the same strength — a per-partition digest, or a
+  batched comparison — before any result is claimed equivalent.
+- **Measurement cost separated from processing cost.** Measuring a table scans
+  it several times: distinct keys, a count and a full digest per table, and
+  three counts per written version. That is invisible at 5,000 rows and would
+  dominate a run at 100 million, contaminating any comparison against DuckDB.
+  The engine comparison must time processing, with measurement either excluded
+  or reported separately.
 
 ## M4 — separately approved cloud proof
 

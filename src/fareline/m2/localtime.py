@@ -46,12 +46,43 @@ def _month_bounds(year: int, month: int) -> tuple[datetime, datetime]:
     return start, end
 
 
+def _transition_instant(before: datetime, after: datetime, zone: Any) -> datetime:
+    """Narrow an hour that contains an offset change down to the second.
+
+    Hourly sampling alone would misplace any transition whose UTC instant is not
+    on the hour, and half-hour offsets make that a real case rather than a
+    theoretical one.
+    """
+    before_offset = before.astimezone(zone).utcoffset()
+    while after - before > timedelta(seconds=1):
+        middle = before + (after - before) / 2
+        if middle.astimezone(zone).utcoffset() == before_offset:
+            before = middle
+        else:
+            after = middle
+    return after
+
+
+def _interval(
+    instant: datetime, before_offset: timedelta, after_offset: timedelta
+) -> LocalInterval:
+    """The local interval an offset change skipped or replayed."""
+    before_local = (instant + before_offset).replace(tzinfo=None)
+    after_local = (instant + after_offset).replace(tzinfo=None)
+    if after_offset > before_offset:
+        # Clocks jumped forward: the skipped local interval never occurred.
+        return LocalInterval(NONEXISTENT, before_local, after_local)
+    # Clocks jumped back: the local interval is replayed a second time.
+    return LocalInterval(AMBIGUOUS, after_local, before_local)
+
+
 def transitions(year: int, month: int, zone_name: str) -> tuple[LocalInterval, ...]:
     """Find the unresolvable local intervals inside one calendar month.
 
     The month is walked in UTC because UTC has no transitions, and the offset is
-    sampled on each side of every hour. Where the offset changes, the local
-    interval it skipped or repeated is reported.
+    sampled on each side of every hour. An hour whose offset changed is then
+    bisected to the exact instant, and the local interval it skipped or repeated
+    is reported.
     """
     if ZoneInfo is None:
         raise TimeZoneDatabaseUnavailable("this Python build has no zoneinfo module")
@@ -67,27 +98,13 @@ def transitions(year: int, month: int, zone_name: str) -> tuple[LocalInterval, .
     found: list[LocalInterval] = []
     previous_offset = cursor.astimezone(zone).utcoffset()
     while cursor < end:
-        cursor += timedelta(hours=1)
-        moment = cursor.astimezone(zone)
-        offset = moment.utcoffset()
-        if offset == previous_offset:
-            continue
-        shift = offset - previous_offset
-        local_before = (cursor - timedelta(hours=1)).astimezone(zone).replace(tzinfo=None)
-        if shift > timedelta(0):
-            # Clocks jumped forward: the skipped local interval never occurred.
-            found.append(
-                LocalInterval(
-                    NONEXISTENT,
-                    local_before + timedelta(hours=1),
-                    local_before + shift + timedelta(hours=1),
-                )
-            )
-        else:
-            # Clocks jumped back: the local interval is replayed a second time.
-            local_after = moment.replace(tzinfo=None)
-            found.append(LocalInterval(AMBIGUOUS, local_after, local_after - shift))
-        previous_offset = offset
+        following = cursor + timedelta(hours=1)
+        offset = following.astimezone(zone).utcoffset()
+        if offset != previous_offset:
+            instant = _transition_instant(cursor, following, zone)
+            found.append(_interval(instant, previous_offset, offset))
+            previous_offset = offset
+        cursor = following
 
     return tuple(item for item in found if item.start.year == year and item.start.month == month)
 

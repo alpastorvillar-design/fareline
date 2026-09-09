@@ -1,20 +1,20 @@
 """Build the contracted service tables, their quarantine and their incidents.
 
-Three Delta tables per service retain contracted rows, quarantined rows and the
-incidents that explain both. They are physical history tables. The immutable
-publication catalog selects the complete derivations readers may observe, so a
-superseded version remains auditable without remaining visible.
+Three Delta tables per service and contract fingerprint retain contracted rows,
+quarantined rows and the incidents that explain both. They are physical history
+tables. The immutable publication catalog selects the complete derivations
+readers may observe, so a superseded version remains auditable without remaining
+visible.
 
-The marker-visible view is a pure function of the landed manifests, the contract
-and the taxi zone lookup version, so an incremental run and a full rebuild are
-supposed to be indistinguishable. ``fareline.m2.equivalence`` checks that claim.
+The visible view is a pure function of the landed manifests, the contract and the
+taxi zone lookup version, so an incremental run and a full rebuild are supposed
+to be indistinguishable. ``fareline.m2.equivalence`` checks that claim.
 """
 
 from __future__ import annotations
 
-import hashlib
 from dataclasses import dataclass
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 from typing import Any
 from urllib.parse import unquote, urlparse
 
@@ -24,20 +24,8 @@ from pyspark.sql import functions as F
 from pyspark.sql import types as T
 
 from fareline.m1 import quality
-from fareline.m2 import contracts, localtime, resolution, types, zones
-
-CONTRACTED_RELATIVE_PATHS = {
-    "yellow": "contracted_trips/yellow_trip",
-    "hvfhv": "contracted_trips/hvfhv_trip",
-}
-QUARANTINE_RELATIVE_PATHS = {
-    "yellow": "quarantine/yellow_trip",
-    "hvfhv": "quarantine/hvfhv_trip",
-}
-INCIDENT_RELATIVE_PATHS = {
-    "yellow": "quality_incidents/yellow_trip",
-    "hvfhv": "quality_incidents/hvfhv_trip",
-}
+from fareline.m2 import contracts, localtime, resolution, types, versions, zones
+from fareline.m2.paths import as_uri
 
 PARTITION_COLUMN = "source_period"
 
@@ -90,16 +78,6 @@ INCIDENT_SCHEMA = T.StructType(
 
 
 @dataclass(frozen=True)
-class TablePaths:
-    contracted: Path
-    quarantine: Path
-    incidents: Path
-
-    def all(self) -> tuple[Path, ...]:
-        return (self.contracted, self.quarantine, self.incidents)
-
-
-@dataclass(frozen=True)
 class VersionOutcome:
     service: str
     period: str
@@ -127,10 +105,6 @@ class VersionOutcome:
         }
 
 
-def as_uri(path: Path | str) -> str:
-    return "file://" + str(PurePosixPath(str(path).replace("\\", "/")))
-
-
 def use_physical_column_names(spark: SparkSession) -> None:
     """Make Spark report source column names exactly as the file spells them.
 
@@ -140,15 +114,6 @@ def use_physical_column_names(spark: SparkSession) -> None:
     reader error instead of a contract decision naming both columns.
     """
     spark.conf.set("spark.sql.caseSensitive", "true")
-
-
-def table_paths(warehouse_root: Path | str, service: str) -> TablePaths:
-    root = Path(warehouse_root)
-    return TablePaths(
-        contracted=root / CONTRACTED_RELATIVE_PATHS[service],
-        quarantine=root / QUARANTINE_RELATIVE_PATHS[service],
-        incidents=root / INCIDENT_RELATIVE_PATHS[service],
-    )
 
 
 def zone_frame(spark: SparkSession, dimension: zones.ZoneDimension) -> DataFrame:
@@ -179,9 +144,7 @@ def _canonical_column(field: resolution.FieldResolution) -> Column:
     return F.lit(None).cast(target).alias(field.canonical_name)
 
 
-def _guard_violation(
-    contract: contracts.ServiceContract, resolved: resolution.SchemaResolution
-) -> Column:
+def _guard_violation(resolved: resolution.SchemaResolution) -> Column:
     """True when a range-checked promotion would silently lose a value."""
     checks = [
         (F.col(f"`{field.source_name}`") < F.lit(-field.guard_bound))
@@ -223,7 +186,7 @@ def contracted_frame(
 ) -> DataFrame:
     """Project one source version onto the contract and evaluate every rule."""
     year, month = quality.period_parts(manifest["period"])
-    guard = _guard_violation(contract, resolved)
+    guard = _guard_violation(resolved)
 
     projected = frame.select(
         F.col("source_row_ordinal"),
@@ -374,13 +337,17 @@ def _row_incidents(evaluated: DataFrame, contract: contracts.ServiceContract) ->
     )
     exploded = evaluated.withColumn("_finding", F.explode(findings))
     return exploded.select(
+        # JSON, not a delimiter. A delimiter is only safe while no component can
+        # contain it, which nothing here enforces, and concat_ws drops nulls
+        # rather than encoding them. Same encoding as versions.incident_id.
         F.sha2(
-            F.concat_ws(
-                "",
-                F.col("source_file_version_id"),
-                F.col("derivation_id"),
-                F.col("source_row_ordinal").cast("string"),
-                F.col("_finding.rule"),
+            F.to_json(
+                F.array(
+                    F.col("source_file_version_id"),
+                    F.col("derivation_id"),
+                    F.col("source_row_ordinal").cast("string"),
+                    F.col("_finding.rule"),
+                )
             ),
             256,
         ).alias("incident_id"),
@@ -408,11 +375,9 @@ def version_incidents(
     """One incident per blocking schema violation of a rejected version."""
     rows = [
         (
-            hashlib.sha256(
-                "".join(
-                    [derived_id, manifest["version_id"], violation.rule, violation.canonical_name]
-                ).encode()
-            ).hexdigest(),
+            versions.incident_id(
+                [derived_id, manifest["version_id"], violation.rule, violation.canonical_name]
+            ),
             manifest["service"],
             manifest["period"],
             manifest["version_id"],

@@ -127,6 +127,9 @@ Invariants:
   contract fingerprint and the taxi zone lookup version it was joined against.
 - A derivation becomes visible only after its contracted, quarantine and incident
   writes have completed. A failed run cannot move the publication boundary.
+- Each contract fingerprint owns its own physical tables, so a revision that
+  changes the derived schema is written beside the previous one rather than
+  merged into it, and the boundary decides which one readers are on.
 
 Rows that break an impossible-value rule are moved whole into a quarantine table
 with their reasons; rows that break a recoverable rule stay published and are

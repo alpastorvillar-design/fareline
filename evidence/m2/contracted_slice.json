@@ -191,14 +191,14 @@
           "equivalent": true,
           "fields": {
             "content_additive_digest": {
-              "incremental": "382170605765084307",
+              "incremental": "296998143310503160",
               "match": true,
-              "rebuild": "382170605765084307"
+              "rebuild": "296998143310503160"
             },
             "content_sorted_digest": {
-              "incremental": "a1ec067fb5bcb13ce9699f925e35f8f9d460880e235361b83f805d3816f844c9",
+              "incremental": "e606a0f579a4a31f3580b92a2a04569b2baf6e9c935d966d2bf5892e0a3c9a9a",
               "match": true,
-              "rebuild": "a1ec067fb5bcb13ce9699f925e35f8f9d460880e235361b83f805d3816f844c9"
+              "rebuild": "e606a0f579a4a31f3580b92a2a04569b2baf6e9c935d966d2bf5892e0a3c9a9a"
             },
             "distinct_keys": {
               "incremental": 1,
@@ -206,14 +206,14 @@
               "rebuild": 1
             },
             "key_additive_digest": {
-              "incremental": "1017468096032556861",
+              "incremental": "358356959746313610",
               "match": true,
-              "rebuild": "1017468096032556861"
+              "rebuild": "358356959746313610"
             },
             "key_sorted_digest": {
-              "incremental": "9e46d08141ba0beb74c71f10aaeea3c7e0da74ac0ecc4e6ef6e9f482c3e58db6",
+              "incremental": "3959988c1ba2d472e01f7fb4690aedd653e03290ea29b6ff1d7e98e48522e0f8",
               "match": true,
-              "rebuild": "9e46d08141ba0beb74c71f10aaeea3c7e0da74ac0ecc4e6ef6e9f482c3e58db6"
+              "rebuild": "3959988c1ba2d472e01f7fb4690aedd653e03290ea29b6ff1d7e98e48522e0f8"
             },
             "rows": {
               "incremental": 1,
@@ -556,14 +556,14 @@
           "equivalent": true,
           "fields": {
             "content_additive_digest": {
-              "incremental": "6152953661356696221",
+              "incremental": "7083934573017718298",
               "match": true,
-              "rebuild": "6152953661356696221"
+              "rebuild": "7083934573017718298"
             },
             "content_sorted_digest": {
-              "incremental": "798c81d93e137c77f2f0c1a232d30c1f4ff7bf4344093d6f9fe1892787b3049b",
+              "incremental": "598db8adc2b72abcc4663fa98c5d43e62857a2e07e14a943fff8df2556dd56a6",
               "match": true,
-              "rebuild": "798c81d93e137c77f2f0c1a232d30c1f4ff7bf4344093d6f9fe1892787b3049b"
+              "rebuild": "598db8adc2b72abcc4663fa98c5d43e62857a2e07e14a943fff8df2556dd56a6"
             },
             "distinct_keys": {
               "incremental": 11,
@@ -571,14 +571,14 @@
               "rebuild": 11
             },
             "key_additive_digest": {
-              "incremental": "7642816291403605315",
+              "incremental": "5769603077911700806",
               "match": true,
-              "rebuild": "7642816291403605315"
+              "rebuild": "5769603077911700806"
             },
             "key_sorted_digest": {
-              "incremental": "02413bb0b6c3bc5a7c71ac93b545211f5ce75bf32b84ecfbf06cd558b391056f",
+              "incremental": "f9bca47d287fe1925848a6720362f7d0b24d5e5ae6674a445d069a6894e934a1",
               "match": true,
-              "rebuild": "02413bb0b6c3bc5a7c71ac93b545211f5ce75bf32b84ecfbf06cd558b391056f"
+              "rebuild": "f9bca47d287fe1925848a6720362f7d0b24d5e5ae6674a445d069a6894e934a1"
             },
             "rows": {
               "incremental": 11,
@@ -773,7 +773,17 @@
       }
     }
   },
-  "generated_at_utc": "2026-09-08T15:30:30.796186+00:00",
+  "gate": {
+    "checks": {
+      "every_known_artifact_is_visible": true,
+      "incremental_matches_rebuild": true,
+      "replay_adds_no_delta_commit": true,
+      "replay_adds_no_ledger_event": true,
+      "replay_changes_nothing": true
+    },
+    "passed": true
+  },
+  "generated_at_utc": "2026-09-08T23:11:30.583624+00:00",
   "incremental": {
     "outcomes": [
       {
@@ -789,8 +799,8 @@
         "version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3"
       },
       {
-        "action": "written",
-        "contracted_rows": 1000,
+        "action": "already_published",
+        "contracted_rows": 0,
         "derivation_id": "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c",
         "incident_rows": 0,
         "period": "2024-01",
@@ -813,10 +823,10 @@
         "version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa"
       },
       {
-        "action": "written",
-        "contracted_rows": 1000,
+        "action": "already_published",
+        "contracted_rows": 0,
         "derivation_id": "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
-        "incident_rows": 4,
+        "incident_rows": 0,
         "period": "2023-01",
         "quarantined_rows": 0,
         "service": "yellow",
@@ -825,10 +835,10 @@
         "version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c"
       },
       {
-        "action": "written",
-        "contracted_rows": 1000,
+        "action": "already_published",
+        "contracted_rows": 0,
         "derivation_id": "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f",
-        "incident_rows": 3,
+        "incident_rows": 0,
         "period": "2024-01",
         "quarantined_rows": 0,
         "service": "yellow",
@@ -860,7 +870,7 @@
         "period": "2019-02",
         "schema_version": 1,
         "service": "hvfhv",
-        "source_published_at_utc": "2026-09-08T00:25:48.676554+00:00",
+        "source_published_at_utc": "2026-09-08T23:09:59.109238+00:00",
         "source_version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3",
         "state": "rejected",
         "violations": [
@@ -869,7 +879,7 @@
         "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
       },
       {
-        "action": "published",
+        "action": "unchanged",
         "contract_fingerprint": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
         "contract_version": "hvfhv/v1",
         "derivation_id": "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c",
@@ -877,7 +887,7 @@
         "period": "2024-01",
         "schema_version": 1,
         "service": "hvfhv",
-        "source_published_at_utc": "2026-09-08T00:25:48.694525+00:00",
+        "source_published_at_utc": "2026-09-08T23:08:25.983679+00:00",
         "source_version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5",
         "state": "active",
         "violations": [],
@@ -892,14 +902,14 @@
         "period": "2025-01",
         "schema_version": 1,
         "service": "hvfhv",
-        "source_published_at_utc": "2026-09-08T00:25:48.712541+00:00",
+        "source_published_at_utc": "2026-09-08T23:09:59.142572+00:00",
         "source_version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa",
         "state": "active",
         "violations": [],
         "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
       },
       {
-        "action": "published",
+        "action": "unchanged",
         "contract_fingerprint": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b",
         "contract_version": "yellow/v1",
         "derivation_id": "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
@@ -907,14 +917,14 @@
         "period": "2023-01",
         "schema_version": 1,
         "service": "yellow",
-        "source_published_at_utc": "2026-09-08T00:25:48.499083+00:00",
+        "source_published_at_utc": "2026-09-08T23:08:25.834868+00:00",
         "source_version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c",
         "state": "active",
         "violations": [],
         "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
       },
       {
-        "action": "published",
+        "action": "unchanged",
         "contract_fingerprint": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b",
         "contract_version": "yellow/v1",
         "derivation_id": "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f",
@@ -922,7 +932,7 @@
         "period": "2024-01",
         "schema_version": 1,
         "service": "yellow",
-        "source_published_at_utc": "2026-09-08T00:25:48.642789+00:00",
+        "source_published_at_utc": "2026-09-08T23:08:25.966567+00:00",
         "source_version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032",
         "state": "active",
         "violations": [],
@@ -937,17 +947,335 @@
         "period": "2025-01",
         "schema_version": 1,
         "service": "yellow",
-        "source_published_at_utc": "2026-09-08T00:25:48.659984+00:00",
+        "source_published_at_utc": "2026-09-08T23:09:59.091949+00:00",
         "source_version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34",
         "state": "active",
         "violations": [],
         "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
       }
-    ]
+    ],
+    "started_from_published_state": true,
+    "state_before_this_run": {
+      "hvfhv": {
+        "contracted": {
+          "content_additive_digest": "562045258384993761225",
+          "content_sorted_digest": "eea7d77a836754cf8762707bb952c296f81e433e17390f421df0b1b0313f0300",
+          "data_file_bytes": 82285,
+          "data_files_on_disk": 1,
+          "delta_version": 0,
+          "distinct_keys": 1000,
+          "key_additive_digest": "572875009401201168430",
+          "key_sorted_digest": "dabe61adc8116848bf9881d5bb3cb8655755a9a31dd82a25be8ceff6da143f70",
+          "physical_rows": 1000,
+          "referenced_data_files": 1,
+          "rows": 1000,
+          "schema": [
+            "derivation_id:string",
+            "source_file_version_id:string",
+            "source_row_ordinal:bigint",
+            "source_service:string",
+            "source_period:string",
+            "source_artifact_completeness:string",
+            "source_logical_url:string",
+            "source_content_sha256:string",
+            "contract_version:string",
+            "contract_fingerprint:string",
+            "zone_lookup_version_id:string",
+            "hvfhs_license_num:string",
+            "dispatching_base_num:string",
+            "originating_base_num:string",
+            "request_datetime:timestamp_ntz",
+            "on_scene_datetime:timestamp_ntz",
+            "pickup_datetime:timestamp_ntz",
+            "dropoff_datetime:timestamp_ntz",
+            "pickup_location_id:bigint",
+            "dropoff_location_id:bigint",
+            "trip_miles:double",
+            "trip_time:bigint",
+            "base_passenger_fare:double",
+            "tolls:double",
+            "bcf:double",
+            "sales_tax:double",
+            "congestion_surcharge:double",
+            "airport_fee:double",
+            "tips:double",
+            "driver_pay:double",
+            "shared_request_flag:string",
+            "shared_match_flag:string",
+            "access_a_ride_flag:string",
+            "wav_request_flag:string",
+            "wav_match_flag:string",
+            "cbd_congestion_fee:double",
+            "pickup_local_date:date",
+            "pickup_local_hour:int",
+            "pickup_borough:string",
+            "pickup_zone_name:string",
+            "pickup_service_zone:string",
+            "pickup_zone_resolved:boolean",
+            "dropoff_borough:string",
+            "dropoff_zone_name:string",
+            "dropoff_service_zone:string",
+            "dropoff_zone_resolved:boolean"
+          ],
+          "visible_derivations": [
+            "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+          ]
+        },
+        "incidents": {
+          "content_additive_digest": null,
+          "content_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_file_bytes": 0,
+          "data_files_on_disk": 0,
+          "delta_version": 0,
+          "distinct_keys": 0,
+          "key_additive_digest": null,
+          "key_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "physical_rows": 0,
+          "referenced_data_files": 0,
+          "rows": 0,
+          "schema": [
+            "incident_id:string",
+            "source_service:string",
+            "source_period:string",
+            "source_file_version_id:string",
+            "derivation_id:string",
+            "source_row_ordinal:bigint",
+            "contract_version:string",
+            "scope:string",
+            "rule:string",
+            "severity:string",
+            "action:string",
+            "detail:string"
+          ],
+          "visible_derivations": [
+            "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+          ]
+        },
+        "quarantine": {
+          "content_additive_digest": null,
+          "content_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_file_bytes": 0,
+          "data_files_on_disk": 0,
+          "delta_version": 0,
+          "distinct_keys": 0,
+          "key_additive_digest": null,
+          "key_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "physical_rows": 0,
+          "referenced_data_files": 0,
+          "rows": 0,
+          "schema": [
+            "derivation_id:string",
+            "source_file_version_id:string",
+            "source_row_ordinal:bigint",
+            "source_service:string",
+            "source_period:string",
+            "source_artifact_completeness:string",
+            "source_logical_url:string",
+            "source_content_sha256:string",
+            "contract_version:string",
+            "contract_fingerprint:string",
+            "zone_lookup_version_id:string",
+            "hvfhs_license_num:string",
+            "dispatching_base_num:string",
+            "originating_base_num:string",
+            "request_datetime:timestamp_ntz",
+            "on_scene_datetime:timestamp_ntz",
+            "pickup_datetime:timestamp_ntz",
+            "dropoff_datetime:timestamp_ntz",
+            "pickup_location_id:bigint",
+            "dropoff_location_id:bigint",
+            "trip_miles:double",
+            "trip_time:bigint",
+            "base_passenger_fare:double",
+            "tolls:double",
+            "bcf:double",
+            "sales_tax:double",
+            "congestion_surcharge:double",
+            "airport_fee:double",
+            "tips:double",
+            "driver_pay:double",
+            "shared_request_flag:string",
+            "shared_match_flag:string",
+            "access_a_ride_flag:string",
+            "wav_request_flag:string",
+            "wav_match_flag:string",
+            "cbd_congestion_fee:double",
+            "pickup_local_date:date",
+            "pickup_local_hour:int",
+            "pickup_borough:string",
+            "pickup_zone_name:string",
+            "pickup_service_zone:string",
+            "pickup_zone_resolved:boolean",
+            "dropoff_borough:string",
+            "dropoff_zone_name:string",
+            "dropoff_service_zone:string",
+            "dropoff_zone_resolved:boolean",
+            "quarantine_reasons:array<string>"
+          ],
+          "visible_derivations": [
+            "c1cbd9a2aefc7b6c12a8bdb956fec10cb95994522a7f5708b5a050f35046395c"
+          ]
+        }
+      },
+      "yellow": {
+        "contracted": {
+          "content_additive_digest": "1149463877744054816912",
+          "content_sorted_digest": "9c62be1cd0a3de0cfd46744ed7c3c0e91521fad4b2dcb1562e2ab3ba187af04f",
+          "data_file_bytes": 101538,
+          "data_files_on_disk": 2,
+          "delta_version": 1,
+          "distinct_keys": 2000,
+          "key_additive_digest": "1135156563980023299396",
+          "key_sorted_digest": "0c26557dfdf176b459448ee6b5cc0eccddee1e83da726f2e061a76bf3aed3f87",
+          "physical_rows": 2000,
+          "referenced_data_files": 2,
+          "rows": 2000,
+          "schema": [
+            "derivation_id:string",
+            "source_file_version_id:string",
+            "source_row_ordinal:bigint",
+            "source_service:string",
+            "source_period:string",
+            "source_artifact_completeness:string",
+            "source_logical_url:string",
+            "source_content_sha256:string",
+            "contract_version:string",
+            "contract_fingerprint:string",
+            "zone_lookup_version_id:string",
+            "vendor_id:bigint",
+            "pickup_datetime:timestamp_ntz",
+            "dropoff_datetime:timestamp_ntz",
+            "passenger_count:double",
+            "trip_distance:double",
+            "ratecode_id:double",
+            "store_and_fwd_flag:string",
+            "pickup_location_id:bigint",
+            "dropoff_location_id:bigint",
+            "payment_type:bigint",
+            "fare_amount:double",
+            "extra:double",
+            "mta_tax:double",
+            "tip_amount:double",
+            "tolls_amount:double",
+            "improvement_surcharge:double",
+            "total_amount:double",
+            "congestion_surcharge:double",
+            "airport_fee:double",
+            "cbd_congestion_fee:double",
+            "pickup_local_date:date",
+            "pickup_local_hour:int",
+            "pickup_borough:string",
+            "pickup_zone_name:string",
+            "pickup_service_zone:string",
+            "pickup_zone_resolved:boolean",
+            "dropoff_borough:string",
+            "dropoff_zone_name:string",
+            "dropoff_service_zone:string",
+            "dropoff_zone_resolved:boolean"
+          ],
+          "visible_derivations": [
+            "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+            "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+          ]
+        },
+        "incidents": {
+          "content_additive_digest": "5329048479735869199",
+          "content_sorted_digest": "fdd6a6a336e9cb946939ef11bb8a4993270233084bff292a85bbea44b929f185",
+          "data_file_bytes": 9898,
+          "data_files_on_disk": 2,
+          "delta_version": 1,
+          "distinct_keys": 7,
+          "key_additive_digest": "3502457363467726390",
+          "key_sorted_digest": "ff2b438d867c9430c7dacb16ea3c4bfbb7251147cf09adcbb1195282abc5e27e",
+          "physical_rows": 7,
+          "referenced_data_files": 2,
+          "rows": 7,
+          "schema": [
+            "incident_id:string",
+            "source_service:string",
+            "source_period:string",
+            "source_file_version_id:string",
+            "derivation_id:string",
+            "source_row_ordinal:bigint",
+            "contract_version:string",
+            "scope:string",
+            "rule:string",
+            "severity:string",
+            "action:string",
+            "detail:string"
+          ],
+          "visible_derivations": [
+            "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+            "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+          ]
+        },
+        "quarantine": {
+          "content_additive_digest": null,
+          "content_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "data_file_bytes": 0,
+          "data_files_on_disk": 0,
+          "delta_version": 1,
+          "distinct_keys": 0,
+          "key_additive_digest": null,
+          "key_sorted_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "physical_rows": 0,
+          "referenced_data_files": 0,
+          "rows": 0,
+          "schema": [
+            "derivation_id:string",
+            "source_file_version_id:string",
+            "source_row_ordinal:bigint",
+            "source_service:string",
+            "source_period:string",
+            "source_artifact_completeness:string",
+            "source_logical_url:string",
+            "source_content_sha256:string",
+            "contract_version:string",
+            "contract_fingerprint:string",
+            "zone_lookup_version_id:string",
+            "vendor_id:bigint",
+            "pickup_datetime:timestamp_ntz",
+            "dropoff_datetime:timestamp_ntz",
+            "passenger_count:double",
+            "trip_distance:double",
+            "ratecode_id:double",
+            "store_and_fwd_flag:string",
+            "pickup_location_id:bigint",
+            "dropoff_location_id:bigint",
+            "payment_type:bigint",
+            "fare_amount:double",
+            "extra:double",
+            "mta_tax:double",
+            "tip_amount:double",
+            "tolls_amount:double",
+            "improvement_surcharge:double",
+            "total_amount:double",
+            "congestion_surcharge:double",
+            "airport_fee:double",
+            "cbd_congestion_fee:double",
+            "pickup_local_date:date",
+            "pickup_local_hour:int",
+            "pickup_borough:string",
+            "pickup_zone_name:string",
+            "pickup_service_zone:string",
+            "pickup_zone_resolved:boolean",
+            "dropoff_borough:string",
+            "dropoff_zone_name:string",
+            "dropoff_service_zone:string",
+            "dropoff_zone_resolved:boolean",
+            "quarantine_reasons:array<string>"
+          ],
+          "visible_derivations": [
+            "c20f8d9acf6fa720884674a5e273cf22a8635f85bb06914cea2a69e1efc78ca6",
+            "dd3e05c0fc4b8c8bcef36341e9088466315da9a3bb2c02dbc817e66532e1c98f"
+          ]
+        }
+      }
+    }
   },
   "landing": {
     "hvfhv:2019-02": {
-      "state": "replayed",
+      "state": "published",
       "version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3"
     },
     "hvfhv:2024-01": {
@@ -955,7 +1283,7 @@
       "version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5"
     },
     "hvfhv:2025-01": {
-      "state": "replayed",
+      "state": "published",
       "version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa"
     },
     "yellow:2023-01": {
@@ -967,7 +1295,7 @@
       "version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032"
     },
     "yellow:2025-01": {
-      "state": "replayed",
+      "state": "published",
       "version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34"
     },
     "zone_lookup": {
@@ -978,10 +1306,11 @@
   "landing_events": {
     "all_runs": {
       "published": 7,
-      "replayed": 35
+      "replayed": 4
     },
     "current_run": {
-      "replayed": 7
+      "published": 3,
+      "replayed": 4
     }
   },
   "limits": [
@@ -993,6 +1322,82 @@
     "Analytical products, the dimensional model and Power BI remain M3 work."
   ],
   "milestone": "m2",
+  "publication": {
+    "boundary_action": "unchanged",
+    "changed_dimensions": [],
+    "complete": true,
+    "coverage": {
+      "complete": true,
+      "invisible_logical_ids": [],
+      "known_artifacts": [
+        {
+          "logical_id": "trip_records:bounded_sample:hvfhv:2019-02",
+          "period": "2019-02",
+          "requested_by_this_run": true,
+          "service": "hvfhv",
+          "visible_under_active_context": true
+        },
+        {
+          "logical_id": "trip_records:bounded_sample:hvfhv:2024-01",
+          "period": "2024-01",
+          "requested_by_this_run": true,
+          "service": "hvfhv",
+          "visible_under_active_context": true
+        },
+        {
+          "logical_id": "trip_records:bounded_sample:hvfhv:2025-01",
+          "period": "2025-01",
+          "requested_by_this_run": true,
+          "service": "hvfhv",
+          "visible_under_active_context": true
+        },
+        {
+          "logical_id": "trip_records:bounded_sample:yellow:2023-01",
+          "period": "2023-01",
+          "requested_by_this_run": true,
+          "service": "yellow",
+          "visible_under_active_context": true
+        },
+        {
+          "logical_id": "trip_records:bounded_sample:yellow:2024-01",
+          "period": "2024-01",
+          "requested_by_this_run": true,
+          "service": "yellow",
+          "visible_under_active_context": true
+        },
+        {
+          "logical_id": "trip_records:bounded_sample:yellow:2025-01",
+          "period": "2025-01",
+          "requested_by_this_run": true,
+          "service": "yellow",
+          "visible_under_active_context": true
+        }
+      ]
+    },
+    "is_migration": false,
+    "missing_logical_ids": [],
+    "previous_context": {
+      "contract_fingerprints": {
+        "hvfhv": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
+        "yellow": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b"
+      },
+      "schema_version": 1,
+      "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+    },
+    "required_logical_ids": [],
+    "scope_check": {
+      "changed_dimensions": [],
+      "missing_logical_ids": []
+    },
+    "target_context": {
+      "contract_fingerprints": {
+        "hvfhv": "31d6193c43d514f4cd626d9575a2644603e1996f7f17ec548e4f328e12ba62bc",
+        "yellow": "68dff1dcba7c9e9da35e32e1e39e9ecf19faa6d1f28256d516b4570d1f4b689b"
+      },
+      "schema_version": 1,
+      "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb"
+    }
+  },
   "rebuild": {
     "outcomes": [
       {
@@ -1079,7 +1484,7 @@
         "period": "2019-02",
         "schema_version": 1,
         "service": "hvfhv",
-        "source_published_at_utc": "2026-09-08T00:25:48.676554+00:00",
+        "source_published_at_utc": "2026-09-08T23:09:59.109238+00:00",
         "source_version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3",
         "state": "rejected",
         "violations": [
@@ -1096,7 +1501,7 @@
         "period": "2024-01",
         "schema_version": 1,
         "service": "hvfhv",
-        "source_published_at_utc": "2026-09-08T00:25:48.694525+00:00",
+        "source_published_at_utc": "2026-09-08T23:08:25.983679+00:00",
         "source_version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5",
         "state": "active",
         "violations": [],
@@ -1111,7 +1516,7 @@
         "period": "2025-01",
         "schema_version": 1,
         "service": "hvfhv",
-        "source_published_at_utc": "2026-09-08T00:25:48.712541+00:00",
+        "source_published_at_utc": "2026-09-08T23:09:59.142572+00:00",
         "source_version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa",
         "state": "active",
         "violations": [],
@@ -1126,7 +1531,7 @@
         "period": "2023-01",
         "schema_version": 1,
         "service": "yellow",
-        "source_published_at_utc": "2026-09-08T00:25:48.499083+00:00",
+        "source_published_at_utc": "2026-09-08T23:08:25.834868+00:00",
         "source_version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c",
         "state": "active",
         "violations": [],
@@ -1141,7 +1546,7 @@
         "period": "2024-01",
         "schema_version": 1,
         "service": "yellow",
-        "source_published_at_utc": "2026-09-08T00:25:48.642789+00:00",
+        "source_published_at_utc": "2026-09-08T23:08:25.966567+00:00",
         "source_version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032",
         "state": "active",
         "violations": [],
@@ -1156,7 +1561,7 @@
         "period": "2025-01",
         "schema_version": 1,
         "service": "yellow",
-        "source_published_at_utc": "2026-09-08T00:25:48.659984+00:00",
+        "source_published_at_utc": "2026-09-08T23:09:59.091949+00:00",
         "source_version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34",
         "state": "active",
         "violations": [],
@@ -1282,7 +1687,7 @@
         "period": "2019-02",
         "schema_version": 1,
         "service": "hvfhv",
-        "source_published_at_utc": "2026-09-08T00:25:48.676554+00:00",
+        "source_published_at_utc": "2026-09-08T23:09:59.109238+00:00",
         "source_version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3",
         "state": "rejected",
         "violations": [
@@ -1299,7 +1704,7 @@
         "period": "2024-01",
         "schema_version": 1,
         "service": "hvfhv",
-        "source_published_at_utc": "2026-09-08T00:25:48.694525+00:00",
+        "source_published_at_utc": "2026-09-08T23:08:25.983679+00:00",
         "source_version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5",
         "state": "active",
         "violations": [],
@@ -1314,7 +1719,7 @@
         "period": "2025-01",
         "schema_version": 1,
         "service": "hvfhv",
-        "source_published_at_utc": "2026-09-08T00:25:48.712541+00:00",
+        "source_published_at_utc": "2026-09-08T23:09:59.142572+00:00",
         "source_version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa",
         "state": "active",
         "violations": [],
@@ -1329,7 +1734,7 @@
         "period": "2023-01",
         "schema_version": 1,
         "service": "yellow",
-        "source_published_at_utc": "2026-09-08T00:25:48.499083+00:00",
+        "source_published_at_utc": "2026-09-08T23:08:25.834868+00:00",
         "source_version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c",
         "state": "active",
         "violations": [],
@@ -1344,7 +1749,7 @@
         "period": "2024-01",
         "schema_version": 1,
         "service": "yellow",
-        "source_published_at_utc": "2026-09-08T00:25:48.642789+00:00",
+        "source_published_at_utc": "2026-09-08T23:08:25.966567+00:00",
         "source_version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032",
         "state": "active",
         "violations": [],
@@ -1359,7 +1764,7 @@
         "period": "2025-01",
         "schema_version": 1,
         "service": "yellow",
-        "source_published_at_utc": "2026-09-08T00:25:48.659984+00:00",
+        "source_published_at_utc": "2026-09-08T23:09:59.091949+00:00",
         "source_version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34",
         "state": "active",
         "violations": [],
@@ -1367,15 +1772,15 @@
       }
     ]
   },
-  "run_id": "m2-release-evidence-20260908",
+  "run_id": "944aa18453e1427c8bdc443036e9c3d7",
   "runtime": {
     "delta_python_version": "4.2.0",
     "duckdb_version": "1.5.5",
     "fareline_version": "0.3.0",
     "java_version": "17.0.17",
     "probe_executor_hosts": [
-      "60734b4bebd9",
-      "730d37f0bea3"
+      "86da007c6f8a",
+      "e455c15fac6b"
     ],
     "python_version": "3.10.12",
     "spark_master": "spark://spark-master:7077",
@@ -1486,14 +1891,14 @@
           ]
         },
         "incidents": {
-          "content_additive_digest": "382170605765084307",
-          "content_sorted_digest": "a1ec067fb5bcb13ce9699f925e35f8f9d460880e235361b83f805d3816f844c9",
+          "content_additive_digest": "296998143310503160",
+          "content_sorted_digest": "e606a0f579a4a31f3580b92a2a04569b2baf6e9c935d966d2bf5892e0a3c9a9a",
           "data_file_bytes": 4989,
           "data_files_on_disk": 1,
           "delta_version": 2,
           "distinct_keys": 1,
-          "key_additive_digest": "1017468096032556861",
-          "key_sorted_digest": "9e46d08141ba0beb74c71f10aaeea3c7e0da74ac0ecc4e6ef6e9f482c3e58db6",
+          "key_additive_digest": "358356959746313610",
+          "key_sorted_digest": "3959988c1ba2d472e01f7fb4690aedd653e03290ea29b6ff1d7e98e48522e0f8",
           "physical_rows": 1,
           "referenced_data_files": 1,
           "rows": 1,
@@ -1647,14 +2052,14 @@
           ]
         },
         "incidents": {
-          "content_additive_digest": "6152953661356696221",
-          "content_sorted_digest": "798c81d93e137c77f2f0c1a232d30c1f4ff7bf4344093d6f9fe1892787b3049b",
+          "content_additive_digest": "7083934573017718298",
+          "content_sorted_digest": "598db8adc2b72abcc4663fa98c5d43e62857a2e07e14a943fff8df2556dd56a6",
           "data_file_bytes": 14883,
           "data_files_on_disk": 3,
           "delta_version": 2,
           "distinct_keys": 11,
-          "key_additive_digest": "7642816291403605315",
-          "key_sorted_digest": "02413bb0b6c3bc5a7c71ac93b545211f5ce75bf32b84ecfbf06cd558b391056f",
+          "key_additive_digest": "5769603077911700806",
+          "key_sorted_digest": "f9bca47d287fe1925848a6720362f7d0b24d5e5ae6674a445d069a6894e934a1",
           "physical_rows": 11,
           "referenced_data_files": 3,
           "rows": 11,
@@ -1810,14 +2215,14 @@
           ]
         },
         "incidents": {
-          "content_additive_digest": "382170605765084307",
-          "content_sorted_digest": "a1ec067fb5bcb13ce9699f925e35f8f9d460880e235361b83f805d3816f844c9",
+          "content_additive_digest": "296998143310503160",
+          "content_sorted_digest": "e606a0f579a4a31f3580b92a2a04569b2baf6e9c935d966d2bf5892e0a3c9a9a",
           "data_file_bytes": 4989,
           "data_files_on_disk": 1,
           "delta_version": 2,
           "distinct_keys": 1,
-          "key_additive_digest": "1017468096032556861",
-          "key_sorted_digest": "9e46d08141ba0beb74c71f10aaeea3c7e0da74ac0ecc4e6ef6e9f482c3e58db6",
+          "key_additive_digest": "358356959746313610",
+          "key_sorted_digest": "3959988c1ba2d472e01f7fb4690aedd653e03290ea29b6ff1d7e98e48522e0f8",
           "physical_rows": 1,
           "referenced_data_files": 1,
           "rows": 1,
@@ -1971,14 +2376,14 @@
           ]
         },
         "incidents": {
-          "content_additive_digest": "6152953661356696221",
-          "content_sorted_digest": "798c81d93e137c77f2f0c1a232d30c1f4ff7bf4344093d6f9fe1892787b3049b",
+          "content_additive_digest": "7083934573017718298",
+          "content_sorted_digest": "598db8adc2b72abcc4663fa98c5d43e62857a2e07e14a943fff8df2556dd56a6",
           "data_file_bytes": 14883,
           "data_files_on_disk": 3,
           "delta_version": 2,
           "distinct_keys": 11,
-          "key_additive_digest": "7642816291403605315",
-          "key_sorted_digest": "02413bb0b6c3bc5a7c71ac93b545211f5ce75bf32b84ecfbf06cd558b391056f",
+          "key_additive_digest": "5769603077911700806",
+          "key_sorted_digest": "f9bca47d287fe1925848a6720362f7d0b24d5e5ae6674a445d069a6894e934a1",
           "physical_rows": 11,
           "referenced_data_files": 3,
           "rows": 11,
@@ -2068,52 +2473,32 @@
     }
   },
   "timings_seconds": {
-    "incremental": 44.017,
-    "land": 0.253,
-    "plan": 1.384,
-    "rebuild": 26.876,
-    "replay": 9.46,
-    "spark_session": 3.158
+    "incremental": 20.476,
+    "land": 0.246,
+    "plan": 1.112,
+    "rebuild": 25.492,
+    "replay": 9.136,
+    "spark_session": 3.071
   },
   "version_ledger": {
     "first_pass_events": [
       {
         "action": "activated",
         "contract_version": "yellow/v1",
-        "event_at_utc": "2026-09-08T15:29:37.263825+00:00",
-        "logical_id": "trip_records:bounded_sample:yellow:2023-01",
-        "period": "2023-01",
-        "run_id": "m2-release-evidence-20260908",
-        "service": "yellow",
-        "version_id": "fd5e031658b81e86f368ff48a672c26935f2bede7e617c3fe87850915206dc4c"
-      },
-      {
-        "action": "activated",
-        "contract_version": "yellow/v1",
-        "event_at_utc": "2026-09-08T15:29:37.263825+00:00",
-        "logical_id": "trip_records:bounded_sample:yellow:2024-01",
-        "period": "2024-01",
-        "run_id": "m2-release-evidence-20260908",
-        "service": "yellow",
-        "version_id": "0358fc478a84b1ecbf5c8abbe5b211d75c9045e2392beaa90e03d81c3bb2e032"
-      },
-      {
-        "action": "activated",
-        "contract_version": "yellow/v1",
-        "event_at_utc": "2026-09-08T15:29:37.263825+00:00",
+        "event_at_utc": "2026-09-08T23:10:40.796965+00:00",
         "logical_id": "trip_records:bounded_sample:yellow:2025-01",
         "period": "2025-01",
-        "run_id": "m2-release-evidence-20260908",
+        "run_id": "944aa18453e1427c8bdc443036e9c3d7",
         "service": "yellow",
         "version_id": "db66b1d4fa267b414ecfa8ed7b72fa47fba902673dff7fb5bfb3e8bf24e82b34"
       },
       {
         "action": "rejected",
         "contract_version": "hvfhv/v1",
-        "event_at_utc": "2026-09-08T15:29:37.263825+00:00",
+        "event_at_utc": "2026-09-08T23:10:40.796965+00:00",
         "logical_id": "trip_records:bounded_sample:hvfhv:2019-02",
         "period": "2019-02",
-        "run_id": "m2-release-evidence-20260908",
+        "run_id": "944aa18453e1427c8bdc443036e9c3d7",
         "service": "hvfhv",
         "version_id": "3c512668b5c120517a14e0fcfe162bccb4a7cca257e62e27d4952e14a746dde3",
         "violations": [
@@ -2123,20 +2508,10 @@
       {
         "action": "activated",
         "contract_version": "hvfhv/v1",
-        "event_at_utc": "2026-09-08T15:29:37.263825+00:00",
-        "logical_id": "trip_records:bounded_sample:hvfhv:2024-01",
-        "period": "2024-01",
-        "run_id": "m2-release-evidence-20260908",
-        "service": "hvfhv",
-        "version_id": "9181aea8831f35c1318a77cc7dcf9f8dd9be29a957934fa0c0febf4bb2c5aad5"
-      },
-      {
-        "action": "activated",
-        "contract_version": "hvfhv/v1",
-        "event_at_utc": "2026-09-08T15:29:37.263825+00:00",
+        "event_at_utc": "2026-09-08T23:10:40.796965+00:00",
         "logical_id": "trip_records:bounded_sample:hvfhv:2025-01",
         "period": "2025-01",
-        "run_id": "m2-release-evidence-20260908",
+        "run_id": "944aa18453e1427c8bdc443036e9c3d7",
         "service": "hvfhv",
         "version_id": "d20d311696163f3a94b348da6ad108191171b3df02a0ab05ea9a43383a2ca1aa"
       }
@@ -2182,7 +2557,7 @@
           "vendor_id"
         ]
       },
-      "published_at_utc": "2026-09-08T00:25:48.499083+00:00",
+      "published_at_utc": "2026-09-08T23:08:25.834868+00:00",
       "resolution_fingerprint": "bcaeef2208904fefe89f8ad2612720478d7dc4c8472bfb3328d23cba32511779",
       "service": "yellow",
       "state": "active",
@@ -2223,7 +2598,7 @@
           "vendor_id"
         ]
       },
-      "published_at_utc": "2026-09-08T00:25:48.642789+00:00",
+      "published_at_utc": "2026-09-08T23:08:25.966567+00:00",
       "resolution_fingerprint": "ae01e06f1f3b5fb7df37bf74e2c334a944f9bbd50d72f6d7aa5e8ef37f618ef8",
       "service": "yellow",
       "state": "active",
@@ -2262,7 +2637,7 @@
           "vendor_id"
         ]
       },
-      "published_at_utc": "2026-09-08T00:25:48.659984+00:00",
+      "published_at_utc": "2026-09-08T23:09:59.091949+00:00",
       "resolution_fingerprint": "3314f859dcba365269379cce15f7e3601b2586fea43b4b4d10fb8ab0748df9c0",
       "service": "yellow",
       "state": "active",
@@ -2308,7 +2683,7 @@
           "airport_fee"
         ]
       },
-      "published_at_utc": "2026-09-08T00:25:48.676554+00:00",
+      "published_at_utc": "2026-09-08T23:09:59.109238+00:00",
       "resolution_fingerprint": "eaa597ada97774dc76ffe612ec285346408b33abbffcc698d50dfaeb22dccbe7",
       "service": "hvfhv",
       "state": "rejected",
@@ -2358,7 +2733,7 @@
           "pickup_location_id"
         ]
       },
-      "published_at_utc": "2026-09-08T00:25:48.694525+00:00",
+      "published_at_utc": "2026-09-08T23:08:25.983679+00:00",
       "resolution_fingerprint": "5afa903675bfd960018b1012d373c6b3d296547dfffbe407446b221f932e1291",
       "service": "hvfhv",
       "state": "active",
@@ -2400,7 +2775,7 @@
           "pickup_location_id"
         ]
       },
-      "published_at_utc": "2026-09-08T00:25:48.712541+00:00",
+      "published_at_utc": "2026-09-08T23:09:59.142572+00:00",
       "resolution_fingerprint": "6d41d5e211d8f30a6fc2ab857cfd006277b9165b4578f4223a94f0c0caf0ed35",
       "service": "hvfhv",
       "state": "active",
@@ -2410,6 +2785,9 @@
     }
   ],
   "zone_lookup": {
+    "differs_from_newest_landed": false,
+    "newest_landed_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb",
+    "pinned_by_publication_boundary": true,
     "zone_lookup_content_sha256": "1a99e105092230f8620f301edcca7f80d3080642ff404d28ed957d3fa222c8ed",
     "zone_lookup_version_id": "d2ac78f0d97547c7e7e290fe3c3accec6e11ff99fdc7f109ec8797c81675bafb",
     "zone_rows": 265

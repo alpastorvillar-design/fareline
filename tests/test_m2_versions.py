@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from fareline.m2 import versions
 
 LOGICAL_ID = "trip_records:bounded_sample:yellow:2024-01"
@@ -246,3 +248,257 @@ def test_a_rejected_marker_is_visible_only_to_incidents(tmp_path: Path) -> None:
         "quarantine": set(),
         "incidents": {derived_id},
     }
+
+
+def boundary(zone: str, **fingerprints: str) -> versions.PublicationBoundary:
+    return versions.PublicationBoundary(
+        zone_lookup_version_id=zone,
+        contract_fingerprints=tuple(sorted(fingerprints.items())),
+    )
+
+
+def publish(
+    catalog: versions.PublicationCatalog,
+    version_id: str,
+    *,
+    fingerprint: str,
+    zone: str,
+    service: str = "yellow",
+    period: str = "2024-01",
+    logical_id: str | None = None,
+) -> None:
+    decision = versions.decide(
+        logical_id or LOGICAL_ID,
+        service,
+        period,
+        [manifest(version_id, "2026-01-01T00:00:00+00:00")],
+        {},
+    )
+    catalog.publish(
+        decision,
+        decision.candidates[0],
+        contract_version=f"{service}/v1",
+        contract_fingerprint=fingerprint,
+        zone_lookup_version_id=zone,
+    )
+
+
+def test_the_boundary_survives_a_document_round_trip(tmp_path: Path) -> None:
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    target = boundary("z1", yellow="f1", hvfhv="f2")
+
+    catalog.install_boundary(target)
+
+    assert catalog.boundary() == target
+    assert catalog.boundary().fingerprint("hvfhv") == "f2"
+
+
+def test_an_absent_boundary_reads_as_no_published_view(tmp_path: Path) -> None:
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+
+    assert catalog.boundary() is None
+
+
+def test_installing_the_same_boundary_twice_reports_it_unchanged(tmp_path: Path) -> None:
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    target = boundary("z1", yellow="f1")
+
+    first = catalog.install_boundary(target)
+    second = catalog.install_boundary(target)
+
+    assert (first, second) == ("installed", "unchanged")
+    assert not list((tmp_path / "warehouse").rglob("*.part"))
+
+
+def test_the_catalog_enumerates_every_artifact_it_knows_about(tmp_path: Path) -> None:
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    publish(catalog, "aaa", fingerprint="f1", zone="z1")
+    publish(
+        catalog,
+        "bbb",
+        fingerprint="f2",
+        zone="z1",
+        service="hvfhv",
+        period="2024-02",
+        logical_id="trip_records:bounded_sample:hvfhv:2024-02",
+    )
+
+    known = catalog.known_artifacts()
+
+    assert [(item.service, item.period) for item in known] == [
+        ("hvfhv", "2024-02"),
+        ("yellow", "2024-01"),
+    ]
+
+
+def test_a_first_publication_is_not_a_migration(tmp_path: Path) -> None:
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    target = boundary("z1", yellow="f1")
+
+    transition = versions.plan_transition(catalog, target=target, covered=set())
+
+    assert not transition.is_migration
+    assert transition.complete
+    assert transition.missing == ()
+
+
+def test_a_new_zone_lookup_version_requires_every_published_artifact(tmp_path: Path) -> None:
+    # The condition the M2 review measured: a newer zone lookup silently emptied
+    # the published view because no coverage was ever required.
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    catalog.install_boundary(boundary("z1", yellow="f1", hvfhv="f2"))
+    publish(catalog, "aaa", fingerprint="f1", zone="z1")
+    publish(
+        catalog,
+        "bbb",
+        fingerprint="f2",
+        zone="z1",
+        service="hvfhv",
+        period="2024-02",
+        logical_id="trip_records:bounded_sample:hvfhv:2024-02",
+    )
+
+    transition = versions.plan_transition(
+        catalog, target=boundary("z2", yellow="f1", hvfhv="f2"), covered={LOGICAL_ID}
+    )
+
+    assert transition.is_migration
+    assert transition.changed == ("zone_lookup_version_id",)
+    assert transition.missing == ("trip_records:bounded_sample:hvfhv:2024-02",)
+    assert not transition.complete
+
+
+def test_a_contract_revision_requires_only_the_artifacts_of_that_service(tmp_path: Path) -> None:
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    catalog.install_boundary(boundary("z1", yellow="f1", hvfhv="f2"))
+    publish(catalog, "aaa", fingerprint="f1", zone="z1")
+    publish(
+        catalog,
+        "bbb",
+        fingerprint="f2",
+        zone="z1",
+        service="hvfhv",
+        period="2024-02",
+        logical_id="trip_records:bounded_sample:hvfhv:2024-02",
+    )
+
+    transition = versions.plan_transition(
+        catalog, target=boundary("z1", yellow="f9", hvfhv="f2"), covered={LOGICAL_ID}
+    )
+
+    assert transition.changed == ("contract_fingerprint:yellow",)
+    assert transition.required == (LOGICAL_ID,)
+    assert transition.complete
+
+
+def test_a_migration_that_covers_everything_previously_published_completes(tmp_path: Path) -> None:
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    catalog.install_boundary(boundary("z1", yellow="f1"))
+    publish(catalog, "aaa", fingerprint="f1", zone="z1")
+    publish(catalog, "aaa", fingerprint="f1", zone="z2")
+
+    target = boundary("z2", yellow="f1")
+    transition = versions.plan_transition(catalog, target=target, covered=catalog.covered(target))
+
+    assert transition.is_migration
+    assert transition.complete
+    assert catalog.covered(target) == {LOGICAL_ID}
+
+
+def test_a_service_added_after_the_first_boundary_needs_no_back_coverage(tmp_path: Path) -> None:
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    catalog.install_boundary(boundary("z1", yellow="f1"))
+    publish(catalog, "aaa", fingerprint="f1", zone="z1")
+
+    transition = versions.plan_transition(
+        catalog, target=boundary("z1", yellow="f1", hvfhv="f2"), covered=set()
+    )
+
+    assert transition.changed == ("contract_fingerprint:hvfhv",)
+    assert transition.required == ()
+    assert transition.complete
+
+
+def test_the_view_keeps_the_boundary_context_when_a_newer_lookup_is_landed(tmp_path: Path) -> None:
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    installed = boundary("z1", yellow="f1")
+    catalog.install_boundary(installed)
+    publish(catalog, "aaa", fingerprint="f1", zone="z1")
+
+    visible = catalog.visible_derivations(
+        LOGICAL_ID,
+        contract_fingerprint=installed.fingerprint("yellow"),
+        zone_lookup_version_id=installed.zone_lookup_version_id,
+    )
+
+    assert visible["contracted"] == {versions.derivation_id("aaa", "f1", "z1")}
+
+
+def test_a_corrupt_marker_names_the_file_and_says_it_is_unreadable(tmp_path: Path) -> None:
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    publish(catalog, "aaa", fingerprint="f1", zone="z1")
+    marker = next((tmp_path / "warehouse" / "publication_catalog").rglob("*.json"))
+    marker.write_text("{ truncated", encoding="utf-8")
+
+    with pytest.raises(versions.PublicationMarkerUnreadable) as error:
+        catalog.entries(LOGICAL_ID)
+
+    assert marker.name in str(error.value)
+
+
+def test_a_conflicting_marker_is_reported_as_a_conflict_not_as_corruption(tmp_path: Path) -> None:
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    publish(catalog, "aaa", fingerprint="f1", zone="z1")
+    marker = next((tmp_path / "warehouse" / "publication_catalog").rglob("*.json"))
+    document = json.loads(marker.read_text(encoding="utf-8"))
+    document["contract_version"] = "yellow/v2"
+    marker.write_text(json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    with pytest.raises(versions.PublicationMarkerConflict) as error:
+        publish(catalog, "aaa", fingerprint="f1", zone="z1")
+
+    assert marker.name in str(error.value)
+
+
+def test_an_incident_id_separates_its_components_unambiguously() -> None:
+    # Joining with an empty separator made ("ab", "c") and ("a", "bc") the same
+    # incident. The canonical encoding has to keep them apart.
+    assert versions.incident_id(["ab", "c"]) != versions.incident_id(["a", "bc"])
+    assert versions.incident_id(["a", None]) != versions.incident_id(["a", "null"])
+    assert versions.incident_id(["a", "b"]) == versions.incident_id(["a", "b"])
+
+
+def test_a_catalog_without_a_boundary_but_with_markers_is_refused(tmp_path: Path) -> None:
+    # An M2 warehouse stored one table per service. M2.1 stores one per contract
+    # fingerprint, so its markers would point at rows that are not where the new
+    # layout looks for them.
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    publish(catalog, "aaa", fingerprint="f1", zone="z1")
+
+    with pytest.raises(versions.PublicationLayoutError):
+        versions.check_layout(catalog)
+
+
+def test_a_catalog_with_a_boundary_passes_the_layout_check(tmp_path: Path) -> None:
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    versions.prepare_layout(catalog)
+    catalog.install_boundary(boundary("z1", yellow="f1"))
+    publish(catalog, "aaa", fingerprint="f1", zone="z1")
+
+    versions.check_layout(catalog)
+
+
+def test_an_empty_warehouse_passes_the_layout_check(tmp_path: Path) -> None:
+    versions.check_layout(versions.PublicationCatalog(tmp_path / "warehouse"))
+
+
+def test_an_interrupted_first_publication_remains_recoverable(tmp_path: Path) -> None:
+    """Markers written before the first boundary are M2.1 recovery state, not legacy M2."""
+    catalog = versions.PublicationCatalog(tmp_path / "warehouse")
+    versions.prepare_layout(catalog)
+    publish(catalog, "aaa", fingerprint="f1", zone="z1")
+
+    # Simulate a crash after a complete artifact marker but before the
+    # dataset-wide publication boundary is installed.
+    versions.check_layout(catalog)
+    assert catalog.boundary() is None

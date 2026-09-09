@@ -4,7 +4,7 @@ x-spark-image: &spark-image
   build:
     context: .
     dockerfile: docker/spark/Dockerfile
-  image: fareline-spark:4.1.0-m2
+  image: fareline-spark:4.1.0-m2.1
 
 x-spark-volumes: &spark-volumes
   - fareline-data:/opt/fareline/data

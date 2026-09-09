@@ -69,3 +69,15 @@ def test_describe_renders_intervals_for_evidence() -> None:
             "end": "2024-03-10T03:00:00",
         }
     ]
+
+
+def test_a_transition_that_is_not_aligned_to_a_utc_hour_is_bounded_exactly() -> None:
+    # Lord Howe shifts by 30 minutes at 15:30 UTC, so an hourly walk places the
+    # interval half an hour late. TLC only needs America/New_York, but a rule
+    # that is only correct for hour-aligned zones is not the rule as described.
+    found = [
+        (item.kind, item.start.isoformat(), item.end.isoformat())
+        for item in localtime.transitions(2024, 10, "Australia/Lord_Howe")
+    ]
+
+    assert found == [(localtime.NONEXISTENT, "2024-10-06T02:00:00", "2024-10-06T02:30:00")]

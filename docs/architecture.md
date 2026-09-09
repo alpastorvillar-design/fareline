@@ -20,8 +20,9 @@ flowchart LR
     F --> T[Delta derivation history]
     G --> T
     T --> P[Atomic publication markers]
-    P --> Q[Quarantine and incidents]
-    P --> H[Zone-hour demand]
+    P --> N[Dataset publication boundary]
+    N --> Q[Quarantine and incidents]
+    N --> H[Zone-hour demand]
     F --> I[Yellow fare-day]
     G --> J[HVFHV fare-day]
     B --> K[Quality and run ledger]
@@ -134,6 +135,44 @@ no marker exposes the incomplete derivation, and then proves a retry publishes
 the complete result. This marker protocol is measured on the shared local
 filesystem used by Docker named volumes. Object storage would need its own
 publication protocol and validation in M4.
+
+## Publication boundary
+
+A marker states that one derivation is complete. It does not state which
+derivation context readers are on. That is a separate, dataset-wide pointer:
+`warehouse/publication_boundary.json` names the taxi zone lookup version and one
+contract fingerprint per service, and installing it is a single same-directory
+rename.
+
+`warehouse/publication_layout.json` has a narrower role: it identifies the
+physical layout and is installed before the first derived write. It grants no
+reader visibility. That distinction lets a retry recognise an interrupted first
+publication whose complete markers exist but whose first boundary was never
+installed, while still refusing warehouses written with the earlier layout.
+
+The two dimensions have deliberately different scope. The lookup version is
+dataset-wide, because analytical products join across services and must not mix
+two versions of one dimension. The contract fingerprint is per service, because
+revising the Yellow contract is no reason to re-derive HVFHV.
+
+Adding markers never moves the boundary. A run therefore joins against the
+lookup version the boundary already exposes rather than the newest landed one,
+and `--zone-lookup-version` is how an operator asks to move it. A run whose
+context differs from the boundary is a migration: it is refused before its first
+write unless its scope rebuilds every artifact the previous boundary published,
+and the boundary is installed only after every one of those markers exists. So
+readers observe the old context or the new one, never a mixture, and a period a
+run did not ask for cannot fall out of the view. Every run's evidence lists all
+the artifacts the catalog knows, whether each is visible under the active
+context, and whether this run asked for it.
+
+Because a contract revision can add a column or change an output type, and Delta
+refuses both as an append to an existing table, each contract fingerprint owns
+its own physical tables under `contract=<fingerprint>`. The previous revision's
+history stays readable exactly as it was written, no `mergeSchema` is involved,
+and the boundary decides which revision readers see. A warehouse written before
+this layout has no layout marker and is refused with an explicit error rather
+than read as if empty.
 
 The Delta append primitive was measured, with two drivers in separate containers
 writing one throwaway table on the shared volume. Two drivers creating the same

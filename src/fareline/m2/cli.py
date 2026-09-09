@@ -73,7 +73,15 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help=f"repeatable service:YYYY-MM; defaults to {' '.join(DEFAULT_ARTIFACTS)}",
     )
-    run.add_argument("--zone-lookup-version", default=None)
+    run.add_argument(
+        "--zone-lookup-version",
+        default=None,
+        help=(
+            "pin the taxi zone lookup version; without it a run stays on the version the "
+            "publication boundary already exposes. Naming a different version asks for a "
+            "migration, which is refused unless this run rebuilds every published artifact"
+        ),
+    )
     run.add_argument("--max-digest-rows", type=int, default=250_000)
     run.add_argument("--run-id", default=None)
     return parser

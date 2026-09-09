@@ -1,6 +1,6 @@
 # M2 contracted correctness
 
-Measured on 2026-09-08 on one Windows host running Docker Desktop with a Spark
+Measured on 2026-09-09 on one Windows host running Docker Desktop with a Spark
 standalone master and two worker containers. The numbers describe bounded
 samples of 1,000 rows per source version, not a month and not the ratified
 annual target.
@@ -91,21 +91,25 @@ run that merely stopped would leave an incremental table holding rows a full
 rebuild would never produce.
 
 Publication and supersession are appended to `version_ledger.jsonl` and never
-rewritten. The measured run wrote five `activated` events and one `rejected`
-event; running it again appended nothing.
+rewritten. Across the two measured runs the ledger holds five `activated` events
+and one `rejected` event — three from the first run and three from the second;
+replaying either appended nothing.
 
 The ledger advances only after publication succeeds. It is an audit record, not
 the visibility mechanism.
 
 ## Contracted tables
 
-Three Delta tables per service, partitioned by `source_period`:
+Three Delta tables per service and contract fingerprint, partitioned by
+`source_period`:
 
 ```text
-warehouse/contracted_trips/<service>_trip
-warehouse/quarantine/<service>_trip
-warehouse/quality_incidents/<service>_trip
+warehouse/contracted_trips/<service>_trip/contract=<fingerprint>
+warehouse/quarantine/<service>_trip/contract=<fingerprint>
+warehouse/quality_incidents/<service>_trip/contract=<fingerprint>
 warehouse/publication_catalog/<logical-id-hash>/<derivation-id>.json
+warehouse/publication_layout.json
+warehouse/publication_boundary.json
 ```
 
 Every row carries the lineage that makes it reproducible: source file version,
@@ -121,6 +125,19 @@ of its required table writes complete and an immutable same-directory marker is
 atomically installed. The marker-aware view selects the newest completed active
 derivation and the completed rejection incidents. Supersession therefore changes
 visibility without deleting auditable history.
+
+The layout marker is installed before the first of those writes and carries only
+the physical layout schema version. It is not a publication pointer. This makes
+a crash after a complete marker but before the first boundary distinguishable
+from a legacy M2 warehouse: the interrupted publication can be replayed and the
+boundary installed, while legacy data is refused.
+
+A marker's `state` records what the candidate was at the moment its marker was
+written, and markers are never rewritten. Two markers of one artifact can
+therefore both read `active`. The resolver is the only correct reader: it filters
+by the boundary's context and keeps the newest completed active derivation by
+`(source_published_at_utc, source_version_id)`. Treating every marker file as
+current would be wrong, and no reader should do it.
 
 | Table | Rows | Distinct keys | Columns |
 | --- | ---: | ---: | ---: |
@@ -141,6 +158,75 @@ No row of the real samples triggered a quarantine rule, and every zone key
 resolved against the joined lookup version. The quarantine and unknown-zone
 paths are therefore exercised by the integration smoke on fixtures rather than
 by these samples, and this document does not claim otherwise.
+
+## The published view, and changing it
+
+Completing a derivation and exposing it are separate decisions. Markers do the
+first; `publication_boundary.json` does the second, naming the zone lookup
+version for the whole dataset and one contract fingerprint per service.
+
+That separation exists because of a measured failure. When the view was resolved
+from whatever context the current run happened to compute, a run defaulted to the
+newest landed lookup version, and every period published under the previous one
+left the view at once — no error, no warning, and no field in the evidence that
+showed it. Upstream reissuing `taxi_zone_lookup.csv` was enough to trigger it.
+
+Three mechanisms replace that behaviour.
+
+- A run joins against the lookup version the boundary exposes. Landing a newer
+  one changes nothing until an operator asks for it with
+  `--zone-lookup-version`. The evidence records both the active version and the
+  newest landed one.
+- A context change is a migration, and a migration is refused before the first
+  write unless the run's scope rebuilds every artifact the previous boundary
+  published. The refusal names the artifacts that are missing.
+- The boundary is installed only after every one of those markers exists, in one
+  rename. Readers see the old context or the new one.
+
+Every run's evidence lists all the artifacts the catalog knows — not only the
+ones the run asked for — with whether each is visible under the active context.
+The gate fails if any is not.
+
+The integration smoke lands a second lookup version and checks all three: the
+default stays on the published version, a single-period migration is refused
+with the boundary and the view intact, and a full migration moves the boundary
+with all four artifacts covered, leaving the previous derivations physically
+present and no longer visible.
+
+## Revising a contract
+
+The derivation identity has always included the contract fingerprint, but a
+revision that changes the derived output schema cannot share a table with its
+predecessor. A Delta append rejects a frame whose schema does not match the
+table's, both when a column is added and when a column's type changes, and
+forcing it with `mergeSchema` would blur two output schemas into one table and
+make the earlier rows unreadable as what they were.
+
+Each fingerprint therefore owns its own tables under `contract=<fingerprint>`,
+and the boundary resolves which one readers are on. The smoke materialises both
+shapes against the same warehouse:
+
+| Revision | Fingerprint | Output columns | `payment_type` | Rows | Replay |
+| --- | --- | ---: | --- | ---: | --- |
+| `yellow/v1` baseline | `68dff1dcba7c…` | 41 | `bigint` | 781 | — |
+| `yellow/v2`, one added column | `bdc7058033f1…` | 42 | `bigint` | 781 | no new Delta commit |
+| `yellow/v3`, one retyped column | `56970e5d0443…` | 41 | `double` | 781 | no new Delta commit |
+
+The retyped revision keeps the column count, so the derived type is what shows
+the revision reached the output rather than being quietly ignored.
+
+After each revision the baseline tables still hold their original rows, the
+boundary points at the revision, and replaying the revision is a no-op. The
+trade-off is that a revision re-derives every artifact rather than sharing
+storage with its predecessor, and that the migration must be complete before it
+becomes visible. That is the intended cost: it buys a readable history and an
+unambiguous current view.
+
+A warehouse written before per-contract tables existed has no layout marker. A
+run refuses it with an explicit message instead of reading it as an empty table.
+Markers without a boundary are accepted only when that current-layout identity
+is present, which is the recoverable state left by an interrupted first
+publication.
 
 ## Quarantine and incidents
 
@@ -178,10 +264,30 @@ zone, the build fails explicitly instead of reporting a misleading zero.
 
 ## Incremental versus rebuild
 
-The same plan is applied twice: incrementally into the warehouse, and from
-nothing into an isolated rebuild root. The comparison is logical — schema, row
+The measured warehouse is built in two runs, because a single run against an
+empty warehouse compares two builds from nothing and proves nothing about
+incremental maintenance.
+
+| Run | Artifacts requested | Outcome |
+| --- | --- | --- |
+| First | Yellow 2023-01, Yellow 2024-01, HVFHV 2024-01 | 3 written; boundary installed |
+| Second | all six | 3 `already_published`, 2 written, 1 rejected |
+
+When the second run starts, the warehouse already exposes 2,000 Yellow contracted
+rows with 7 incidents at Delta version 1, and 1,000 HVFHV contracted rows at
+Delta version 0. The evidence records that starting state in
+`incremental.state_before_this_run`, and `incremental.started_from_published_state`
+says whether there was one at all.
+
+That maintained warehouse is then compared against a rebuild of all six versions
+from nothing into an isolated root. The comparison is logical — schema, row
 counts, distinct technical keys, and content digests over every column — and it
 passed for all six tables.
+
+The rebuild root is also guarded as an owned scratch location. Fareline may
+claim an absent or empty directory by writing `.fareline-rebuild-root.json`, and
+may clear only a root carrying that valid marker. A non-empty unmarked directory,
+a corrupt marker, or an unsupported marker version is refused before deletion.
 
 Two digests are produced. The sorted digest folds one SHA-256 per row in a fixed
 order and is exact below a bounded row count; the additive digest is
@@ -193,9 +299,14 @@ them to match would test the writer rather than the result.
 | Table | Rows | Content digest |
 | --- | ---: | --- |
 | Yellow contracted | 3,000 | `4c9637a2483ae…` |
-| Yellow incidents | 11 | `798c81d93e137…` |
+| Yellow incidents | 11 | `598db8adc2b72…` |
 | HVFHV contracted | 2,000 | `ba9093b637c12…` |
-| HVFHV incidents | 1 | `a1ec067fb5bcb…` |
+| HVFHV incidents | 1 | `e606a0f579a4a…` |
+
+The two contracted digests are the ones the previous measured run produced. The
+incident digests changed because an incident identifier is now the hash of a
+JSON encoding of its components rather than of a delimiter-joined string; the
+rows it identifies are the same.
 
 ## Replay
 
@@ -214,6 +325,12 @@ first physical write remains repairable but receives no publication marker, so
 the reader-visible state does not change. A retry completes the other writes and
 then publishes the marker. The same smoke runs only one requested period and
 proves periods omitted from the request remain visible.
+
+Each evidence file states its own verdict. `gate.passed` and the five named
+checks behind it — incremental matches rebuild, replay changes nothing, replay
+adds no Delta commit, replay adds no ledger event, every known artifact is
+visible — are written into the file, so a `contracted_slice.json` found on its
+own says whether it records a success or a failure.
 
 ## Concurrency
 
@@ -241,13 +358,39 @@ data files it points at, and requires each of them to exist on disk before
 measuring anything. The integration smoke deletes a published table's data files
 and confirms that this check refuses the result instead of trusting the log.
 
+## Physical history retention
+
+Nothing is ever deleted. Every re-derivation — a corrected source file, a moved
+lookup version, a revised contract — appends a complete new copy that the
+boundary hides and no process removes. At 5,000 rows that is free. At the scale
+M3 measures it is a design decision, so the policy is stated before it is needed
+rather than after.
+
+- **Auditable warehouse.** History is retained in full, and `VACUUM` is never
+  run. Reproducing what a reader saw at a past boundary is the point of keeping
+  it, and Delta's own retention defaults must not silently remove files a
+  superseded derivation still references.
+- **Benchmark warehouse.** A measurement warehouse is disposable. It is built
+  from scratch for the run that uses it and deleted afterwards, so a benchmark
+  never pays for accumulated history and never contaminates the audit trail.
+- **Authorised cleanup.** Pruning the auditable warehouse needs an explicit
+  decision that names what is removed and after how long, and it must run
+  against a boundary that no longer references the derivations being dropped.
+  Nothing in M2 does this, and nothing should do it implicitly.
+
+This is a policy, not a measurement. What is measured here is that the history
+survives supersession: after the zone migration in the smoke, the contracted
+table holds 1,953 physical rows and exposes 781.
+
 ## Runtime and timings
 
 Apache Spark 4.1.0, Delta Lake 4.2.0, Java 17.0.17, Python 3.10.12, DuckDB
-1.5.5, two executor hosts. Wall clock for the reviewed cold run: 0.253 s landing,
-3.158 s session start, 1.384 s planning, 44.017 s incremental build, 26.876 s
-rebuild and 9.460 s replay. These describe one run on one host, not a benchmark;
-measured engine comparisons belong to M3.
+1.5.5, two executor hosts. Wall clock for the second measured run: 0.246 s
+landing, 3.071 s session start, 1.112 s planning, 20.476 s incremental build,
+25.492 s rebuild and 9.136 s replay. The incremental figure is below the rebuild
+because three of the six versions were already published by the first run, whose
+own incremental pass took 37.217 s. These describe two runs on one host, not a
+benchmark; measured engine comparisons belong to M3.
 
 ## Known limits
 
@@ -260,9 +403,15 @@ measured engine comparisons belong to M3.
   was derived from; see the note above.
 - Concurrency is measured only for the one-table Delta append primitive with two
   drivers on one host. The orchestration retains one coordinator.
-- Atomic publication markers are validated on the shared local filesystem; an
-  object-store protocol remains an M4 decision.
+- Atomic publication markers and the boundary rename are validated on the shared
+  local filesystem; an object-store protocol remains an M4 decision.
+- A migration is refused unless one run rebuilds every affected artifact. There
+  is no resumable multi-run migration, and there is no partial install of one
+  dimension while another waits.
 - The exact sorted digest is bounded by a driver-side row limit; above it only
-  the additive digest remains.
+  the additive digest remains. Equivalence at M3 scale needs a different
+  mechanism, and measurement cost has to be separated from processing cost
+  before any engine comparison is meaningful.
+- Physical history is never pruned; see the retention policy above.
 - No analytical products, dimensional model, Power BI report, cloud service or
   IaC.
